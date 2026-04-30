@@ -96,7 +96,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
         run: >-
-          gh workflow run pypipublish.yml
+          gh workflow run publish.yml
           -f artifact-pattern=bm3dcpu-*
           -f package=vapoursynth-bm3dcpu
           -f packages-dir=dist
