@@ -1,4 +1,4 @@
-name: BM3DCPU Wheels
+name: BM3DCPU
 
 on:
   push:

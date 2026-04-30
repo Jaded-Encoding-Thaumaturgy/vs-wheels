@@ -1,4 +1,4 @@
-name: Publish Python dist
+name: Publish
 
 on:
   workflow_dispatch:
