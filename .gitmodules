@@ -1,0 +1,18 @@
+[submodule "bm3dcuda/bm3dcpu/VapourSynth-BM3DCUDA"]
+	path = bm3dcuda/bm3dcpu/VapourSynth-BM3DCUDA
+	url = https://github.com/WolframRhodium/VapourSynth-BM3DCUDA
+[submodule "bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA"]
+	path = bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA
+	url = https://github.com/WolframRhodium/VapourSynth-BM3DCUDA
+[submodule "bm3dcuda/bm3dhip/VapourSynth-BM3DCUDA"]
+	path = bm3dcuda/bm3dhip/VapourSynth-BM3DCUDA
+	url = https://github.com/WolframRhodium/VapourSynth-BM3DCUDA
+[submodule "bm3dcuda/bm3dcpu/vapoursynth"]
+	path = bm3dcuda/bm3dcpu/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth.git
+[submodule "bm3dcuda/bm3dcuda/vapoursynth"]
+	path = bm3dcuda/bm3dcuda/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth.git
+[submodule "bm3dcuda/bm3dhip/vapoursynth"]
+	path = bm3dcuda/bm3dhip/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth.git
