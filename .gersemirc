@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/BlankSpruce/gersemi/0.27.2/gersemi/configuration.schema.json
+
+line_length: 120
+indent: 2
+list_expansion: favour-inlining

@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vs-wheels"
+version = "0.0.0"
+requires-python = ">=3.12"
+
+[dependency-groups]
+dev = ["gersemi>=0.27.2"]
+
+[tool.hatch.build.targets.wheel]
+bypass-selection = true

@@ -1,0 +1,42 @@
+{
+  "folders": [
+    {
+      "name": "vs-wheels (Root)",
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.tabSize": 2,
+    },
+    "[toml]": {
+      "editor.defaultFormatter": "tamasfe.even-better-toml",
+      "editor.tabSize": 4,
+    },
+    "[github-actions-workflow]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.tabSize": 2,
+    },
+    "[powershell]": {
+      "debug.saveBeforeStart": "nonUntitledEditorsInActiveGroup",
+      "editor.semanticHighlighting.enabled": false,
+      "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+      "editor.defaultFormatter": "ms-vscode.powershell",
+    },
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "powershell.cwd": "vs-wheels (Root)",
+  },
+  "extensions": {
+    "recommendations": [
+      "skellock.just",
+      "tamasfe.even-better-toml",
+      "esbenp.prettier-vscode",
+      "ms-vscode.cmake-tools",
+      "ms-python.python",
+      "charliermarsh.ruff",
+      "ms-vscode.powershell",
+    ],
+  },
+}
