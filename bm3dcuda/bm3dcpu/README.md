@@ -28,8 +28,8 @@ To compile and install the package with optimizations tailored to your specific 
 ### Requirements
 
 - **C++ Compiler**: C++17 compatible.
-  - **Windows**: MSVC (Visual Studio 2019+) or Clang.
-  - **Linux**: GCC or Clang.
+  - **Windows**: Clang or MSVC (Visual Studio 2019+).
+  - **Linux**: GCC.
 
 ```powershell
 uv build --package vapoursynth-bm3dcpu
