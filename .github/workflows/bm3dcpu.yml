@@ -1,0 +1,48 @@
+name: BM3DCPU Wheels
+
+on:
+  push:
+    paths:
+      - bm3dcuda/bm3dcpu/**
+      - .github/workflows/bm3dcpu.yml
+  pull_request:
+    paths:
+      - bm3dcuda/bm3dcpu/**
+      - .github/workflows/bm3dcpu.yml
+  workflow_dispatch:
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2025-vs2026]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Setup MSVC
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          . ./scripts/Enter-DevShell.ps1
+          $envVars = "INCLUDE", "LIB", "LIBPATH", "UCRTVersion", "VCToolsVersion", "WindowsSdkDir", "PATH"
+          $envVars | ForEach-Object { if (Test-Path "Env:$_") { "$_=$((Get-Content Env:\$_))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8 } }
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.4.1
+        with:
+          package-dir: bm3dcuda/bm3dcpu
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bm3dcpu-wheels-${{ matrix.os }}
+          path: ./wheelhouse/*.whl

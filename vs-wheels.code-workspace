@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "name": "BM3D CPU",
+      "path": "bm3dcuda/bm3dcpu",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },

@@ -12,3 +12,6 @@ dev = ["gersemi>=0.27.2"]
 
 [tool.hatch.build.targets.wheel]
 bypass-selection = true
+
+[tool.uv.workspace]
+members = ["bm3dcuda/bm3dcpu"]

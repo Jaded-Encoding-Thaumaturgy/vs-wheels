@@ -8,6 +8,10 @@ shebang := if os() == 'windows' {
 set windows-shell := ['pwsh.exe', '-CommandWithArgs']
 set positional-arguments
 
+# Format CMake files (Windows)
+format:
+  #!{{shebang}}
+  uv run gersemi ./bm3dcuda/bm3dcpu/CMakeLists.txt -i --definitions ./bm3dcuda/bm3dcpu/CMakeLists.txt
 
 # Show submodule status with lightweight tags
 substatus:

@@ -1,0 +1,12 @@
+[
+  {
+    "suffix": "",
+    "mtune": "haswell",
+    "extra_flags": ""
+  },
+  {
+    "suffix": ".zn4",
+    "mtune": "znver4",
+    "extra_flags": "-mno-sse4a"
+  }
+]
