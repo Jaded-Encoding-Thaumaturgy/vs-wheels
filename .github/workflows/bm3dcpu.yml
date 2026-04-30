@@ -24,6 +24,10 @@ on:
         options:
           - testpypi
           - pypi
+      version:
+        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCPU)
+        type: string
+        required: false
 
 jobs:
   build-wheels:
@@ -55,6 +59,8 @@ jobs:
         uses: pypa/cibuildwheel@v3.4.1
         with:
           package-dir: bm3dcuda/bm3dcpu
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCPU: ${{ inputs.version }}
 
       - uses: actions/upload-artifact@v7
         with:
@@ -75,6 +81,8 @@ jobs:
 
       - name: Build sdist
         run: uv build --sdist --package vapoursynth-bm3dcpu
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCPU: ${{ inputs.version }}
 
       - uses: actions/upload-artifact@v7
         with:
