@@ -37,18 +37,17 @@ cmake.source-dir = "."
 cmake.args = ["-G", "Ninja"]
 cmake.define.CMAKE_BUILD_TYPE = "Release"
 cmake.define.BM3D_MULTI_TARGET = "OFF"
+ninja.make-fallback = false
+ninja.version = ">=1.5"
 
 [[tool.scikit-build.overrides]]
-if.platform-system = "windows"
+if.platform-system = "win32"
 cmake.define.CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
 cmake.define.CMAKE_CXX_COMPILER = "clang++.exe"
 
 [[tool.scikit-build.overrides]]
-if.env.CIBUILDWHEEL = "1"
+if.env.CIBUILDWHEEL = true
 cmake.define.BM3D_MULTI_TARGET = "ON"
-
-ninja.make-fallback = false
-ninja.version = ">=1.5"
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
