@@ -38,6 +38,7 @@ To pin a submodule to a tag:
 
 ```powershell
 git -C bm3dcuda/bm3dcpu/vapoursynth fetch --tags
+git -C bm3dcuda/bm3dcpu/vapoursynth tag
 git -C bm3dcuda/bm3dcpu/vapoursynth checkout R57
 
 git add bm3dcuda/bm3dcpu/vapoursynth
