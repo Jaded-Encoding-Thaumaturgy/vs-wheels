@@ -15,7 +15,7 @@ To compile and install the package with optimizations tailored to your specific 
 - Windows within the developer shell:
 
   ```powershell
-  pip install vapoursynth-bm3dcpu --no-binary vapoursynth-bm3dcpu -C "cmake.define.CMAKE_CXX_COMPILER=clang++.exe"
+  pip install vapoursynth-bm3dcpu --no-binary vapoursynth-bm3dcpu
   ```
 
 - Linux:
@@ -32,7 +32,7 @@ To compile and install the package with optimizations tailored to your specific 
   - **Linux**: GCC or Clang.
 
 ```powershell
-uv build --package vapoursynth-bm3dcpu -C "cmake.define.CMAKE_CXX_COMPILER=clang++.exe" -C "cmake.define.BM3D_MULTI_TARGET=ON"
+uv build --package vapoursynth-bm3dcpu
 ```
 
 ---

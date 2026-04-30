@@ -34,7 +34,19 @@ wheel.install-dir = "vapoursynth/plugins/bm3dcpu"
 wheel.expand-macos-universal-tags = true
 wheel.py-api = "py3"
 cmake.source-dir = "."
-cmake.args = ["-G", "Ninja", "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"]
+cmake.args = ["-G", "Ninja"]
+cmake.define.CMAKE_BUILD_TYPE = "Release"
+cmake.define.BM3D_MULTI_TARGET = "OFF"
+
+[[tool.scikit-build.overrides]]
+if.platform-system = "windows"
+cmake.define.CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
+cmake.define.CMAKE_CXX_COMPILER = "clang++.exe"
+
+[[tool.scikit-build.overrides]]
+if.env.CIBUILDWHEEL = "1"
+cmake.define.BM3D_MULTI_TARGET = "ON"
+
 ninja.make-fallback = false
 ninja.version = ">=1.5"
 
@@ -51,16 +63,6 @@ build = "cp312-*"
 
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]
-config-settings = { "cmake.define.BM3D_MULTI_TARGET" = "ON" }
 
 [tool.cibuildwheel.windows]
 archs = ["AMD64"]
-config-settings = { "cmake.define.BM3D_MULTI_TARGET" = "ON", "cmake.define.CMAKE_CXX_COMPILER" = "clang++.exe" }
-
-# [[tool.cibuildwheel.overrides]]
-# select = "*-manylinux*"
-# before-all = "dnf install -y ninja-build"
-
-# [[tool.cibuildwheel.overrides]]
-# select = "*-musllinux*"
-# before-all = "apk add ninja-build"
