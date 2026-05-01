@@ -35,15 +35,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-24.04
+          - os: ubuntu-latest
             arch: x86_64
+            container: quay.io/pypa/manylinux_2_28_x86_64
+            cuda_repo: rhel8/x86_64
           - os: ubuntu-24.04-arm
             arch: sbsa
+            container: quay.io/pypa/manylinux_2_28_aarch64
+            cuda_repo: rhel8/sbsa
           - os: windows-2025
             arch: amd64
 
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     steps:
       - uses: actions/checkout@v6
@@ -57,13 +62,23 @@ jobs:
       - name: Setup CUDA (Linux)
         if: runner.os == 'Linux'
         run: |
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/${{ matrix.arch }}/cuda-keyring_1.1-1_all.deb
-          sudo dpkg -i cuda-keyring_1.1-1_all.deb
-          sudo apt-get update
-          sudo apt-get -y install cuda-nvcc-12-8 cuda-cudart-dev-12-8 cuda-nvrtc-dev-12-8
-          echo "PATH=/usr/local/cuda/bin${PATH:+:${PATH}}" >> $GITHUB_ENV
+          dnf install -y 'dnf-command(config-manager)'
+          dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/${{ matrix.cuda_repo }}/cuda-rhel8.repo
+          dnf clean all
+          dnf -y install cuda-nvcc-12-8 cuda-cudart-devel-12-8 cuda-nvrtc-devel-12-8 cuda-driver-devel-12-8
           echo "CUDA_PATH=/usr/local/cuda" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=/usr/local/cuda/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> $GITHUB_ENV
+          echo "/usr/local/cuda/bin" >> $GITHUB_PATH
+
+      - name: Prepare CUDA stubs (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          STUB_DIRS=$(find /usr/local/cuda-12.8 -name stubs -type d)
+          for dir in $STUB_DIRS; do
+            ln -sf $dir/libcuda.so /usr/lib64/libcuda.so
+            ln -sf $dir/libcuda.so /usr/lib64/libcuda.so.1
+            echo "LD_LIBRARY_PATH=$dir${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> $GITHUB_ENV
+            echo "LIBRARY_PATH=$dir${LIBRARY_PATH:+:${LIBRARY_PATH}}" >> $GITHUB_ENV
+          done
 
       - name: Setup MSVC
         if: runner.os == 'Windows'
@@ -97,8 +112,6 @@ jobs:
       - name: Repair wheel (Linux)
         if: runner.os == 'Linux'
         run: |
-          sudo ln -sf /usr/local/cuda-12.8/lib64/stubs/libcuda.so /usr/local/cuda-12.8/lib64/stubs/libcuda.so.1
-          export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64/stubs:$LD_LIBRARY_PATH
           uvx --with patchelf auditwheel repair --strip dist/*.whl -w repaired_wheels
           rm dist/*.whl
           mv repaired_wheels/*.whl dist/
