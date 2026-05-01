@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "vs-wheels"
 version = "0.0.0"
 requires-python = ">=3.12"
+dependencies = ["vapoursynth>=75"]
 
 [dependency-groups]
 dev = ["gersemi>=0.27.2"]
@@ -14,4 +15,4 @@ dev = ["gersemi>=0.27.2"]
 bypass-selection = true
 
 [tool.uv.workspace]
-members = ["bm3dcuda/bm3dcpu"]
+members = ["bm3dcuda/bm3dcpu", "bm3dcuda/bm3dcuda"]

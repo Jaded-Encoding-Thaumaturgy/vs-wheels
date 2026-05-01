@@ -5,6 +5,10 @@
       "path": "bm3dcuda/bm3dcpu",
     },
     {
+      "name": "BM3D CUDA",
+      "path": "bm3dcuda/bm3dcuda",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },
