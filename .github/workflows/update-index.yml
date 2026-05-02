@@ -1,0 +1,64 @@
+name: Update Package Index
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build-index:
+    name: Build index
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Restore index cache
+        uses: actions/cache/restore@v5
+        with:
+          path: _site/packages.json
+          key: pypi-index-${{ github.run_id }}
+          restore-keys: |
+            pypi-index-
+
+      - name: Generate PEP 503 index
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run --script scripts/generate_index.py _site
+
+      - name: Save index cache
+        uses: actions/cache/save@v5
+        if: always()
+        with:
+          path: _site/packages.json
+          key: pypi-index-${{ github.run_id }}
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build-index
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v5

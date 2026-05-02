@@ -16,14 +16,6 @@ on:
         type: boolean
         required: false
         default: false
-      repository:
-        description: Package index to publish to
-        type: choice
-        required: true
-        default: testpypi
-        options:
-          - testpypi
-          - pypi
       version:
         description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION)
         type: string
@@ -94,27 +86,59 @@ jobs:
           name: fmtconv-sdist
           path: dist/*.tar.gz
 
-  trigger-publish:
-    name: Trigger ${{ inputs.repository }} publish
+  upload-release:
+    name: Upload to GitHub Release
     if: github.event_name == 'workflow_dispatch' && inputs.publish
     needs: [build-wheels, build-sdist]
     runs-on: ubuntu-latest
     permissions:
-      actions: write
-      contents: read
+      contents: write
 
     steps:
-      - name: Trigger publish workflow
+      - name: Download wheels
+        uses: actions/download-artifact@v7
+        with:
+          pattern: fmtc-wheels-*
+          path: dist
+          merge-multiple: true
+
+      - name: Download sdist
+        uses: actions/download-artifact@v7
+        with:
+          name: fmtconv-sdist
+          path: dist
+
+      - name: Determine version
+        id: version
+        run: |
+          WHEEL=$(ls dist/*.whl | head -1)
+          VERSION=$(basename "$WHEEL" | sed 's/^[^-]*-\([^-]*\)-.*/\1/')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Create release and upload assets
         env:
           GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
-        run: >-
-          gh workflow run publish.yml
-          -f artifact-pattern=fmtconv-*
-          -f package=vapoursynth-fmtconv
-          -f packages-dir=dist
-          -f repository=${{ inputs.repository }}
-          -f repository-url="$REPOSITORY_URL"
-          -f run-id=${{ github.run_id }}
-          --ref ${{ github.ref_name }}
+        run: |
+          TAG="vapoursynth-fmtconv-v${{ steps.version.outputs.version }}"
+          TITLE="vapoursynth-fmtconv ${{ steps.version.outputs.version }}"
+
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TITLE" \
+            --notes "vapoursynth-fmtconv ${{ steps.version.outputs.version }}" \
+            --latest 2>/dev/null || true
+
+          gh release upload "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
+
+  update-index:
+    name: Update package index
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [upload-release]
+    uses: ./.github/workflows/update-index.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
