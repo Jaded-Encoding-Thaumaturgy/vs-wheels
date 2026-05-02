@@ -44,7 +44,11 @@
     "cmake.sourceDirectory": "${workspaceFolder}",
     "powershell.cwd": "vs-wheels (Root)",
     "yaml.schemas": {
-      "https://www.schemastore.org/github-action.json": ".github/actions/**/*.yml",
+      "https://www.schemastore.org/github-action.json": "**/.github/actions/**/*.yml",
+    },
+    "files.associations": {
+      "**/.github/workflows/*.yml": "github-actions-workflow",
+      "**/.github/actions/**/action.yml": "github-actions-workflow"
     },
   },
   "extensions": {
