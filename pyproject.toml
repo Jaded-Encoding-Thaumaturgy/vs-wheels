@@ -9,10 +9,61 @@ requires-python = ">=3.12"
 dependencies = ["vapoursynth>=75"]
 
 [dependency-groups]
-dev = ["gersemi>=0.27.2"]
+dev = [
+    "dumb-pypi>=1.15.0",
+    "gersemi>=0.27.2",
+    "mypy>=1.20.2",
+    "niquests>=3.18.7",
+    "ruff>=0.15.12",
+]
 
 [tool.hatch.build.targets.wheel]
 bypass-selection = true
 
 [tool.uv.workspace]
 members = ["bm3dcuda/bm3dcpu", "bm3dcuda/bm3dcuda", "bm3dcuda/bm3dhip", "fmtc"]
+
+[tool.mypy]
+exclude_gitignore = true
+
+# Flags changed by --strict
+warn_return_any = false
+extra_checks = false
+
+# Misc
+warn_unreachable = true
+
+allow_redefinition_new = true
+local_partial_types = true
+implicit_reexport = false
+strict = true
+
+show_column_numbers = true
+pretty = true
+color_output = true
+error_summary = true
+fixed_format_cache = true
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+extend-select = [
+    "E",
+    "C4",
+    "I",
+    "PYI",
+    "Q",
+    "SIM",
+    "N",
+    "W",
+    "UP",
+    "FURB",
+    "RUF",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.*" = ["F401", "F403"]
