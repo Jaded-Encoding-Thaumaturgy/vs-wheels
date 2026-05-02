@@ -44,6 +44,15 @@ Available on PyPI.
 
 ### BM3DHIP
 
+Available on PyPI.
+
+- **2.16**: Matches upstream release R2.16.
+  - **Windows**: Compiled with HIP 6.4.2 and Visual Studio 2022.
+  - **Linux**: Compiled with HIP 7.0.
+- **2.17.dev1**:
+  - **Windows**: Compiled with HIP 7.1.1 and Visual Studio 2026.
+  - **Linux**: Compiled with HIP 7.2.2.
+
 ### DFTTEST2
 
 ### VS-MLRT
