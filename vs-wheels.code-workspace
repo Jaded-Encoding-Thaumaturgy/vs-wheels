@@ -13,6 +13,10 @@
       "path": "bm3dcuda/bm3dhip",
     },
     {
+      "name": "FMTCONV",
+      "path": "fmtc",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },
@@ -48,7 +52,7 @@
     },
     "files.associations": {
       "**/.github/workflows/*.yml": "github-actions-workflow",
-      "**/.github/actions/**/action.yml": "github-actions-workflow"
+      "**/.github/actions/**/action.yml": "github-actions-workflow",
     },
   },
   "extensions": {

@@ -15,4 +15,4 @@ dev = ["gersemi>=0.27.2"]
 bypass-selection = true
 
 [tool.uv.workspace]
-members = ["bm3dcuda/bm3dcpu", "bm3dcuda/bm3dcuda", "bm3dcuda/bm3dhip"]
+members = ["bm3dcuda/bm3dcpu", "bm3dcuda/bm3dcuda", "bm3dcuda/bm3dhip", "fmtc"]

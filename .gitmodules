@@ -16,3 +16,6 @@
 [submodule "bm3dcuda/bm3dhip/vapoursynth"]
 	path = bm3dcuda/bm3dhip/vapoursynth
 	url = https://github.com/vapoursynth/vapoursynth.git
+[submodule "fmtc/fmtconv"]
+	path = fmtc/fmtconv
+	url = https://gitlab.com/EleonoreMizo/fmtconv.git
