@@ -12,7 +12,7 @@ pip install vapoursynth-bm3dcuda
 
 ### Requirements
 
-- **CUDA Toolkit**: 12.8 or newer.
+- **[CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit-archive)**: 12.8 or newer.
 - **C++ Compiler**: A C++20 compatible compiler.
   - **Windows**: Visual Studio 2022 or newer.
   - **Linux**: GCC
