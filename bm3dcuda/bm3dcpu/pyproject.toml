@@ -15,7 +15,7 @@ license-files = ["VapourSynth-BM3DCUDA/LICENSE"]
 requires-python = ">=3.12"
 authors = [{ name = "WolframRhodium" }]
 maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
-dependencies = ["vapoursynth>=74"]
+dependencies = ["vapoursynth>=75"]
 
 [project.urls]
 "Source Code" = "https://github.com/WolframRhodium/VapourSynth-BM3DCUDA"
