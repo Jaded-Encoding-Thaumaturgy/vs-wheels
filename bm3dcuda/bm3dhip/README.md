@@ -7,3 +7,9 @@ This package contains the HIP implementation of the [VapourSynth-BM3DCUDA](https
 ```bash
 pip install vapoursynth-bm3dhip
 ```
+
+---
+
+Detailed parameter information from the parent project follows.
+
+---
