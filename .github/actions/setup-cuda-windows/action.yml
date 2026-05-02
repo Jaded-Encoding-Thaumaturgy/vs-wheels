@@ -1,0 +1,47 @@
+name: "Setup CUDA (Windows)"
+description: "Downloads, caches, and installs NVIDIA CUDA for Windows"
+inputs:
+  cuda-version:
+    description: "CUDA version (e.g., 13.0.1)"
+    required: true
+  cache-key:
+    description: "Extra cache key part"
+    required: false
+    default: "default"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configure CUDA Path (Windows)
+      shell: pwsh
+      run: |
+        $cudaVersion = "${{ inputs.cuda-version }}"
+        $cudaShort = $cudaVersion -replace '\.\d+$', ''
+        "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v$cudaShort" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "CUDA_VERSION_WINDOWS=$cudaVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "CUDA_VERSION_WINDOWS_SHORT=$cudaShort" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+    - name: Cache CUDA (Windows)
+      id: cache-cuda
+      uses: actions/cache@v5
+      with:
+        path: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA
+        key: setup-cuda-windows-${{ runner.os }}-${{ inputs.cuda-version }}-${{ inputs.cache-key }}
+
+    - name: Setup CUDA (Windows)
+      if: steps.cache-cuda.outputs.cache-hit != 'true'
+      shell: pwsh
+      run: |
+        $cudaVersion = $env:CUDA_VERSION_WINDOWS
+        $cudaShort = $env:CUDA_VERSION_WINDOWS_SHORT
+        curl.exe -s -o cuda_installer.exe -L `
+          "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_network.exe"
+        Start-Process ./cuda_installer.exe -ArgumentList `
+          "-s",
+          "nvcc_$cudaShort",
+          "cudart_$cudaShort",
+          "nvrtc_dev_$cudaShort",
+          "crt_$cudaShort",
+          "nvptxcompiler_$cudaShort",
+          "nvvm_$cudaShort" `
+          -Wait

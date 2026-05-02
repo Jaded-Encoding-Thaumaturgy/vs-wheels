@@ -5,10 +5,14 @@ on:
     paths:
       - bm3dcuda/bm3dcuda/**
       - .github/workflows/bm3dcuda.yml
+      - .github/actions/setup-cuda-linux/**
+      - .github/actions/setup-cuda-windows/**
   pull_request:
     paths:
       - bm3dcuda/bm3dcuda/**
       - .github/workflows/bm3dcuda.yml
+      - .github/actions/setup-cuda-linux/**
+      - .github/actions/setup-cuda-windows/**
   workflow_dispatch:
     inputs:
       publish:
@@ -84,30 +88,10 @@ jobs:
 
       - name: Setup CUDA (Linux)
         if: runner.os == 'Linux'
-        run: |
-          CUDA_VER="${{ env.CUDA_LINUX }}"
-          CUDA_DASH=${CUDA_VER//./-}
-          dnf install -y 'dnf-command(config-manager)'
-          dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/${{ matrix.cuda_repo }}/cuda-rhel8.repo
-          dnf clean all
-          dnf -y install \
-            cuda-nvcc-$CUDA_DASH \
-            cuda-cudart-devel-$CUDA_DASH \
-            cuda-nvrtc-devel-$CUDA_DASH \
-            cuda-driver-devel-$CUDA_DASH
-          echo "CUDA_PATH=/usr/local/cuda" >> $GITHUB_ENV
-          echo "/usr/local/cuda/bin" >> $GITHUB_PATH
-
-      - name: Prepare CUDA stubs (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          STUB_DIRS=$(find /usr/local/cuda-${{ env.CUDA_LINUX }} -name stubs -type d)
-          for dir in $STUB_DIRS; do
-            ln -sf $dir/libcuda.so /usr/lib64/libcuda.so
-            ln -sf $dir/libcuda.so /usr/lib64/libcuda.so.1
-            echo "LD_LIBRARY_PATH=$dir${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> $GITHUB_ENV
-            echo "LIBRARY_PATH=$dir${LIBRARY_PATH:+:${LIBRARY_PATH}}" >> $GITHUB_ENV
-          done
+        uses: ./.github/actions/setup-cuda-linux
+        with:
+          cuda-version: ${{ env.CUDA_LINUX }}
+          cuda-repo: ${{ matrix.cuda_repo }}
 
       - name: Setup MSVC (Windows)
         if: runner.os == 'Windows'
@@ -117,41 +101,12 @@ jobs:
           $envVars = "INCLUDE", "LIB", "LIBPATH", "UCRTVersion", "VCToolsVersion", "WindowsSdkDir", "PATH"
           $envVars | ForEach-Object { if (Test-Path "Env:$_") { "$_=$((Get-Content Env:\$_))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8 } }
 
-      - name: Configure CUDA Path (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $cudaVersion = "${{ env.CUDA_WINDOWS }}"
-          $cudaShort = $cudaVersion -replace '\.\d+$', ''
-          "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v$cudaShort" | Out-File -FilePath $env:GITHUB_ENV -Append
-          "CUDA_VERSION_WINDOWS=$cudaVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
-          "CUDA_VERSION_WINDOWS_SHORT=$cudaShort" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-      - name: Cache CUDA (Windows)
-        if: runner.os == 'Windows'
-        id: cache-cuda
-        uses: actions/cache@v5
-        with:
-          path: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA
-          key: ${{ github.workflow }}-${{ runner.os }}-${{ matrix.os }}-cuda-${{ env.CUDA_WINDOWS }}
-
       - name: Setup CUDA (Windows)
-        if: runner.os == 'Windows' && steps.cache-cuda.outputs.cache-hit != 'true'
-        shell: pwsh
-        run: |
-          $cudaVersion = $env:CUDA_VERSION_WINDOWS
-          $cudaShort = $env:CUDA_VERSION_WINDOWS_SHORT
-          curl.exe -s -o cuda_installer.exe -L `
-            "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_network.exe"
-          Start-Process ./cuda_installer.exe -ArgumentList `
-            "-s",
-            "nvcc_$cudaShort",
-            "cudart_$cudaShort",
-            "nvrtc_dev_$cudaShort",
-            "crt_$cudaShort",
-            "nvptxcompiler_$cudaShort",
-            "nvvm_$cudaShort" `
-            -Wait
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/setup-cuda-windows
+        with:
+          cuda-version: ${{ env.CUDA_WINDOWS }}
+          cache-key: ${{ matrix.os }}
 
       - name: Build wheels
         run: uv build --wheel --package vapoursynth-bm3dcuda
