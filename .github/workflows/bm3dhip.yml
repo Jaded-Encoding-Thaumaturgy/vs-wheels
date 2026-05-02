@@ -1,0 +1,170 @@
+name: BM3DHIP
+
+on:
+  push:
+    paths:
+      - bm3dcuda/bm3dhip/**
+      - .github/workflows/bm3dhip.yml
+      - .github/actions/setup-hip-linux/**
+      - .github/actions/setup-hip-windows/**
+  pull_request:
+    paths:
+      - bm3dcuda/bm3dhip/**
+      - .github/workflows/bm3dhip.yml
+      - .github/actions/setup-hip-linux/**
+      - .github/actions/setup-hip-windows/**
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish built distributions
+        type: boolean
+        required: false
+        default: false
+      repository:
+        description: Package index to publish to
+        type: choice
+        required: true
+        default: testpypi
+        options:
+          - testpypi
+          - pypi
+      version:
+        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DHIP)
+        type: string
+        required: false
+      hip-linux:
+        description: HIP version for Linux (7.0, 7.2.2)
+        type: string
+        required: false
+        default: "7.0"
+      hip-windows:
+        description: HIP version for Windows (e.g., 25.Q3 -> 6.4.2 | 26.Q1 -> 7.1.1)
+        type: choice
+        required: true
+        options:
+          - 25.Q3-WinSvr2022
+          - 26.Q1-Win11
+      windows-runner:
+        description: Windows runner to use
+        type: choice
+        required: true
+        default: windows-2022
+        options:
+          - windows-2025-vs2026
+          - windows-2025
+          - windows-2022
+
+env:
+  HIP_LINUX: ${{ inputs.hip-linux || '7.0' }}
+  HIP_WINDOWS: ${{ inputs.hip-windows || '25.Q3-WinSvr2022' }}
+
+jobs:
+  build-wheels:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+            container: quay.io/pypa/manylinux_2_28_x86_64
+          - os: ${{ inputs.windows-runner || 'windows-2022' }}
+            arch: amd64
+
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Setup HIP (Linux)
+        if: runner.os == 'Linux'
+        uses: ./.github/actions/setup-hip-linux
+        with:
+          hip-version: ${{ env.HIP_LINUX }}
+
+      - name: Setup MSVC (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          . ./scripts/Enter-DevShell.ps1
+          $envVars = "INCLUDE", "LIB", "LIBPATH", "UCRTVersion", "VCToolsVersion", "WindowsSdkDir", "PATH"
+          $envVars | ForEach-Object { if (Test-Path "Env:$_") { "$_=$((Get-Content Env:\$_))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8 } }
+
+      - name: Setup HIP (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/setup-hip-windows
+        with:
+          hip-version: ${{ env.HIP_WINDOWS }}
+          cache-key: ${{ matrix.os }}
+
+      - name: Build wheels
+        run: uv build --wheel --package vapoursynth-bm3dhip
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DHIP: ${{ inputs.version }}
+
+      - name: Repair wheel (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          uvx --with patchelf auditwheel repair --strip dist/*.whl -w repaired_wheels
+          rm dist/*.whl
+          mv repaired_wheels/*.whl dist/
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v7
+        with:
+          name: bm3dhip-wheels-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*.whl
+
+  build-sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Build sdist
+        run: uv build --sdist --package vapoursynth-bm3dhip
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DHIP: ${{ inputs.version }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bm3dhip-sdist
+          path: dist/*.tar.gz
+
+  trigger-publish:
+    name: Trigger ${{ inputs.repository }} publish
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Trigger publish workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+        run: >-
+          gh workflow run publish.yml
+          -f artifact-pattern=bm3dhip-*
+          -f package=vapoursynth-bm3dhip
+          -f packages-dir=dist
+          -f repository=${{ inputs.repository }}
+          -f repository-url="$REPOSITORY_URL"
+          -f run-id=${{ github.run_id }}
+          --ref ${{ github.ref_name }}

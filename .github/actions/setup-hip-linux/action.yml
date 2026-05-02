@@ -1,0 +1,65 @@
+name: "Setup HIP (Linux)"
+description: "Installs and configures AMD ROCm HIP for Linux (RHEL/Manylinux)"
+inputs:
+  hip-version:
+    description: "HIP version (e.g., 7.0)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install HIP
+      shell: bash
+      run: |
+        dnf install -y dnf-plugins-core
+        rpm --import https://repo.radeon.com/rocm/rocm.gpg.key
+        tee /etc/yum.repos.d/rocm.repo > /dev/null <<EOF
+        [rocm]
+        name=ROCm ${{ inputs.hip-version }} repository
+        baseurl=https://repo.radeon.com/rocm/el8/${{ inputs.hip-version }}/main
+        enabled=1
+        priority=50
+        gpgcheck=1
+        gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
+        EOF
+        dnf clean all
+        dnf install -y hip-devel hip-runtime-amd rocm-device-libs libxml2 libstdc++-devel
+
+    - name: Configure HIP Path
+      shell: bash
+      run: |
+        # Identify ROCm installation path
+        ROCM_PATH=/opt/rocm-${{ inputs.hip-version }}
+        [ ! -d "$ROCM_PATH" ] && ROCM_PATH=/opt/rocm
+
+        # GCC Toolset 14 is required for C++20 on Manylinux 2.28
+        source /opt/rh/gcc-toolset-14/enable
+        GCC_ROOT=/opt/rh/gcc-toolset-14/root/usr
+        GCC_VER=$(gcc -dumpversion)
+        GCC_TRIPLET=$(gcc -dumpmachine)
+
+        # Add ROCm binaries to PATH
+        echo "$ROCM_PATH/bin" >> $GITHUB_PATH
+
+        # Export environment variables for the compiler and CMake
+        {
+          echo "ROCM_PATH=$ROCM_PATH"
+          echo "HIP_PATH=$ROCM_PATH"
+          echo "CC=$ROCM_PATH/bin/amdclang"
+          echo "CXX=$ROCM_PATH/bin/amdclang++"
+
+          # Pass toolchain to Clang
+          echo "CFLAGS=--gcc-toolchain=$GCC_ROOT"
+          echo "CXXFLAGS=--gcc-toolchain=$GCC_ROOT"
+          echo "LDFLAGS=--gcc-toolchain=$GCC_ROOT"
+
+          # Explicitly set include and library paths to help the linker find libstdc++
+          echo "CPLUS_INCLUDE_PATH=$GCC_ROOT/include/c++/$GCC_VER:$GCC_ROOT/include/c++/$GCC_VER/$GCC_TRIPLET${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
+          echo "LIBRARY_PATH=$GCC_ROOT/lib/gcc/$GCC_TRIPLET/$GCC_VER:/usr/lib64${LIBRARY_PATH:+:${LIBRARY_PATH}}"
+
+          # Help CMake find ROCm components
+          echo "CMAKE_PREFIX_PATH=$ROCM_PATH"
+
+          # Ensure libraries are found at runtime (for build tools and auditwheel)
+          echo "LD_LIBRARY_PATH=$ROCM_PATH/lib:$ROCM_PATH/lib64:$GCC_ROOT/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+        } >> "$GITHUB_ENV"

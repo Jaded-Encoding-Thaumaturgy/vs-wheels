@@ -1,0 +1,67 @@
+name: "Setup HIP (Windows)"
+description: "Downloads, caches, and installs AMD ROCm HIP for Windows"
+inputs:
+  hip-version:
+    description: "HIP version (e.g., 25.Q3-WinSvr2022, 26.Q1-Win11)"
+    required: true
+  cache-key:
+    description: "Extra cache key part"
+    required: false
+    default: "default"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Restore ROCm HIP
+      id: cache-hip
+      uses: actions/cache/restore@v5
+      with:
+        path: C:\Program Files\AMD\ROCM
+        key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
+
+    - name: Restore HIP Installer
+      if: steps.cache-hip.outputs.cache-hit != 'true'
+      id: cache-hip-installer
+      uses: actions/cache/restore@v5
+      with:
+        path: hip_installer.exe
+        key: hip-installer-${{ inputs.hip-version }}
+
+    - name: Download HIP Installer
+      if: steps.cache-hip.outputs.cache-hit != 'true' && steps.cache-hip-installer.outputs.cache-hit != 'true'
+      shell: pwsh
+      run: |
+        curl -s -o hip_installer.exe -L https://download.amd.com/developer/eula/rocm-hub/AMD-Software-PRO-Edition-${{ inputs.hip-version }}-For-HIP.exe
+
+    - name: Save HIP Installer
+      if: steps.cache-hip.outputs.cache-hit != 'true' && steps.cache-hip-installer.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: hip_installer.exe
+        key: hip-installer-${{ inputs.hip-version }}
+
+    - name: Install HIP
+      if: steps.cache-hip.outputs.cache-hit != 'true'
+      shell: pwsh
+      run: |
+        Start-Process hip_installer.exe -ArgumentList '-install' -NoNewWindow -Wait
+
+    - name: Save ROCm HIP
+      if: steps.cache-hip.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: C:\Program Files\AMD\ROCM
+        key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
+
+    - name: Configure HIP Path
+      shell: pwsh
+      run: |
+        $hipVersion = "${{ inputs.hip-version }}"
+        $hipVersionShort = ($hipVersion -eq '25.Q3-WinSvr2022') ? '6.4' : '7.1'
+        $rocmRoot = "C:/Program Files/AMD/ROCm/$hipVersionShort"
+
+        "CC=$rocmRoot/bin/clang.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "CXX=$rocmRoot/bin/clang++.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "HIP_PATH=$rocmRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "HIP_DIR=$rocmRoot/lib/cmake/hip" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "$rocmRoot/bin" | Out-File -FilePath $env:GITHUB_PATH -Append

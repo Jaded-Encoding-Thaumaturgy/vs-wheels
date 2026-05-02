@@ -1,0 +1,67 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.12",
+    "setuptools-scm",
+    "ninja ; sys_platform != 'win32'",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "vapoursynth-bm3dhip"
+dynamic = ["version", "readme"]
+description = "BM3D denoising filter for VapourSynth, implemented in HIP"
+license = "GPL-2.0-or-later"
+license-files = ["VapourSynth-BM3DCUDA/LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "WolframRhodium" }]
+maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
+dependencies = ["vapoursynth>=74"]
+
+[project.urls]
+"Source Code" = "https://github.com/WolframRhodium/VapourSynth-BM3DCUDA"
+"Bug Tracker" = "https://github.com/WolframRhodium/VapourSynth-BM3DCUDA/issues"
+
+[tool.setuptools_scm]
+root = "VapourSynth-BM3DCUDA"
+local_scheme = "no-local-version"
+tag_regex = "^R(?P<version>.*)$"
+
+[tool.scikit-build]
+logging.level = "INFO"
+metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
+metadata.readme.provider = "scikit_build_core.metadata.fancy_pypi_readme"
+wheel.exclude = ["*.lib"]
+wheel.install-dir = "vapoursynth/plugins/bm3dhip"
+wheel.expand-macos-universal-tags = true
+wheel.py-api = "py3"
+cmake.source-dir = "."
+build.verbose = true
+cmake.args = ["-G", "Ninja"]
+cmake.define.CMAKE_BUILD_TYPE = "Release"
+cmake.define.CMAKE_INSTALL_BINDIR = "."
+cmake.define.CMAKE_INSTALL_LIBDIR = "."
+cmake.define.CMAKE_CXX_FLAGS = "-Wall -ffast-math -Rpass-analysis=kernel-resource-usage"
+cmake.define.ENABLE_CPU = "OFF"
+cmake.define.ENABLE_CUDA = "OFF"
+cmake.define.ENABLE_HIP = "ON"
+ninja.make-fallback = false
+ninja.version = ">=1.5"
+
+[[tool.scikit-build.overrides]]
+if.platform-system = "win32"
+inherit.cmake.define = "append"
+cmake.define.CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
+cmake.define.HIP_PLATFORM = "amd"
+cmake.define.GPU_TARGETS = "gfx1030;gfx1031;gfx1032;gfx1100;gfx1101;gfx1102;gfx1151;gfx1200;gfx1201"
+
+[[tool.scikit-build.overrides]]
+if.platform-system = "linux"
+inherit.cmake.define = "append"
+cmake.define.GPU_TARGETS = "gfx1010;gfx1011;gfx1012;gfx1030;gfx1031;gfx1032;gfx1033;gfx1034;gfx1035;gfx1036;gfx1100;gfx1101;gfx1102;gfx1103;gfx1200;gfx1201"
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [
+    { path = "README.md" },
+    { path = "VapourSynth-BM3DCUDA/README.md" },
+]

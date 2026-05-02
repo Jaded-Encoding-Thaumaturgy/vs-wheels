@@ -9,6 +9,10 @@
       "path": "bm3dcuda/bm3dcuda",
     },
     {
+      "name": "BM3D HIP",
+      "path": "bm3dcuda/bm3dhip",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },
