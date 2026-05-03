@@ -40,3 +40,21 @@
 [submodule "dfttest2/dfttest2_nvrtc/vs-dfttest2"]
 	path = dfttest2/dfttest2_nvrtc/vs-dfttest2
 	url = https://github.com/AmusementClub/vs-dfttest2
+[submodule "bm3dcuda/bm3dcuda/dfttest2/dfttest2_cpu/vapoursynth"]
+	path = bm3dcuda/bm3dcuda/dfttest2/dfttest2_cpu/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth
+[submodule "dfttest2/dfttest2_cuda/vapoursynth"]
+	path = dfttest2/dfttest2_cuda/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth
+[submodule "dfttest2/dfttest2_gcc/vapoursynth"]
+	path = dfttest2/dfttest2_gcc/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth
+[submodule "dfttest2/dfttest2_hip/vapoursynth"]
+	path = dfttest2/dfttest2_hip/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth
+[submodule "dfttest2/dfttest2_hiprtc/vapoursynth"]
+	path = dfttest2/dfttest2_hiprtc/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth
+[submodule "dfttest2/dfttest2_nvrtc/vapoursynth"]
+	path = dfttest2/dfttest2_nvrtc/vapoursynth
+	url = https://github.com/vapoursynth/vapoursynth
