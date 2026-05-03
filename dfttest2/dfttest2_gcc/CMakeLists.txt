@@ -8,9 +8,9 @@ find_package(Threads REQUIRED)
 set(VS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include" CACHE PATH "Path to VapourSynth headers")
 
 # Fix version detection
-if(SKBUILD_PROJECT_VERSION AND NOT VCS_TAG)
+if(SKBUILD_PROJECT_VERSION)
   set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(GIT_FOUND OFF CACHE BOOL "Disable git in submodule to avoid error messages")
+  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
 endif()
 
 set(ENABLE_CUDA OFF CACHE BOOL "" FORCE)
