@@ -25,6 +25,10 @@
       "path": "dfttest2/dfttest2_gcc",
     },
     {
+      "name": "DFTTEST2 CPU",
+      "path": "dfttest2/dfttest2_cpu",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },
