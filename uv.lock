@@ -97,8 +97,17 @@ dependencies = [
     { name = "vapoursynth" },
 ]
 
+[package.optional-dependencies]
+gcc = [
+    { name = "vapoursynth-dfttest2-gcc" },
+]
+
 [package.metadata]
-requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
+requires-dist = [
+    { name = "vapoursynth", specifier = ">=75" },
+    { name = "vapoursynth-dfttest2-gcc", marker = "extra == 'gcc'", editable = "dfttest2/dfttest2_gcc" },
+]
+provides-extras = ["gcc"]
 
 [[package]]
 name = "dumb-pypi"

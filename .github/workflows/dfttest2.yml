@@ -1,0 +1,80 @@
+name: DFTTEST2
+
+on:
+  push:
+    paths:
+      - dfttest2/dfttest2/**
+      - .github/workflows/dfttest2.yml
+  pull_request:
+    paths:
+      - dfttest2/dfttest2/**
+      - .github/workflows/dfttest2.yml
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish built distributions
+        type: boolean
+        required: false
+        default: false
+      repository:
+        description: Package index to publish to
+        type: choice
+        required: true
+        default: testpypi
+        options:
+          - testpypi
+          - pypi
+      version:
+        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION)
+        type: string
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive dfttest2/dfttest2/vs-dfttest2
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Build
+        run: uv build --package dfttest2
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION: ${{ inputs.version }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dfttest2-py
+          path: dist/
+
+  trigger-publish:
+    name: Trigger ${{ inputs.repository }} publish
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Trigger publish workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+        run: >-
+          gh workflow run publish.yml
+          -f artifact-pattern=dfttest2-py
+          -f package=dfttest2
+          -f packages-dir=dist
+          -f repository=${{ inputs.repository }}
+          -f repository-url="$REPOSITORY_URL"
+          -f run-id=${{ github.run_id }}
+          --ref ${{ github.ref_name }}
