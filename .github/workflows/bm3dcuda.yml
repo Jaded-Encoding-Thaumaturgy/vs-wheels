@@ -80,8 +80,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          submodules: recursive
           fetch-depth: 0
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA bm3dcuda/bm3dcuda/vapoursynth
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v8.1.0
@@ -134,8 +136,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          submodules: recursive
           fetch-depth: 0
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA bm3dcuda/bm3dcuda/vapoursynth
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v8.1.0
