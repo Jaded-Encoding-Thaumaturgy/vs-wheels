@@ -83,7 +83,10 @@ jobs:
           fetch-depth: 0
 
       - name: Initialize submodules
-        run: git submodule update --init --recursive bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA bm3dcuda/bm3dcuda/vapoursynth
+        run: |
+          # Workaround for Linux containers
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git submodule update --init --recursive bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA bm3dcuda/bm3dcuda/vapoursynth
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v8.1.0
