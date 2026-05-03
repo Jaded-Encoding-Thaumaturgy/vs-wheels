@@ -104,7 +104,8 @@ Available on PyPI.
 - **2.16**: Yanked.
 - **2.16.1**: Yanked.
 - **2.16.2**: Yanked.
-- **2.16.3**: Matches upstream R2.16.
+- **2.16.3**: Yanked.
+- **2.16.4**: Matches upstream R2.16. Requires VapourSynth R75.
 
 ### BM3DCUDA
 
