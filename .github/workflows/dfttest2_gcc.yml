@@ -1,0 +1,130 @@
+name: DFTTEST2_GCC
+
+on:
+  push:
+    paths:
+      - dfttest2/dfttest2_gcc/**
+      - .github/workflows/dfttest2_gcc.yml
+  pull_request:
+    paths:
+      - dfttest2/dfttest2_gcc/**
+      - .github/workflows/dfttest2_gcc.yml
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish built distributions
+        type: boolean
+        required: false
+        default: false
+      repository:
+        description: Package index to publish to
+        type: choice
+        required: true
+        default: testpypi
+        options:
+          - testpypi
+          - pypi
+      version:
+        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_GCC)
+        type: string
+        required: false
+
+jobs:
+  build-wheels:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: Linux x64
+          - os: ubuntu-24.04-arm
+            name: Linux ARM
+          - os: windows-2025-vs2026
+            name: Windows x64
+          - os: macos-26
+            name: macOS ARM64
+          - os: macos-26-intel
+            name: macOS x64
+
+    name: Build wheels on ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive dfttest2/dfttest2_gcc/vs-dfttest2 dfttest2/dfttest2_gcc/vapoursynth
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Setup MSVC
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          . ./scripts/Enter-DevShell.ps1
+          $envVars = "INCLUDE", "LIB", "LIBPATH", "UCRTVersion", "VCToolsVersion", "WindowsSdkDir", "PATH"
+          $envVars | ForEach-Object { if (Test-Path "Env:$_") { "$_=$((Get-Content Env:\$_))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8 } }
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.4.1
+        with:
+          package-dir: dfttest2/dfttest2_gcc
+        env:
+          CIBW_ENVIRONMENT: SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_GCC="${{ inputs.version }}"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dfttest2_gcc-wheels-${{ matrix.name }}
+          path: ./wheelhouse/*.whl
+
+  build-sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive dfttest2/dfttest2_gcc/vs-dfttest2 dfttest2/dfttest2_gcc/vapoursynth
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Build sdist
+        run: uv build --sdist --package vapoursynth-dfttest2_gcc
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_GCC: ${{ inputs.version }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dfttest2_gcc-sdist
+          path: dist/*.tar.gz
+
+  trigger-publish:
+    name: Trigger ${{ inputs.repository }} publish
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Trigger publish workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+        run: >-
+          gh workflow run publish.yml
+          -f artifact-pattern=dfttest2_gcc-*
+          -f package=vapoursynth-dfttest2_gcc
+          -f packages-dir=dist
+          -f repository=${{ inputs.repository }}
+          -f repository-url="$REPOSITORY_URL"
+          -f run-id=${{ github.run_id }}
+          --ref ${{ github.ref_name }}

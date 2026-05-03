@@ -17,6 +17,14 @@
       "path": "fmtc",
     },
     {
+      "name": "DFTTEST2 (PYTHON)",
+      "path": "dfttest2/dfttest2",
+    },
+    {
+      "name": "DFTTEST2 GCC",
+      "path": "dfttest2/dfttest2_gcc",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },

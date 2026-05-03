@@ -8,9 +8,11 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "dfttest2",
     "vapoursynth-bm3dcpu",
     "vapoursynth-bm3dcuda",
     "vapoursynth-bm3dhip",
+    "vapoursynth-dfttest2-gcc",
     "vapoursynth-fmtconv",
     "vs-wheels",
 ]
@@ -87,6 +89,16 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/de/32/d92444ad05c7a6e41fb2036749777c163baf7a0301a040cb672d6b2b1ae9/charset_normalizer-3.4.7-cp314-cp314t-win_arm64.whl", hash = "sha256:c35abb8bfff0185efac5878da64c45dafd2b37fb0383add1be155a763c1f083d", size = 153018, upload-time = "2026-04-02T09:27:51.116Z" },
     { url = "https://files.pythonhosted.org/packages/db/8f/61959034484a4a7c527811f4721e75d02d653a35afb0b6054474d8185d4c/charset_normalizer-3.4.7-py3-none-any.whl", hash = "sha256:3dce51d0f5e7951f8bb4900c257dad282f49190fdbebecd4ba99bcc41fef404d", size = 61958, upload-time = "2026-04-02T09:28:37.794Z" },
 ]
+
+[[package]]
+name = "dfttest2"
+source = { editable = "dfttest2/dfttest2" }
+dependencies = [
+    { name = "vapoursynth" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
 
 [[package]]
 name = "dumb-pypi"
@@ -714,6 +726,16 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "vapoursynth", specifier = ">=74" }]
+
+[[package]]
+name = "vapoursynth-dfttest2-gcc"
+source = { editable = "dfttest2/dfttest2_gcc" }
+dependencies = [
+    { name = "vapoursynth" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
 
 [[package]]
 name = "vapoursynth-fmtconv"

@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling>=1.29.0", "hatch-vcs", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dfttest2"
+dynamic = ["version", "readme"]
+description = "DFTTest re-implemetation"
+license = "GPL-3.0-or-later"
+license-files = ["vs-dfttest2/LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "WolframRhodium" }]
+maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
+dependencies = ["vapoursynth>=75"]
+
+# [project.optional-dependencies]
+# cuda = ["vapoursynth-dfttest2_cuda", "vapoursynth-dfttest2_nvrtc"]
+# hip = ["vapoursynth-dfttest2_hip", "vapoursynth-dfttest2_hiprtc"]
+# cufft = ["vapoursynth-dfttest2_cuda"]
+# nvrtc = ["vapoursynth-dfttest2_nvrtc"]
+# hipfft = ["vapoursynth-dfttest2_hip"]
+# hiprtc = ["vapoursynth-dfttest2_hiprtc"]
+# cpu = ["vapoursynth-dfttest2_cpu"]
+# gcc = ["vapoursynth-dfttest2_gcc"]
+
+# windows = ["dfttest2[cuda,hip,gcc,cpu]"]
+# linux = [
+#     "dfttest2[cuda,hip,gcc,cpu] ; platform_machine == 'x86_64'",
+#     "dfttest2[cuda,gcc] ; platform_machine == 'aarch64'",
+# ]
+# macos = [
+#     "dfttest2[cpu,gcc] ; platform_machine == 'x86_64'",
+#     "dfttest2[gcc] ; platform_machine == 'arm64'",
+# ]
+
+[project.urls]
+"Source Code" = "https://github.com/AmusementClub/vs-dfttest2"
+"Bug Tracker" = "https://github.com/AmusementClub/vs-dfttest2/issues"
+"Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
+
+[tool.hatch.version]
+source = "vcs"
+tag-pattern = '^v(?P<version>.*)$'
+
+[tool.hatch.version.raw-options]
+root = "vs-dfttest2"
+local_scheme = "no-local-version"
+
+[tool.hatch.build.targets.sdist]
+include = ["vs-dfttest2"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"vs-dfttest2/dfttest2.py" = "dfttest2.py"
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [{ path = "README.md" }, { path = "vs-dfttest2/README.md" }]

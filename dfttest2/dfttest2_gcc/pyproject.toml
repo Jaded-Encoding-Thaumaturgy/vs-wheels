@@ -1,0 +1,81 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.12",
+    "setuptools-scm",
+    "ninja ; sys_platform != 'win32'",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "vapoursynth-dfttest2_gcc"
+dynamic = ["version", "readme"]
+description = "BM3D denoising filter for VapourSynth, implemented in AVX2"
+license = "GPL-2.0-or-later"
+license-files = ["vs-dfttest2/LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "WolframRhodium" }]
+maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
+dependencies = ["vapoursynth>=75"]
+
+[project.urls]
+"Source Code" = "https://github.com/AmusementClub/vs-dfttest2"
+"Bug Tracker" = "https://github.com/AmusementClub/vs-dfttest2/issues"
+"Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
+
+[tool.setuptools_scm]
+root = "vs-dfttest2"
+local_scheme = "no-local-version"
+tag_regex = "^v(?P<version>.*)$"
+
+[tool.scikit-build]
+metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
+metadata.readme.provider = "scikit_build_core.metadata.fancy_pypi_readme"
+wheel.exclude = ["*.lib"]
+wheel.install-dir = "vapoursynth/plugins"
+wheel.expand-macos-universal-tags = true
+wheel.py-api = "py3"
+cmake.source-dir = "."
+cmake.args = ["-G", "Ninja"]
+cmake.define.CMAKE_BUILD_TYPE = "Release"
+cmake.define.CMAKE_CXX_COMPILER = "clang++"
+cmake.define.CMAKE_CXX_FLAGS = "-Wall -ffast-math -pthread"
+ninja.make-fallback = false
+ninja.version = ">=1.5"
+
+[[tool.scikit-build.overrides]]
+if.platform-system = "win32"
+inherit.cmake.define = "append"
+cmake.define.CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
+cmake.define.CMAKE_C_COMPILER = "clang.exe"
+cmake.define.CMAKE_CXX_COMPILER = "clang++.exe"
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [{ path = "README.md" }, { path = "vs-dfttest2/README.md" }]
+
+[tool.cibuildwheel]
+build-frontend = { name = "build[uv]", args = ["--verbose"] }
+build = "cp312-*"
+
+[tool.cibuildwheel.windows]
+archs = ["AMD64"]
+
+[tool.cibuildwheel.linux]
+archs = ["native"]
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
+musllinux-x86_64-image = "musllinux_1_2"
+musllinux-aarch64-image = "musllinux_1_2"
+repair-wheel-command = "auditwheel repair --strip -w {dest_dir} {wheel}"
+
+[tool.cibuildwheel.macos]
+archs = ["native"]
+environment = { MACOSX_DEPLOYMENT_TARGET = "13.0" }
+
+[[tool.cibuildwheel.overrides]]
+select = "*-manylinux*"
+before-all = "dnf install -y clang"
+
+[[tool.cibuildwheel.overrides]]
+select = "*-musllinux*"
+before-all = "apk add --no-cache clang build-base"

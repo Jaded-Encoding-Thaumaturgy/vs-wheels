@@ -24,7 +24,14 @@ dev = [
 bypass-selection = true
 
 [tool.uv.workspace]
-members = ["bm3dcuda/bm3dcpu", "bm3dcuda/bm3dcuda", "bm3dcuda/bm3dhip", "fmtc"]
+members = [
+    "bm3dcuda/bm3dcpu",
+    "bm3dcuda/bm3dcuda",
+    "bm3dcuda/bm3dhip",
+    "fmtc",
+    "dfttest2/dfttest2",
+    "dfttest2/dfttest2_gcc",
+]
 
 [tool.mypy]
 exclude_gitignore = true
