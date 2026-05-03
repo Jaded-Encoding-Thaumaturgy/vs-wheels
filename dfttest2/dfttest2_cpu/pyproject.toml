@@ -63,9 +63,7 @@ archs = ["AMD64"]
 [tool.cibuildwheel.linux]
 archs = ["native"]
 manylinux-x86_64-image = "manylinux_2_28"
-manylinux-aarch64-image = "manylinux_2_28"
 musllinux-x86_64-image = "musllinux_1_2"
-musllinux-aarch64-image = "musllinux_1_2"
 repair-wheel-command = "auditwheel repair --strip -w {dest_dir} {wheel}"
 
 [[tool.cibuildwheel.overrides]]
