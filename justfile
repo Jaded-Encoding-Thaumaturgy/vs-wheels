@@ -11,7 +11,10 @@ set positional-arguments
 # Format CMake files (Windows)
 format:
   #!{{shebang}}
-  uv run gersemi ./bm3dcuda/bm3dcpu/CMakeLists.txt -i --definitions ./bm3dcuda/bm3dcpu/CMakeLists.txt
+  $files = git ls-files --others --cached --exclude-standard | Select-String -Pattern 'CMakeLists\.txt$', '\.cmake$' | ForEach-Object { $_.ToString() }
+  if ($files) {
+    uv run python -m gersemi $files -i --definitions bm3dcuda/bm3dcpu/Common.cmake
+  }
 
 # Show submodule status with lightweight tags
 substatus:
