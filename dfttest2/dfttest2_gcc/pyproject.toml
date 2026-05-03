@@ -9,7 +9,7 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "vapoursynth-dfttest2_gcc"
 dynamic = ["version", "readme"]
-description = "BM3D denoising filter for VapourSynth, implemented in AVX2"
+description = "A VapourSynth re-implementation of DFTTest, using Compiler Vector Extensions."
 license = "GPL-2.0-or-later"
 license-files = ["vs-dfttest2/LICENSE"]
 requires-python = ">=3.12"
