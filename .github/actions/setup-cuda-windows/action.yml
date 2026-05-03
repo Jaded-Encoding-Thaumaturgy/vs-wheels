@@ -23,13 +23,15 @@ runs:
         "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v$cudaShort" | Out-File -FilePath $env:GITHUB_ENV -Append
         "CUDA_VERSION_WINDOWS=$cudaVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
         "CUDA_VERSION_WINDOWS_SHORT=$cudaShort" | Out-File -FilePath $env:GITHUB_ENV -Append
+        $componentsSafe = "${{ inputs.cuda-components }}" -replace ',', '-' -replace ' ', ''
+        "CUDA_COMPONENTS=$componentsSafe" | Out-File -FilePath $env:GITHUB_ENV -Append
 
     - name: Cache CUDA (Windows)
       id: cache-cuda
       uses: actions/cache@v5
       with:
         path: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA
-        key: setup-cuda-windows-${{ runner.os }}-${{ inputs.cuda-version }}-${{ inputs.cuda-components }}-${{ inputs.cache-key }}
+        key: setup-cuda-windows-${{ runner.os }}-${{ inputs.cuda-version }}-${{ env.CUDA_COMPONENTS }}-${{ inputs.cache-key }}
 
     - name: Setup CUDA (Windows)
       if: steps.cache-cuda.outputs.cache-hit != 'true'
@@ -45,3 +47,6 @@ runs:
             $installArgs += "${comp}_$cudaShort"
         }
         Start-Process ./cuda_installer.exe -ArgumentList $installArgs -Wait
+
+# nvcc_13.0 cudart_13.0 nvrtc_dev_13.0 crt_13.0 nvptxcompiler_13.0
+# cufft_13.0 cufft_dev_13.0
