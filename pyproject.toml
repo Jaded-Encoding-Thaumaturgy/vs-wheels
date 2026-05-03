@@ -8,6 +8,9 @@ version = "0.0.0"
 requires-python = ">=3.12"
 dependencies = ["vapoursynth>=75"]
 
+[project.urls]
+"Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
+
 [dependency-groups]
 dev = [
     "dumb-pypi>=1.15.0",

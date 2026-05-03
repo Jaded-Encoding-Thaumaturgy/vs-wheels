@@ -21,8 +21,9 @@ dependencies = ["vapoursynth>=74"]
 dev = ["hatchling==1.29.0", "packaging==26.1"]
 
 [project.urls]
-Repository = "https://gitlab.com/EleonoreMizo/fmtconv"
-Issues = "https://gitlab.com/EleonoreMizo/fmtconv/-/work_items/"
+"Source Code" = "https://gitlab.com/EleonoreMizo/fmtconv"
+"Bug Tracker" = "https://gitlab.com/EleonoreMizo/fmtconv/-/work_items/"
+"Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
 
 [tool.hatch.version]
 source = "vcs"

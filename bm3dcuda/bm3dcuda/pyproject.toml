@@ -20,6 +20,7 @@ dependencies = ["vapoursynth>=74"]
 [project.urls]
 "Source Code" = "https://github.com/WolframRhodium/VapourSynth-BM3DCUDA"
 "Bug Tracker" = "https://github.com/WolframRhodium/VapourSynth-BM3DCUDA/issues"
+"Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
 
 [tool.setuptools_scm]
 root = "VapourSynth-BM3DCUDA"
