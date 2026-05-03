@@ -92,6 +92,7 @@ jobs:
         with:
           cuda-version: ${{ env.CUDA_LINUX }}
           cuda-repo: ${{ matrix.cuda_repo }}
+          cuda-components: "nvcc, cudart-devel, nvrtc-devel, driver-devel"
 
       - name: Setup MSVC (Windows)
         if: runner.os == 'Windows'
@@ -106,6 +107,7 @@ jobs:
         uses: ./.github/actions/setup-cuda-windows
         with:
           cuda-version: ${{ env.CUDA_WINDOWS }}
+          cuda-components: "nvcc, cudart, nvrtc_dev, crt, nvptxcompiler, nvvm"
           cache-key: ${{ matrix.os }}
 
       - name: Build wheels

@@ -7,6 +7,9 @@ inputs:
   cuda-repo:
     description: "CUDA repository path (e.g., rhel8/x86_64)"
     required: true
+  cuda-components:
+    description: "Comma-separated list of CUDA components to install"
+    required: true
 
 runs:
   using: "composite"
@@ -19,11 +22,14 @@ runs:
         dnf install -y 'dnf-command(config-manager)'
         dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/${{ inputs.cuda-repo }}/cuda-rhel8.repo
         dnf clean all
-        dnf -y install \
-          cuda-nvcc-$CUDA_DASH \
-          cuda-cudart-devel-$CUDA_DASH \
-          cuda-nvrtc-devel-$CUDA_DASH \
-          cuda-driver-devel-$CUDA_DASH
+        IFS=', ' read -ra ADDR <<< "${{ inputs.cuda-components }}"
+        PKG_LIST=""
+        for comp in "${ADDR[@]}"; do
+          if [ -n "$comp" ]; then
+            PKG_LIST="$PKG_LIST cuda-$comp-$CUDA_DASH"
+          fi
+        done
+        dnf -y install $PKG_LIST
         echo "CUDA_PATH=/usr/local/cuda" >> $GITHUB_ENV
         echo "/usr/local/cuda/bin" >> $GITHUB_PATH
 

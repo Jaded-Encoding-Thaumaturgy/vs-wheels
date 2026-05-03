@@ -4,6 +4,9 @@ inputs:
   cuda-version:
     description: "CUDA version (e.g., 13.0.1)"
     required: true
+  cuda-components:
+    description: "Comma-separated list of CUDA components to install"
+    required: true
   cache-key:
     description: "Extra cache key part"
     required: false
@@ -26,7 +29,7 @@ runs:
       uses: actions/cache@v5
       with:
         path: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA
-        key: setup-cuda-windows-${{ runner.os }}-${{ inputs.cuda-version }}-${{ inputs.cache-key }}
+        key: setup-cuda-windows-${{ runner.os }}-${{ inputs.cuda-version }}-${{ inputs.cuda-components }}-${{ inputs.cache-key }}
 
     - name: Setup CUDA (Windows)
       if: steps.cache-cuda.outputs.cache-hit != 'true'
@@ -36,12 +39,9 @@ runs:
         $cudaShort = $env:CUDA_VERSION_WINDOWS_SHORT
         curl.exe -s -o cuda_installer.exe -L `
           "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_network.exe"
-        Start-Process ./cuda_installer.exe -ArgumentList `
-          "-s",
-          "nvcc_$cudaShort",
-          "cudart_$cudaShort",
-          "nvrtc_dev_$cudaShort",
-          "crt_$cudaShort",
-          "nvptxcompiler_$cudaShort",
-          "nvvm_$cudaShort" `
-          -Wait
+        $components = "${{ inputs.cuda-components }}".Split(',') | ForEach-Object { $_.Trim() }
+        $installArgs = @("-s")
+        foreach ($comp in $components) {
+            $installArgs += "${comp}_$cudaShort"
+        }
+        Start-Process ./cuda_installer.exe -ArgumentList $installArgs -Wait
