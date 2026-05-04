@@ -29,6 +29,10 @@
       "path": "dfttest2/dfttest2_cpu",
     },
     {
+      "name": "DFTTEST2 CUDA",
+      "path": "dfttest2/dfttest2_cuda",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },

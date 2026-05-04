@@ -12,6 +12,8 @@ members = [
     "vapoursynth-bm3dcpu",
     "vapoursynth-bm3dcuda",
     "vapoursynth-bm3dhip",
+    "vapoursynth-dfttest2-cpu",
+    "vapoursynth-dfttest2-cuda",
     "vapoursynth-dfttest2-gcc",
     "vapoursynth-fmtconv",
     "vs-wheels",
@@ -98,6 +100,12 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+cpu = [
+    { name = "vapoursynth-dfttest2-cpu" },
+]
+cufft = [
+    { name = "vapoursynth-dfttest2-cuda" },
+]
 gcc = [
     { name = "vapoursynth-dfttest2-gcc" },
 ]
@@ -105,9 +113,11 @@ gcc = [
 [package.metadata]
 requires-dist = [
     { name = "vapoursynth", specifier = ">=75" },
+    { name = "vapoursynth-dfttest2-cpu", marker = "extra == 'cpu'", editable = "dfttest2/dfttest2_cpu" },
+    { name = "vapoursynth-dfttest2-cuda", marker = "extra == 'cufft'", editable = "dfttest2/dfttest2_cuda" },
     { name = "vapoursynth-dfttest2-gcc", marker = "extra == 'gcc'", editable = "dfttest2/dfttest2_gcc" },
 ]
-provides-extras = ["gcc"]
+provides-extras = ["cpu", "cufft", "gcc"]
 
 [[package]]
 name = "dumb-pypi"
@@ -735,6 +745,26 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "vapoursynth", specifier = ">=74" }]
+
+[[package]]
+name = "vapoursynth-dfttest2-cpu"
+source = { editable = "dfttest2/dfttest2_cpu" }
+dependencies = [
+    { name = "vapoursynth" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
+
+[[package]]
+name = "vapoursynth-dfttest2-cuda"
+source = { editable = "dfttest2/dfttest2_cuda" }
+dependencies = [
+    { name = "vapoursynth" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
 
 [[package]]
 name = "vapoursynth-dfttest2-gcc"

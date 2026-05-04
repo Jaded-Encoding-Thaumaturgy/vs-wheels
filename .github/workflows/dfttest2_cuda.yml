@@ -1,18 +1,14 @@
-name: BM3DCUDA
+name: DFTTEST2_CUDA
 
 on:
   push:
     paths:
-      - bm3dcuda/bm3dcuda/**
-      - .github/workflows/bm3dcuda.yml
-      - .github/actions/setup-cuda-linux/**
-      - .github/actions/setup-cuda-windows/**
+      - dfttest2/dfttest2_cuda/**
+      - .github/workflows/dfttest2_cuda.yml
   pull_request:
     paths:
-      - bm3dcuda/bm3dcuda/**
-      - .github/workflows/bm3dcuda.yml
-      - .github/actions/setup-cuda-linux/**
-      - .github/actions/setup-cuda-windows/**
+      - dfttest2/dfttest2_cuda/**
+      - .github/workflows/dfttest2_cuda.yml
   workflow_dispatch:
     inputs:
       publish:
@@ -29,14 +25,14 @@ on:
           - testpypi
           - pypi
       version:
-        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCUDA)
+        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_CUDA)
         type: string
         required: false
       cuda-linux:
         description: CUDA version for Linux
         type: string
         required: false
-        default: "12.8"
+        default: "13.0"
       cuda-windows:
         description: CUDA version for Windows
         type: string
@@ -50,11 +46,11 @@ on:
         options:
           - windows-2025-vs2026
           - windows-2025
-          - windows-2022
 
 env:
-  CUDA_LINUX: ${{ inputs.cuda-linux || '12.8' }}
+  CUDA_LINUX: ${{ inputs.cuda-linux || '13.0' }}
   CUDA_WINDOWS: ${{ inputs.cuda-windows || '13.0.1' }}
+  PACKAGE_NAME: dfttest2_cuda
 
 jobs:
   build-wheels:
@@ -86,7 +82,7 @@ jobs:
         run: |
           # Workaround for Linux containers
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git submodule update --init --recursive bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA bm3dcuda/bm3dcuda/vapoursynth
+          git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v8.1.0
@@ -97,9 +93,13 @@ jobs:
         with:
           cuda-version: ${{ env.CUDA_LINUX }}
           cuda-repo: ${{ matrix.cuda_repo }}
-          cuda-components: "cuda-nvcc, cuda-cudart-devel, cuda-nvrtc-devel, cuda-driver-devel"
+          cuda-components: "cuda-nvcc, cuda-cudart-devel, cuda-nvrtc-devel, libcufft-devel, cuda-driver-devel"
 
-      - name: Setup MSVC (Windows)
+      - name: Setup LLVM Toolset (aarch64)
+        if: matrix.arch == 'sbsa'
+        run: dnf module install -y llvm-toolset
+
+      - name: Setup MSVC
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
@@ -112,13 +112,13 @@ jobs:
         uses: ./.github/actions/setup-cuda-windows
         with:
           cuda-version: ${{ env.CUDA_WINDOWS }}
-          cuda-components: "nvcc, cudart, nvrtc_dev, crt, nvptxcompiler, nvvm"
+          cuda-components: "nvcc, cudart, nvrtc_dev, cufft, cufft_dev, crt, nvptxcompiler"
           cache-key: ${{ matrix.os }}
 
       - name: Build wheels
-        run: uv build --wheel --package vapoursynth-bm3dcuda
+        run: uv build --package vapoursynth-${{ env.PACKAGE_NAME }}
         env:
-          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCUDA: ${{ inputs.version }}
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_CUDA: ${{ inputs.version }}
 
       - name: Repair wheel (Linux)
         if: runner.os == 'Linux'
@@ -127,10 +127,9 @@ jobs:
           rm dist/*.whl
           mv repaired_wheels/*.whl dist/
 
-      - name: Upload wheels
-        uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7
         with:
-          name: bm3dcuda-wheels-${{ matrix.os }}-${{ matrix.arch }}
+          name: ${{ env.PACKAGE_NAME }}-wheels-${{ matrix.os }}-${{ matrix.arch }}
           path: dist/*.whl
 
   build-sdist:
@@ -142,19 +141,19 @@ jobs:
           fetch-depth: 0
 
       - name: Initialize submodules
-        run: git submodule update --init --recursive bm3dcuda/bm3dcuda/VapourSynth-BM3DCUDA bm3dcuda/bm3dcuda/vapoursynth
+        run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v8.1.0
 
       - name: Build sdist
-        run: uv build --sdist --package vapoursynth-bm3dcuda
+        run: uv build --sdist --package vapoursynth-${{ env.PACKAGE_NAME }}
         env:
-          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCUDA: ${{ inputs.version }}
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_CUDA: ${{ inputs.version }}
 
       - uses: actions/upload-artifact@v7
         with:
-          name: bm3dcuda-sdist
+          name: ${{ env.PACKAGE_NAME }}-sdist
           path: dist/*.tar.gz
 
   trigger-publish:
@@ -174,10 +173,67 @@ jobs:
           REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
         run: >-
           gh workflow run publish.yml
-          -f artifact-pattern=bm3dcuda-*
-          -f package=vapoursynth-bm3dcuda
+          -f artifact-pattern=${{ env.PACKAGE_NAME }}-sdist
+          -f package=vapoursynth-${{ env.PACKAGE_NAME }}
           -f packages-dir=dist
           -f repository=${{ inputs.repository }}
           -f repository-url="$REPOSITORY_URL"
           -f run-id=${{ github.run_id }}
           --ref ${{ github.ref_name }}
+
+  upload-release:
+    name: Upload to GitHub Release
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download wheels
+        uses: actions/download-artifact@v7
+        with:
+          pattern: ${{ env.PACKAGE_NAME }}-wheels-*
+          path: dist
+          merge-multiple: true
+
+      - name: Download sdist
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ env.PACKAGE_NAME }}-sdist
+          path: dist
+
+      - name: Determine version
+        id: version
+        run: |
+          WHEEL=$(ls dist/*.whl | head -1)
+          VERSION=$(basename "$WHEEL" | sed 's/^[^-]*-\([^-]*\)-.*/\1/')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Create release and upload assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="vapoursynth-${{ env.PACKAGE_NAME }}-v${{ steps.version.outputs.version }}"
+          TITLE="vapoursynth-${{ env.PACKAGE_NAME }} ${{ steps.version.outputs.version }}"
+
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TITLE" \
+            --notes "vapoursynth-${{ env.PACKAGE_NAME }} ${{ steps.version.outputs.version }}" \
+            2>/dev/null || true
+
+          gh release upload "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
+
+  update-index:
+    name: Update package index
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [upload-release]
+    uses: ./.github/workflows/update-index.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write

@@ -26,7 +26,7 @@ runs:
         PKG_LIST=""
         for comp in "${ADDR[@]}"; do
           if [ -n "$comp" ]; then
-            PKG_LIST="$PKG_LIST cuda-$comp-$CUDA_DASH"
+            PKG_LIST="$PKG_LIST $comp-$CUDA_DASH"
           fi
         done
         dnf -y install $PKG_LIST
