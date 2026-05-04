@@ -4,6 +4,9 @@ inputs:
   hip-version:
     description: "HIP version (e.g., 7.0)"
     required: true
+  hip-components:
+    description: "Comma-separated list of HIP components to install"
+    required: true
 
 runs:
   using: "composite"
@@ -22,8 +25,7 @@ runs:
         gpgcheck=1
         gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
         EOF
-        dnf clean all
-        dnf install -y hip-devel hip-runtime-amd rocm-device-libs libxml2 libstdc++-devel
+        dnf -y install $(echo "${{ inputs.hip-components }}" | tr -d ',')
 
     - name: Configure HIP Path
       shell: bash

@@ -96,6 +96,7 @@ jobs:
         uses: ./.github/actions/setup-hip-linux
         with:
           hip-version: ${{ env.HIP_LINUX }}
+          hip-components: hip-devel, hip-runtime-amd, rocm-device-libs, libxml2, libstdc++-devel
 
       - name: Setup MSVC (Windows)
         if: runner.os == 'Windows'
