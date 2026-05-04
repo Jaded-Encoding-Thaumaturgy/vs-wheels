@@ -37,6 +37,10 @@
       "path": "dfttest2/dfttest2_nvrtc",
     },
     {
+      "name": "DFTTEST2 HIPRTC",
+      "path": "dfttest2/dfttest2_hiprtc",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },

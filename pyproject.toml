@@ -35,6 +35,7 @@ members = [
     "dfttest2/dfttest2_cpu",
     "dfttest2/dfttest2_cuda",
     "dfttest2/dfttest2_nvrtc",
+    "dfttest2/dfttest2_hiprtc",
 ]
 
 [tool.mypy]

@@ -19,7 +19,7 @@ cuda = ["vapoursynth-dfttest2_cuda", "vapoursynth-dfttest2_nvrtc"]
 cufft = ["vapoursynth-dfttest2_cuda"]
 nvrtc = ["vapoursynth-dfttest2_nvrtc"]
 # hipfft = ["vapoursynth-dfttest2_hip"]
-# hiprtc = ["vapoursynth-dfttest2_hiprtc"]
+hiprtc = ["vapoursynth-dfttest2_hiprtc"]
 cpu = ["vapoursynth-dfttest2_cpu"]
 gcc = ["vapoursynth-dfttest2-gcc"]
 
@@ -64,3 +64,4 @@ vapoursynth-dfttest2-gcc = { workspace = true }
 vapoursynth-dfttest2-cpu = { workspace = true }
 vapoursynth-dfttest2-cuda = { workspace = true }
 vapoursynth-dfttest2-nvrtc = { workspace = true }
+vapoursynth-dfttest2-hiprtc = { workspace = true }

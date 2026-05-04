@@ -1,0 +1,59 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.12",
+    "setuptools-scm",
+    "ninja ; sys_platform != 'win32'",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "vapoursynth-dfttest2_hiprtc"
+dynamic = ["version", "readme"]
+description = "A VapourSynth re-implementation of DFTTest, using AMD Runtime Compilation (HIPRTC) for GPU acceleration."
+license = "GPL-2.0-or-later"
+license-files = ["vs-dfttest2/LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "WolframRhodium" }]
+maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
+dependencies = ["vapoursynth>=75"]
+
+[project.urls]
+"Source Code" = "https://github.com/AmusementClub/vs-dfttest2"
+"Bug Tracker" = "https://github.com/AmusementClub/vs-dfttest2/issues"
+"Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
+
+[tool.setuptools_scm]
+root = "vs-dfttest2"
+local_scheme = "no-local-version"
+tag_regex = '^v(?P<version>\d+.*)$'
+
+[tool.scikit-build]
+metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
+metadata.readme.provider = "scikit_build_core.metadata.fancy_pypi_readme"
+wheel.exclude = ["*.lib"]
+wheel.install-dir = "vapoursynth/plugins/dfttest2_hiprtc"
+wheel.expand-macos-universal-tags = true
+wheel.py-api = "py3"
+cmake.source-dir = "."
+cmake.args = ["-G", "Ninja"]
+cmake.define.CMAKE_CXX_FLAGS = "-Wall -ffast-math"
+cmake.define.CMAKE_BUILD_TYPE = "Release"
+cmake.define.CMAKE_POLICY_VERSION_MINIMUM = "3.5"
+ninja.make-fallback = false
+ninja.version = ">=1.5"
+
+[[tool.scikit-build.overrides]]
+if.platform-system = "^win32"
+inherit.cmake.define = "append"
+cmake.define.CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
+cmake.define.HIP_PLATFORM = "amd"
+cmake.define.GPU_TARGETS = "gfx1030;gfx1031;gfx1032;gfx1100;gfx1101;gfx1102;gfx1151;gfx1200;gfx1201"
+
+[[tool.scikit-build.overrides]]
+if.platform-system = "^linux"
+inherit.cmake.define = "append"
+cmake.define.GPU_TARGETS = "gfx1010;gfx1011;gfx1012;gfx1030;gfx1031;gfx1032;gfx1033;gfx1034;gfx1035;gfx1036;gfx1100;gfx1101;gfx1102;gfx1103;gfx1200;gfx1201"
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [{ path = "README.md" }, { path = "vs-dfttest2/README.md" }]
