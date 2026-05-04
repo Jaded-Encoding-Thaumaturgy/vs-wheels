@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Download distributions
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           pattern: ${{ inputs.artifact-pattern }}
           path: ${{ inputs.packages-dir }}
@@ -60,7 +60,7 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Publish distributions
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # release/v1
         with:
           packages-dir: ${{ inputs.packages-dir }}
           repository-url: ${{ inputs.repository-url }}

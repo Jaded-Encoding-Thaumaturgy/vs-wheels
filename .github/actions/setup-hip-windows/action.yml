@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Restore ROCm HIP
       id: cache-hip
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
       with:
         path: C:\Program Files\AMD\ROCM
         key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
@@ -22,7 +22,7 @@ runs:
     - name: Restore HIP Installer
       if: steps.cache-hip.outputs.cache-hit != 'true'
       id: cache-hip-installer
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
       with:
         path: hip_installer.exe
         key: hip-installer-${{ inputs.hip-version }}
@@ -35,7 +35,7 @@ runs:
 
     - name: Save HIP Installer
       if: steps.cache-hip.outputs.cache-hit != 'true' && steps.cache-hip-installer.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
       with:
         path: hip_installer.exe
         key: hip-installer-${{ inputs.hip-version }}
@@ -48,7 +48,7 @@ runs:
 
     - name: Save ROCm HIP
       if: steps.cache-hip.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
       with:
         path: C:\Program Files\AMD\ROCM
         key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
