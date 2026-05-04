@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling==1.29.0", "packaging==26.1", "hatch-vcs"]
+requires = ["hatchling==1.29.0", "packaging==26.2", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -18,7 +18,7 @@ maintainers = [
 dependencies = ["vapoursynth>=74"]
 
 [dependency-groups]
-dev = ["hatchling==1.29.0", "packaging==26.1"]
+dev = ["hatchling==1.29.0", "packaging==26.2"]
 
 [project.urls]
 "Source Code" = "https://gitlab.com/EleonoreMizo/fmtconv"
