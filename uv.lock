@@ -15,6 +15,7 @@ members = [
     "vapoursynth-dfttest2-cpu",
     "vapoursynth-dfttest2-cuda",
     "vapoursynth-dfttest2-gcc",
+    "vapoursynth-dfttest2-nvrtc",
     "vapoursynth-fmtconv",
     "vs-wheels",
 ]
@@ -103,21 +104,31 @@ dependencies = [
 cpu = [
     { name = "vapoursynth-dfttest2-cpu" },
 ]
+cuda = [
+    { name = "vapoursynth-dfttest2-cuda" },
+    { name = "vapoursynth-dfttest2-nvrtc" },
+]
 cufft = [
     { name = "vapoursynth-dfttest2-cuda" },
 ]
 gcc = [
     { name = "vapoursynth-dfttest2-gcc" },
 ]
+nvrtc = [
+    { name = "vapoursynth-dfttest2-nvrtc" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "vapoursynth", specifier = ">=75" },
     { name = "vapoursynth-dfttest2-cpu", marker = "extra == 'cpu'", editable = "dfttest2/dfttest2_cpu" },
+    { name = "vapoursynth-dfttest2-cuda", marker = "extra == 'cuda'", editable = "dfttest2/dfttest2_cuda" },
     { name = "vapoursynth-dfttest2-cuda", marker = "extra == 'cufft'", editable = "dfttest2/dfttest2_cuda" },
     { name = "vapoursynth-dfttest2-gcc", marker = "extra == 'gcc'", editable = "dfttest2/dfttest2_gcc" },
+    { name = "vapoursynth-dfttest2-nvrtc", marker = "extra == 'cuda'", editable = "dfttest2/dfttest2_nvrtc" },
+    { name = "vapoursynth-dfttest2-nvrtc", marker = "extra == 'nvrtc'", editable = "dfttest2/dfttest2_nvrtc" },
 ]
-provides-extras = ["cpu", "cufft", "gcc"]
+provides-extras = ["cpu", "cuda", "cufft", "gcc", "nvrtc"]
 
 [[package]]
 name = "dumb-pypi"
@@ -769,6 +780,16 @@ requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
 [[package]]
 name = "vapoursynth-dfttest2-gcc"
 source = { editable = "dfttest2/dfttest2_gcc" }
+dependencies = [
+    { name = "vapoursynth" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
+
+[[package]]
+name = "vapoursynth-dfttest2-nvrtc"
+source = { editable = "dfttest2/dfttest2_nvrtc" }
 dependencies = [
     { name = "vapoursynth" },
 ]
