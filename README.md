@@ -97,7 +97,7 @@ $env:UV_INDEX = "https://jaded-encoding-thaumaturgy.github.io/vs-wheels/simple"
 
 ## Available Packages
 
-### BM3DCPU
+### **BM3DCPU**
 
 Available on PyPI.
 
@@ -107,7 +107,7 @@ Available on PyPI.
 - **2.16.3**: Yanked.
 - **2.16.4**: Matches upstream R2.16. Requires VapourSynth R75.
 
-### BM3DCUDA
+### **BM3DCUDA**
 
 Available on PyPI.
 
@@ -118,7 +118,7 @@ Available on PyPI.
   - **Windows**: Compiled with CUDA 13.2.1 and Visual Studio 2026.
   - **Linux**: Compiled with CUDA 13.2.
 
-### BM3DHIP
+### **BM3DHIP**
 
 Available on PyPI.
 
@@ -129,11 +129,52 @@ Available on PyPI.
   - **Windows**: Compiled with HIP 7.1.1 and Visual Studio 2026.
   - **Linux**: Compiled with HIP 7.2.2.
 
-### DFTTEST2
+### **DFTTEST2**
 
-### VS-MLRT
+Available on PyPI.
 
-### FMTCONV / FMTC
+This is the meta-package providing the Python interface and backend dependencies via extras to simplify installation.
+
+- **10**: Matches upstream release v10
+
+### **DFTTEST2_GCC**
+
+Available on PyPI.
+
+- **10**: Matches upstream release v10
+  Available on all platforms.
+
+### **DFTTEST2_CPU**
+
+Available on PyPI.
+
+- **10**: Matches upstream release v10
+
+### **DFTTEST2_NVRTC**
+
+Available on PyPI.
+
+- **10**: Matches upstream release v10
+  - **Windows**: Compiled with CUDA 13.0.1 and Visual Studio 2022.
+  - **Linux**: Compiled with CUDA 13.0.
+- **11.dev1**:
+  - **Windows**: Compiled with CUDA 13.2.1 and Visual Studio 2026.
+  - **Linux**: Compiled with CUDA 13.2.
+
+### **DFTTEST2_CUDA**
+
+Wheels are available on vs-wheels index.
+
+- **10** / **10.post1**: Matches upstream release v10
+  - **Windows**: Compiled with CUDA 13.0.1 and Visual Studio 2022.
+  - **Linux**: Compiled with CUDA 13.0.
+- **11.dev1**:
+  - **Windows**: Compiled with CUDA 13.2.1 and Visual Studio 2026.
+  - **Linux**: Compiled with CUDA 13.2.
+
+### **VS-MLRT**
+
+### **FMTCONV / FMTC**
 
 Available on vs-wheels index and on all platforms.
 
