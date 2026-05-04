@@ -53,7 +53,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
 
@@ -61,7 +61,7 @@ jobs:
         run: git submodule update --init --recursive dfttest2/dfttest2_gcc/vs-dfttest2 dfttest2/dfttest2_gcc/vapoursynth
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
       - name: Setup MSVC
         if: runner.os == 'Windows'
@@ -72,13 +72,13 @@ jobs:
           $envVars | ForEach-Object { if (Test-Path "Env:$_") { "$_=$((Get-Content Env:\$_))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8 } }
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v3.4.1
+        uses: pypa/cibuildwheel@8d2b08b68458a16aeb24b64e68a09ab1c8e82084 # v3.4.1
         with:
           package-dir: dfttest2/dfttest2_gcc
         env:
           CIBW_ENVIRONMENT: SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_GCC="${{ inputs.version }}"
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: dfttest2_gcc-wheels-${{ matrix.name }}
           path: ./wheelhouse/*.whl
@@ -87,7 +87,7 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
 
@@ -95,14 +95,14 @@ jobs:
         run: git submodule update --init --recursive dfttest2/dfttest2_gcc/vs-dfttest2 dfttest2/dfttest2_gcc/vapoursynth
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
       - name: Build sdist
         run: uv build --sdist --package vapoursynth-dfttest2_gcc
         env:
           SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_GCC: ${{ inputs.version }}
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: dfttest2_gcc-sdist
           path: dist/*.tar.gz
