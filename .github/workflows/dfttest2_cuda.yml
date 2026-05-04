@@ -185,48 +185,13 @@ jobs:
     name: Upload to GitHub Release
     if: github.event_name == 'workflow_dispatch' && inputs.publish
     needs: [build-wheels, build-sdist]
-    runs-on: ubuntu-latest
     permissions:
       contents: write
-
-    steps:
-      - name: Download wheels
-        uses: actions/download-artifact@v7
-        with:
-          pattern: ${{ env.PACKAGE_NAME }}-wheels-*
-          path: dist
-          merge-multiple: true
-
-      - name: Download sdist
-        uses: actions/download-artifact@v7
-        with:
-          name: ${{ env.PACKAGE_NAME }}-sdist
-          path: dist
-
-      - name: Determine version
-        id: version
-        run: |
-          WHEEL=$(ls dist/*.whl | head -1)
-          VERSION=$(basename "$WHEEL" | sed 's/^[^-]*-\([^-]*\)-.*/\1/')
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "Detected version: $VERSION"
-
-      - name: Create release and upload assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          TAG="vapoursynth-${{ env.PACKAGE_NAME }}-v${{ steps.version.outputs.version }}"
-          TITLE="vapoursynth-${{ env.PACKAGE_NAME }} ${{ steps.version.outputs.version }}"
-
-          gh release create "$TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$TITLE" \
-            --notes "vapoursynth-${{ env.PACKAGE_NAME }} ${{ steps.version.outputs.version }}" \
-            2>/dev/null || true
-
-          gh release upload "$TAG" dist/* \
-            --repo "$GITHUB_REPOSITORY" \
-            --clobber
+    uses: ./.github/workflows/upload-release.yml
+    with:
+      wheel-pattern: dfttest2_cuda-wheels-*
+      sdist-name: dfttest2_cuda-sdist
+      display-name: vapoursynth-dfttest2_cuda
 
   update-index:
     name: Update package index

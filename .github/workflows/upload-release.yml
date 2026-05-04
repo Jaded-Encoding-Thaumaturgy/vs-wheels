@@ -1,0 +1,59 @@
+name: Upload Release
+
+on:
+  workflow_call:
+    inputs:
+      wheel-pattern:
+        description: Pattern for wheel artifacts
+        type: string
+        required: true
+      sdist-name:
+        description: Name for sdist artifact
+        type: string
+        required: true
+      display-name:
+        description: Name used for release tag and title (e.g., vapoursynth-fmtconv)
+        type: string
+        required: true
+
+jobs:
+  upload:
+    name: Upload to GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download wheels
+        uses: actions/download-artifact@v7
+        with:
+          pattern: ${{ inputs.wheel-pattern }}
+          path: dist
+          merge-multiple: true
+
+      - name: Download sdist
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.sdist-name }}
+          path: dist
+
+      - name: Determine version
+        id: version
+        run: |
+          WHEEL=$(ls dist/*.whl | head -1)
+          VERSION=$(basename "$WHEEL" | sed 's/^[^-]*-\([^-]*\)-.*/\1/')
+          TAG="${{ inputs.display-name }}-v$VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+          echo "Release tag: $TAG"
+
+      - name: Create release and upload assets
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ inputs.display-name }} ${{ steps.version.outputs.version }}
+          files: dist/*
+          body: ${{ inputs.display-name }} ${{ steps.version.outputs.version }}
+          fail_on_unmatched_files: true
+          generate_release_notes: false
