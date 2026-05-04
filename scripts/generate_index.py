@@ -3,6 +3,7 @@
 # dependencies = [
 #     "dumb-pypi>=1.15.0",
 #     "niquests>=3.18.7",
+#     "rich>=15.0.0",
 # ]
 # ///
 """
@@ -12,21 +13,60 @@ Generate a PEP 503 Simple Repository API index from GitHub Releases.
 import asyncio
 import hashlib
 import json
+import logging
 import os
-import sys
 import tempfile
 from pathlib import Path
 from typing import Any
 
 import niquests
+import rich.console
+import rich.logging
 from dumb_pypi.main import main as dumb_pypi_main  # type: ignore[import-untyped]
+from rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    Progress,
+    TextColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+    TransferSpeedColumn,
+)
 
 PACKAGES_URL_PLACEHOLDER = "https://__PACKAGES_PLACEHOLDER__"
 OUTPUT_DIR = Path("_site")
 LOGO_WIDTH = 100
 
+console = rich.console.Console(
+    stderr=True,
+    force_terminal=True if os.environ.get("GITHUB_ACTIONS") else None,
+)
+
+logging.basicConfig(
+    level=logging.INFO,
+    handlers=[rich.logging.RichHandler(rich_tracebacks=True, console=console, show_path=True)],
+    format="%(message)s",
+    datefmt="[%X]",
+)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+progress = Progress(
+    TextColumn("{task.description}"),
+    BarColumn(),
+    DownloadColumn(),
+    TransferSpeedColumn(),
+    TimeElapsedColumn(),
+    TimeRemainingColumn(),
+    transient=True,
+    console=console,
+    refresh_per_second=1 if os.environ.get("GITHUB_ACTIONS") else 10,
+)
+
 
 def github_api_get(url: str, token: str | None) -> list[dict[str, Any]]:
+    logger.debug(f"Fetching {url}...")
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
@@ -39,6 +79,7 @@ def github_api_get(url: str, token: str | None) -> list[dict[str, Any]]:
 
 
 def fetch_releases(repo: str, token: str | None = None) -> list[dict[str, Any]]:
+    logger.debug(f"Fetching releases for {repo}...")
     releases = list[dict[str, Any]]()
     page = 1
     while True:
@@ -47,6 +88,8 @@ def fetch_releases(repo: str, token: str | None = None) -> list[dict[str, Any]]:
             break
         releases.extend(batch)
         page += 1
+
+    logger.info(f"Found {len(releases)} releases.")
     return releases
 
 
@@ -75,33 +118,48 @@ async def collect_assets(releases: list[dict[str, Any]]) -> dict[str, dict[str, 
         return assets
 
     async with niquests.AsyncSession() as session:
-        async with asyncio.TaskGroup() as tg:
-            for name, url in asset_info:
-                print(f"Hashing new asset (async): {name}...", file=sys.stderr)
-                task = tg.create_task(calculate_sha256(session, url, semaphore))
-                tasks[name] = (url, task)
+        with progress:
+            async with asyncio.TaskGroup() as tg:
+                for name, url in asset_info:
+                    logger.info(f"Hashing new asset: {name}...")
+                    task = tg.create_task(calculate_sha256(session, url, semaphore, name))
+                    tasks[name] = (url, task)
 
         for name, (url, task) in tasks.items():
+            logger.info(f"Adding asset to index: {name}")
             assets[name] = {"url": url, "hash": task.result()}
 
     return assets
 
 
-async def calculate_sha256(session: niquests.AsyncSession, url: str, semaphore: asyncio.Semaphore) -> str:
+async def calculate_sha256(session: niquests.AsyncSession, url: str, semaphore: asyncio.Semaphore, name: str) -> str:
     async with semaphore:
-        resp = await session.get(url, stream=True)
+        resp = await session.get(url, stream=True, timeout=300)
         resp.raise_for_status()
 
         sha256 = hashlib.sha256()
-        async for chunk in await resp.iter_content():
-            sha256.update(chunk)
+        task_id = progress.add_task(name)
 
-        return sha256.hexdigest()
+        async for chunk in await resp.iter_content(chunk_size=1024 * 1024):
+            assert resp.download_progress
+            progress.update(
+                task_id,
+                total=resp.download_progress.content_length,
+                completed=resp.download_progress.total,
+            )
+            sha256.update(chunk)
+        progress.update(task_id, refresh=True)
+
+        digest = sha256.hexdigest()
+        logger.debug(f"Finished hashing: {name}")
+        return digest
 
 
 def load_cache() -> dict[str, str]:
+    logger.info("Loading cache...")
     cache_path = OUTPUT_DIR / "packages.json"
     if not cache_path.exists():
+        logger.info("No cache found.")
         return {}
 
     cache = dict[str, str]()
@@ -174,19 +232,19 @@ async def main() -> None:
     token = os.environ.get("GITHUB_TOKEN")
     title = os.environ.get("INDEX_TITLE", "JET Package Index")
 
-    print(f"Generating index for {repo} -> {OUTPUT_DIR}", file=sys.stderr)
+    logger.info("Generating index for %s -> %s", repo, OUTPUT_DIR)
 
     releases = fetch_releases(repo, token)
     assets = await collect_assets(releases)
 
-    print(f"Found {len(assets)} distribution file(s) across {len(releases)} release(s)", file=sys.stderr)
+    logger.info("Found %s distribution file(s) across %s release(s)", len(assets), len(releases))
 
     if not assets:
-        print("WARNING: No distribution assets found in any release.", file=sys.stderr)
+        logger.warning("No distribution assets found in any release.")
     else:
         run_dumb_pypi(assets, title)
 
-    print("Done.", file=sys.stderr)
+    logger.info("Done.")
 
 
 if __name__ == "__main__":

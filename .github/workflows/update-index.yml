@@ -13,6 +13,12 @@ concurrency:
   group: github-pages
   cancel-in-progress: false
 
+env:
+  COLUMNS: 160
+  FORCE_COLOR: 1
+  TTY_COMPATIBLE: 1
+  TTY_INTERACTIVE: 1
+
 jobs:
   build-index:
     name: Build index
