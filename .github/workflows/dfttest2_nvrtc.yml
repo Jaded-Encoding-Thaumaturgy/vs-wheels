@@ -173,7 +173,7 @@ jobs:
           REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
         run: >-
           gh workflow run publish.yml
-          -f artifact-pattern=${{ env.PACKAGE_NAME }}
+          -f artifact-pattern=${{ env.PACKAGE_NAME }}-*
           -f package=vapoursynth-${{ env.PACKAGE_NAME }}
           -f packages-dir=dist
           -f repository=${{ inputs.repository }}
