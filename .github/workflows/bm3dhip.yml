@@ -2,6 +2,8 @@ name: BM3DHIP
 
 on:
   push:
+    branches:
+      - master
     paths:
       - bm3dcuda/bm3dhip/**
       - .github/workflows/bm3dhip.yml
@@ -53,6 +55,7 @@ on:
           - windows-2025-vs2026
           - windows-2025
           - windows-2022
+  merge_group:
 
 env:
   HIP_LINUX: ${{ inputs.hip-linux || '7.0' }}

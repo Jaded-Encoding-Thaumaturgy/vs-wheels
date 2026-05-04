@@ -2,6 +2,8 @@ name: BM3DCUDA
 
 on:
   push:
+    branches:
+      - master
     paths:
       - bm3dcuda/bm3dcuda/**
       - .github/workflows/bm3dcuda.yml
@@ -51,6 +53,7 @@ on:
           - windows-2025-vs2026
           - windows-2025
           - windows-2022
+  merge_group:
 
 env:
   CUDA_LINUX: ${{ inputs.cuda-linux || '12.8' }}

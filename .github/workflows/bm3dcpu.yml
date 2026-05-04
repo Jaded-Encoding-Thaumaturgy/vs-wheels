@@ -2,6 +2,8 @@ name: BM3DCPU
 
 on:
   push:
+    branches:
+      - master
     paths:
       - bm3dcuda/bm3dcpu/**
       - .github/workflows/bm3dcpu.yml
@@ -28,6 +30,7 @@ on:
         description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DCPU)
         type: string
         required: false
+  merge_group:
 
 jobs:
   build-wheels:

@@ -2,6 +2,8 @@ name: DFTTEST2_NVRTC
 
 on:
   push:
+    branches:
+      - master
     paths:
       - dfttest2/dfttest2_nvrtc/**
       - .github/workflows/dfttest2_nvrtc.yml
@@ -46,6 +48,7 @@ on:
         options:
           - windows-2025-vs2026
           - windows-2025
+  merge_group:
 
 env:
   CUDA_LINUX: ${{ inputs.cuda-linux || '13.0' }}

@@ -2,6 +2,8 @@ name: DFTTEST2
 
 on:
   push:
+    branches:
+      - master
     paths:
       - dfttest2/dfttest2/**
       - .github/workflows/dfttest2.yml
@@ -28,6 +30,7 @@ on:
         description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION)
         type: string
         required: false
+  merge_group:
 
 jobs:
   build:

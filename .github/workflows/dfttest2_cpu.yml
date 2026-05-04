@@ -2,6 +2,8 @@ name: DFTTEST2_CPU
 
 on:
   push:
+    branches:
+      - master
     paths:
       - dfttest2/dfttest2_cpu/**
       - .github/workflows/dfttest2_cpu.yml
@@ -28,6 +30,7 @@ on:
         description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_CPU)
         type: string
         required: false
+  merge_group:
 
 jobs:
   build-wheels:
