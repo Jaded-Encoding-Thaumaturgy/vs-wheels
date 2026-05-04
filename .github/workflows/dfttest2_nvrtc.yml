@@ -1,0 +1,182 @@
+name: DFTTEST2_NVRTC
+
+on:
+  push:
+    paths:
+      - dfttest2/dfttest2_nvrtc/**
+      - .github/workflows/dfttest2_nvrtc.yml
+  pull_request:
+    paths:
+      - dfttest2/dfttest2_nvrtc/**
+      - .github/workflows/dfttest2_nvrtc.yml
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish built distributions
+        type: boolean
+        required: false
+        default: false
+      repository:
+        description: Package index to publish to
+        type: choice
+        required: true
+        default: testpypi
+        options:
+          - testpypi
+          - pypi
+      version:
+        description: Version override (SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_NVRTC)
+        type: string
+        required: false
+      cuda-linux:
+        description: CUDA version for Linux
+        type: string
+        required: false
+        default: "13.0"
+      cuda-windows:
+        description: CUDA version for Windows
+        type: string
+        required: false
+        default: "13.0.1"
+      windows-runner:
+        description: Windows runner to use
+        type: choice
+        required: true
+        default: windows-2025
+        options:
+          - windows-2025-vs2026
+          - windows-2025
+
+env:
+  CUDA_LINUX: ${{ inputs.cuda-linux || '13.0' }}
+  CUDA_WINDOWS: ${{ inputs.cuda-windows || '13.0.1' }}
+  PACKAGE_NAME: dfttest2_nvrtc
+
+jobs:
+  build-wheels:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+            container: quay.io/pypa/manylinux_2_28_x86_64
+            cuda_repo: rhel8/x86_64
+          - os: ubuntu-24.04-arm
+            arch: sbsa
+            container: quay.io/pypa/manylinux_2_28_aarch64
+            cuda_repo: rhel8/sbsa
+          - os: ${{ inputs.windows-runner || 'windows-2025' }}
+            arch: amd64
+
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Initialize submodules
+        run: |
+          # Workaround for Linux containers
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Setup CUDA (Linux)
+        if: runner.os == 'Linux'
+        uses: ./.github/actions/setup-cuda-linux
+        with:
+          cuda-version: ${{ env.CUDA_LINUX }}
+          cuda-repo: ${{ matrix.cuda_repo }}
+          cuda-components: "cuda-nvcc, cuda-cudart-devel, cuda-nvrtc-devel, libcufft-devel, cuda-driver-devel"
+
+      - name: Setup LLVM Toolset (aarch64)
+        if: matrix.arch == 'sbsa'
+        run: dnf module install -y llvm-toolset
+
+      - name: Setup MSVC
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          . ./scripts/Enter-DevShell.ps1
+          $envVars = "INCLUDE", "LIB", "LIBPATH", "UCRTVersion", "VCToolsVersion", "WindowsSdkDir", "PATH"
+          $envVars | ForEach-Object { if (Test-Path "Env:$_") { "$_=$((Get-Content Env:\$_))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8 } }
+
+      - name: Setup CUDA (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/setup-cuda-windows
+        with:
+          cuda-version: ${{ env.CUDA_WINDOWS }}
+          cuda-components: "nvcc, cudart, nvrtc_dev, cufft, cufft_dev, crt, nvptxcompiler"
+          cache-key: ${{ matrix.os }}
+
+      - name: Build wheels
+        run: uv build --package vapoursynth-${{ env.PACKAGE_NAME }}
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_NVRTC: ${{ inputs.version }}
+
+      - name: Repair wheel (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          uvx --with patchelf auditwheel repair --strip dist/*.whl -w repaired_wheels
+          rm dist/*.whl
+          mv repaired_wheels/*.whl dist/
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PACKAGE_NAME }}-wheels-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*.whl
+
+  build-sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Build sdist
+        run: uv build --sdist --package vapoursynth-${{ env.PACKAGE_NAME }}
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_DFTTEST2_NVRTC: ${{ inputs.version }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PACKAGE_NAME }}-sdist
+          path: dist/*.tar.gz
+
+  trigger-publish:
+    name: Trigger ${{ inputs.repository }} publish
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Trigger publish workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+        run: >-
+          gh workflow run publish.yml
+          -f artifact-pattern=${{ env.PACKAGE_NAME }}-sdist
+          -f package=vapoursynth-${{ env.PACKAGE_NAME }}
+          -f packages-dir=dist
+          -f repository=${{ inputs.repository }}
+          -f repository-url="$REPOSITORY_URL"
+          -f run-id=${{ github.run_id }}
+          --ref ${{ github.ref_name }}

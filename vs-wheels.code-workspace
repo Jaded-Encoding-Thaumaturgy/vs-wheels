@@ -33,6 +33,10 @@
       "path": "dfttest2/dfttest2_cuda",
     },
     {
+      "name": "DFTTEST2 NCRTC",
+      "path": "dfttest2/dfttest2_nvrtc",
+    },
+    {
       "name": "vs-wheels (Root)",
       "path": ".",
     },

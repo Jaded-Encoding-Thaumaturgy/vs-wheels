@@ -14,10 +14,10 @@ maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
 dependencies = ["vapoursynth>=75"]
 
 [project.optional-dependencies]
-# cuda = ["vapoursynth-dfttest2_cuda", "vapoursynth-dfttest2_nvrtc"]
+cuda = ["vapoursynth-dfttest2_cuda", "vapoursynth-dfttest2_nvrtc"]
 # hip = ["vapoursynth-dfttest2_hip", "vapoursynth-dfttest2_hiprtc"]
 cufft = ["vapoursynth-dfttest2_cuda"]
-# nvrtc = ["vapoursynth-dfttest2_nvrtc"]
+nvrtc = ["vapoursynth-dfttest2_nvrtc"]
 # hipfft = ["vapoursynth-dfttest2_hip"]
 # hiprtc = ["vapoursynth-dfttest2_hiprtc"]
 cpu = ["vapoursynth-dfttest2_cpu"]
@@ -63,3 +63,4 @@ fragments = [{ path = "README.md" }, { path = "vs-dfttest2/README.md" }]
 vapoursynth-dfttest2-gcc = { workspace = true }
 vapoursynth-dfttest2-cpu = { workspace = true }
 vapoursynth-dfttest2-cuda = { workspace = true }
+vapoursynth-dfttest2-nvrtc = { workspace = true }
