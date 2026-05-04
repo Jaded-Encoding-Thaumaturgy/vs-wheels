@@ -1,0 +1,39 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "cloneSubmodules": true,
+  "extends": [
+    "config:best-practices",
+    ":automergeMinor",
+    ":automergePr",
+    ":automergeRequireAllStatusChecks",
+    ":disableDependencyDashboard",
+    ":disableRateLimiting",
+    ":semanticCommits",
+    ":semanticCommitScopeDisabled",
+    ":semanticCommitTypeAll(deps)"
+  ],
+  "git-submodules": {
+    "enabled": true
+  },
+  "ignoreDeps": [
+    "bm3dcuda/bm3dcpu/vapoursynth",
+    "bm3dcuda/bm3dcuda/vapoursynth",
+    "bm3dcuda/bm3dhip/vapoursynth",
+    "dfttest2/dfttest2_cpu/vapoursynth",
+    "dfttest2/dfttest2_cuda/vapoursynth",
+    "dfttest2/dfttest2_gcc/vapoursynth",
+    "dfttest2/dfttest2_hip/vapoursynth",
+    "dfttest2/dfttest2_hiprtc/vapoursynth",
+    "dfttest2/dfttest2_nvrtc/vapoursynth"
+  ],
+  "packageRules": [
+    {
+      "extends": [":semanticCommitTypeAll(ci)"],
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "automerge": true,
+      "matchUpdateTypes": ["pin", "digest", "pinDigest"]
+    }
+  ]
+}
