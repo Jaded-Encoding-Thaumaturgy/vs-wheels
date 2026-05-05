@@ -137,6 +137,8 @@ This is the meta-package providing the Python interface and backend dependencies
 
 - **10**: Matches upstream release v10
 
+More information [here](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/blob/master/dfttest2/dfttest2/README.md).
+
 ### **DFTTEST2_GCC**
 
 Available on PyPI.
@@ -171,6 +173,17 @@ Wheels are available on vs-wheels index.
 - **11.dev1**:
   - **Windows**: Compiled with CUDA 13.2.1 and Visual Studio 2026.
   - **Linux**: Compiled with CUDA 13.2.
+
+### **DFTTEST2_HIPRTC**
+
+Available on PyPI.
+
+- **10**:
+  - **Windows**: Compiled with HIP 7.1.1 and Visual Studio 2026.
+  - **Linux**: Compiled with HIP 7.0.
+- **11.dev1**:
+  - **Windows**: Compiled with HIP 7.1.1 and Visual Studio 2026.
+  - **Linux**: Compiled with HIP 7.2.2.
 
 ### **VS-MLRT**
 
