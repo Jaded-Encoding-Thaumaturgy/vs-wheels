@@ -15,6 +15,7 @@ members = [
     "vapoursynth-dfttest2-cpu",
     "vapoursynth-dfttest2-cuda",
     "vapoursynth-dfttest2-gcc",
+    "vapoursynth-dfttest2-hip",
     "vapoursynth-dfttest2-hiprtc",
     "vapoursynth-dfttest2-nvrtc",
     "vapoursynth-fmtconv",
@@ -115,6 +116,13 @@ cufft = [
 gcc = [
     { name = "vapoursynth-dfttest2-gcc" },
 ]
+hip = [
+    { name = "vapoursynth-dfttest2-hip" },
+    { name = "vapoursynth-dfttest2-hiprtc" },
+]
+hipfft = [
+    { name = "vapoursynth-dfttest2-hip" },
+]
 hiprtc = [
     { name = "vapoursynth-dfttest2-hiprtc" },
 ]
@@ -129,11 +137,14 @@ requires-dist = [
     { name = "vapoursynth-dfttest2-cuda", marker = "extra == 'cuda'", editable = "dfttest2/dfttest2_cuda" },
     { name = "vapoursynth-dfttest2-cuda", marker = "extra == 'cufft'", editable = "dfttest2/dfttest2_cuda" },
     { name = "vapoursynth-dfttest2-gcc", marker = "extra == 'gcc'", editable = "dfttest2/dfttest2_gcc" },
+    { name = "vapoursynth-dfttest2-hip", marker = "extra == 'hip'", editable = "dfttest2/dfttest2_hip" },
+    { name = "vapoursynth-dfttest2-hip", marker = "extra == 'hipfft'", editable = "dfttest2/dfttest2_hip" },
+    { name = "vapoursynth-dfttest2-hiprtc", marker = "extra == 'hip'", editable = "dfttest2/dfttest2_hiprtc" },
     { name = "vapoursynth-dfttest2-hiprtc", marker = "extra == 'hiprtc'", editable = "dfttest2/dfttest2_hiprtc" },
     { name = "vapoursynth-dfttest2-nvrtc", marker = "extra == 'cuda'", editable = "dfttest2/dfttest2_nvrtc" },
     { name = "vapoursynth-dfttest2-nvrtc", marker = "extra == 'nvrtc'", editable = "dfttest2/dfttest2_nvrtc" },
 ]
-provides-extras = ["cpu", "cuda", "cufft", "gcc", "hiprtc", "nvrtc"]
+provides-extras = ["cpu", "cuda", "cufft", "gcc", "hip", "hipfft", "hiprtc", "nvrtc"]
 
 [[package]]
 name = "dumb-pypi"
@@ -828,6 +839,16 @@ requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
 [[package]]
 name = "vapoursynth-dfttest2-gcc"
 source = { editable = "dfttest2/dfttest2_gcc" }
+dependencies = [
+    { name = "vapoursynth" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
+
+[[package]]
+name = "vapoursynth-dfttest2-hip"
+source = { editable = "dfttest2/dfttest2_hip" }
 dependencies = [
     { name = "vapoursynth" },
 ]

@@ -37,6 +37,10 @@
       "path": "dfttest2/dfttest2_nvrtc",
     },
     {
+      "name": "DFTTEST2 HIP",
+      "path": "dfttest2/dfttest2_hip",
+    },
+    {
       "name": "DFTTEST2 HIPRTC",
       "path": "dfttest2/dfttest2_hiprtc",
     },
