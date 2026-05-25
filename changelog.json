@@ -128,5 +128,23 @@
       "vulkan_linux": "1.4.321.1",
       "vulkan_macos": "1.4.350.0"
     }
+  },
+  "bm3dcuda": {
+    "2.16.1": {
+      "package": "bm3dcuda",
+      "version": "2.16.1",
+      "cuda_linux": "13.2",
+      "cuda_windows": "13.2.1",
+      "release_date": "2026-05-25"
+    }
+  },
+  "dfttest2_nvrtc": {
+    "10.1": {
+      "package": "dfttest2_nvrtc",
+      "version": "10.1",
+      "cuda_windows": "13.2.1",
+      "cuda_linux": "13.2",
+      "release_date": "2026-05-25"
+    }
   }
 }

@@ -1,10 +1,25 @@
 # Plugins Release Changelog
 
+## bm3dcuda
+
+### Version 2.16.1 (2026-05-25)
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
+
 ## dfttest2
 
 ### Version 10 (2026-05-16)
 
 Matches upstream release v10
+
+
+## dfttest2_nvrtc
+
+### Version 10.1 (2026-05-25)
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
 
 ## vapoursynth-bm3dcpu
 
@@ -12,13 +27,13 @@ Matches upstream release v10
 
 Matches upstream R2.16. Requires VapourSynth R75.
 
+
 ## vapoursynth-bm3dcuda
 
 ### Version 2.17.dev1 (2026-05-16)
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
-
 ### Version 2.16 (2026-05-16)
 
 - **CUDA Windows**: 13.0.1
@@ -30,7 +45,6 @@ Matches upstream R2.16. Requires VapourSynth R75.
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
-
 ### Version 2.16 (2026-05-16)
 
 - **HIP Windows**: 6.4.2
@@ -42,6 +56,7 @@ Matches upstream R2.16. Requires VapourSynth R75.
 
 Matches upstream release v10
 
+
 ## vapoursynth-dfttest2-cuda
 
 ### Version 11.dev2 (2026-05-16)
@@ -52,7 +67,6 @@ Available on vs-wheels index
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
-
 ### Version 10.2 (2026-05-16)
 
 Available on PyPI
@@ -68,13 +82,13 @@ Available on PyPI
 
 Matches upstream release v10
 
+
 ## vapoursynth-dfttest2-hip
 
 ### Version 11.dev1 (2026-05-16)
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
-
 ### Version 10 (2026-05-16)
 
 - **HIP Windows**: 7.1.1
@@ -86,7 +100,6 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
-
 ### Version 10 (2026-05-16)
 
 - **HIP Windows**: 7.1.1
@@ -98,7 +111,6 @@ Matches upstream release v10
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
-
 ### Version 10 (2026-05-16)
 
 - **CUDA Windows**: 13.0.1
@@ -110,11 +122,13 @@ Matches upstream release v10
 
 Compiled with Fast Forward Moving Picture Experts Group 8.1 from the vcpkg 2026.04.27 Release.
 
+
 ## vapoursynth-fmtconv
 
 ### Version 31 (2026-05-16)
 
 Matches upstream release R31.
+
 
 ## vapoursynth-mlrt-ncnn
 
@@ -129,3 +143,4 @@ Matches upstream release R31.
 - **Vulkan Windows**: 1.4.321.1
 - **Vulkan Linux**: 1.4.321.1
 - **Vulkan macOS**: 1.4.350.0
+
