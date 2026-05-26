@@ -46,7 +46,7 @@ jobs:
   build-wheels:
     name: Build wheels on Linux x64
     runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux_2_28_x86_64
+    container: quay.io/pypa/manylinux_2_28_x86_64@sha256:441c35fdc6ee809ff9260894f8468ab4fea8c15dc880f8700a3f81b7922c1cda
 
     steps:
       - name: Checkout
