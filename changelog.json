@@ -146,5 +146,49 @@
       "cuda_linux": "13.2",
       "release_date": "2026-05-25"
     }
+  },
+  "ort": {
+    "15.16.dev1": {
+      "package": "ort",
+      "version": "15.16.dev1",
+      "onnxruntime_windows": "v1.26.0",
+      "onnxruntime_linux": "v1.26.0",
+      "onnxruntime_macos": "v1.26.0",
+      "release_date": "2026-05-27"
+    }
+  },
+  "ncnn": {
+    "15.16.dev1": {
+      "package": "ncnn",
+      "version": "15.16.dev1",
+      "onnx_windows": "v1.21.0",
+      "onnx_linux": "v1.21.0",
+      "onnx_macos": "v1.21.0",
+      "ncnn_windows": "20260526",
+      "ncnn_linux": "20260526",
+      "ncnn_macos": "20260526",
+      "vulkan_windows": "1.4.350.0",
+      "vulkan_linux": "1.4.350.1",
+      "vulkan_macos": "1.4.350.0",
+      "release_date": "2026-05-27"
+    }
+  },
+  "dfttest2_cuda": {
+    "10.3": {
+      "package": "dfttest2_cuda",
+      "version": "10.3",
+      "cuda_linux": "13.2",
+      "cuda_windows": "13.2.1",
+      "release_date": "2026-05-27"
+    }
+  },
+  "bm3dhip": {
+    "2.16.1": {
+      "package": "bm3dhip",
+      "version": "2.16.1",
+      "hip_linux": "7.2.3",
+      "hip_windows": "26.Q1-Win11",
+      "release_date": "2026-05-27"
+    }
   }
 }

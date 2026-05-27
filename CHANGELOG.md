@@ -7,6 +7,13 @@
 - **CUDA Linux**: 13.2
 - **CUDA Windows**: 13.2.1
 
+## bm3dhip
+
+### Version 2.16.1 (2026-05-27)
+
+- **HIP Linux**: 7.2.3
+- **HIP Windows**: 26.Q1-Win11
+
 ## dfttest2
 
 ### Version 10 (2026-05-16)
@@ -14,12 +21,41 @@
 Matches upstream release v10
 
 
+## dfttest2_cuda
+
+### Version 10.3 (2026-05-27)
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
+
 ## dfttest2_nvrtc
 
 ### Version 10.1 (2026-05-25)
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
+
+## ncnn
+
+### Version 15.16.dev1 (2026-05-27)
+
+- **ONNX Windows**: v1.21.0
+- **ONNX Linux**: v1.21.0
+- **ONNX macOS**: v1.21.0
+- **NCNN Windows**: 20260526
+- **NCNN Linux**: 20260526
+- **NCNN macOS**: 20260526
+- **Vulkan Windows**: 1.4.350.0
+- **Vulkan Linux**: 1.4.350.1
+- **Vulkan macOS**: 1.4.350.0
+
+## ort
+
+### Version 15.16.dev1 (2026-05-27)
+
+- **ONNXruntime Windows**: v1.26.0
+- **ONNXruntime Linux**: v1.26.0
+- **ONNXruntime macOS**: v1.26.0
 
 ## vapoursynth-bm3dcpu
 
