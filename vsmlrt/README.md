@@ -48,7 +48,7 @@ graph TD
     HW -->|Intel GPU / NPU| Intel_Dev{Device Type?}
     Intel_Dev -->|NPU| OV_NPU["OV NPU"]
     Intel_Dev -->|iGPU / dGPU| Intel_OS{OS?}
-    Intel_OS -->|Linux| NCNN_VK_intel["ORT GPU"]
+    Intel_OS -->|Linux| NCNN_VK_intel["OV GPU"]
     Intel_OS -->|Windows| ORT_DML_intel["ORT DML"]
 
     %% Apple Silicon branch
