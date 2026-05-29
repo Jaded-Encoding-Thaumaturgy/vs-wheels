@@ -5,19 +5,19 @@ The upstream project is [AmusementClub/vs-mlrt](https://github.com/AmusementClub
 
 ## Summary Table of Backends
 
-| Backend          | Wheel Package               | Supported Platforms (CI Builds)                      | Dependencies / API                       | Target Hardware                                      |
-| :--------------- | :-------------------------- | :--------------------------------------------------- | :--------------------------------------- | :--------------------------------------------------- |
-| **`ORT CPU`**    | `vapoursynth-mlrt-ort`      | Windows, Linux x64, Linux aarch64, macOS ARM64       | ONNX Runtime (CPU)                       | Standard CPU inference                               |
-| **`ORT CUDA`**   | `vapoursynth-mlrt-ort-cuda` | Windows, Linux x64, Linux aarch64                    | ONNX Runtime (CUDA), CUDA Toolkit, cuDNN | NVIDIA GPUs                                          |
-| **`ORT DML`**    | `vapoursynth-mlrt-ort`      | Windows                                              | ONNX Runtime (DirectML), Direct3D 12     | DirectX 12-capable GPUs                              |
-| **`ORT COREML`** | `vapoursynth-mlrt-ort`      | macOS ARM64                                          | ONNX Runtime (CoreML)                    | Apple Silicon                                        |
-| **`OV CPU`**     | `vapoursynth-mlrt-ov`       | Windows, Linux x64, Linux aarch64, macOS ARM64       | OpenVINO, ONNX                           | Standard CPU inference                               |
-| **`OV GPU`**     | `vapoursynth-mlrt-ov`       | Windows, Linux x64, Linux aarch64, macOS ARM64       | OpenVINO, OpenCL                         | Intel Integrated Graphics, dedicated GPUs via OpenCL |
-| **`OV NPU`**     | `vapoursynth-mlrt-ov`       | Windows, Linux x64, Linux aarch64, macOS ARM64       | OpenVINO, Intel NPU drivers              | Intel Core Ultra Neural Processing Units (NPUs)      |
-| **`TRT`**        | `vapoursynth-mlrt-trt`      | Windows, Linux x64, Linux aarch64                    | TensorRT, CUDA Toolkit                   | NVIDIA GPUs                                          |
-| **`TRT RTX`**    | `vapoursynth-mlrt-trt_rtx`  | Windows, Linux x64, Linux aarch64                    | TensorRT RTX, CUDA Toolkit               | NVIDIA RTX GPUs                                      |
-| **`NCNN VK`**    | `vapoursynth-mlrt-ncnn`     | Windows, Linux x64, Linux aarch64, macOS (universal) | NCNN, Vulkan SDK, ONNX                   | Broad GPU support via Vulkan                         |
-| **`MIGX`**       | `vapoursynth-mlrt-migx`     | Linux x64                                            | AMD ROCm/HIP, MIGraphX, MIOpen, rocBLAS  | AMD Radeon / Instinct GPUs (ROCm-capable)            |
+| Backend          | Wheel Package               | Supported Platforms (CI Builds) | Dependencies / API                       | Target Hardware                                      |
+| :--------------- | :-------------------------- | :------------------------------ | :--------------------------------------- | :--------------------------------------------------- |
+| **`ORT CPU`**    | `vapoursynth-mlrt-ort`      | Windows, Linux, macOS           | ONNX Runtime (CPU)                       | Standard CPU inference                               |
+| **`ORT CUDA`**   | `vapoursynth-mlrt-ort-cuda` | Windows, Linux                  | ONNX Runtime (CUDA), CUDA Toolkit, cuDNN | NVIDIA GPUs                                          |
+| **`ORT DML`**    | `vapoursynth-mlrt-ort`      | Windows                         | ONNX Runtime (DirectML), Direct3D 12     | DirectX 12-capable GPUs                              |
+| **`ORT COREML`** | `vapoursynth-mlrt-ort`      | macOS                           | ONNX Runtime (CoreML)                    | Apple Silicon                                        |
+| **`OV CPU`**     | `vapoursynth-mlrt-ov`       | Windows, Linux, macOS           | OpenVINO, ONNX                           | Standard CPU inference                               |
+| **`OV GPU`**     | `vapoursynth-mlrt-ov`       | Windows, Linux x64              | OpenVINO, OpenCL                         | Intel Integrated Graphics, dedicated GPUs via OpenCL |
+| **`OV NPU`**     | `vapoursynth-mlrt-ov`       | Windows, Linux                  | OpenVINO, Intel NPU drivers              | Intel Core Ultra Neural Processing Units (NPUs)      |
+| **`TRT`**        | `vapoursynth-mlrt-trt`      | Windows, Linux                  | TensorRT, CUDA Toolkit                   | NVIDIA GPUs                                          |
+| **`TRT RTX`**    | `vapoursynth-mlrt-trt_rtx`  | Windows, Linux                  | TensorRT RTX, CUDA Toolkit               | NVIDIA RTX GPUs                                      |
+| **`NCNN VK`**    | `vapoursynth-mlrt-ncnn`     | Windows, Linux, macOS           | NCNN, Vulkan SDK, ONNX                   | Broad GPU support via Vulkan                         |
+| **`MIGX`**       | `vapoursynth-mlrt-migx`     | Linux x64                       | AMD ROCm/HIP, MIGraphX, MIOpen, rocBLAS  | AMD Radeon / Instinct GPUs (ROCm-capable)            |
 
 ## Picking the Right Backend
 
@@ -40,7 +40,7 @@ graph TD
     HW -->|AMD GPU| AMD_OS{OS?}
     AMD_OS -->|Linux| AMD_Usage{Usage Goal?}
     AMD_Usage -->|Max Performance| MIGX["MIGX"]
-    AMD_Usage -->|Fast Startup| NCNN_VK["NCNN VK"]
+    AMD_Usage -->|Fast Startup| NCNN_VK_AMD["NCNN VK"]
     AMD_OS -->|Windows| ORT_DML["ORT DML"]
     AMD_OS -->|macOS| NCNN_VK_mac["NCNN VK"]
 
@@ -48,7 +48,7 @@ graph TD
     HW -->|Intel GPU / NPU| Intel_Dev{Device Type?}
     Intel_Dev -->|NPU| OV_NPU["OV NPU"]
     Intel_Dev -->|iGPU / dGPU| Intel_OS{OS?}
-    Intel_OS -->|Linux| NCNN_VK_intel["OV GPU"]
+    Intel_OS -->|Linux| OV_GPU_intel["OV GPU"]
     Intel_OS -->|Windows| ORT_DML_intel["ORT DML"]
 
     %% Apple Silicon branch
@@ -64,5 +64,5 @@ graph TD
     classDef choice fill:#162521,stroke:#10b981,stroke-width:2px,color:#d1fae5;
 
     class HW,NV_Usage,NV_OS,NV_RTX,AMD_OS,AMD_Usage,Intel_Dev,Intel_Usage,Mac_Usage,Intel_OS,Mac_Reqs,CPU_Platform decision;
-    class TRT_RTX,TRT,ORT_CUDA,NV_OS_win,MIGX,NV_OS_linux,NCNN_VK,NCNN_VK_intel,ORT_DML_intel,ORT_DML,OV_NPU,OV_GPU,OV_CPU,ORT_COREML,NCNN_VK_mac2,NCNN_VK_mac,OV_CPU_gen,ORT_CPU choice;
+    class TRT_RTX,TRT,ORT_CUDA,NV_OS_win,MIGX,NV_OS_linux,NCNN_VK_AMD,OV_GPU_intel,ORT_DML_intel,ORT_DML,OV_NPU,OV_GPU,OV_CPU,ORT_COREML,NCNN_VK_mac2,NCNN_VK_mac,OV_CPU_gen,ORT_CPU choice;
 ```
