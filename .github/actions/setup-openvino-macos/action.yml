@@ -15,12 +15,21 @@ runs:
       id: cache-key
       shell: bash
       run: |
+        ARCH=$(uname -m)
+        if [ "$ARCH" = "x86_64" ]; then
+          ARCH_FILE=".github/cmake-cache/openvino-macos-x86_64.cmake"
+        elif [ "$ARCH" = "arm64" ] || [ "$ARCH" = "aarch64" ]; then
+          ARCH_FILE=".github/cmake-cache/openvino-macos-arm64.cmake"
+        fi
+
         HASH="${{ hashFiles(
             '.github/cmake-cache/openvino-base.cmake',
             '.github/cmake-cache/openvino-macos.cmake',
-            '.github/cmake-cache/openvino-aarch64.cmake'
+            '.github/cmake-cache/openvino-macos-x86_64.cmake',
+            '.github/cmake-cache/openvino-macos-arm64.cmake'
           ) }}"
-        echo "key=setup-openvino-${{ inputs.os }}-${{ inputs.openvino-tag }}-${HASH}" >> $GITHUB_OUTPUT
+        echo "key=setup-openvino-${{ inputs.os }}-${ARCH}-${{ inputs.openvino-tag }}-${HASH}" >> $GITHUB_OUTPUT
+        echo "arch-file=$ARCH_FILE" >> $GITHUB_OUTPUT
 
     - name: Restore OpenVINO
       id: cache-openvino
@@ -59,8 +68,11 @@ runs:
           -LA
           -C "$GITHUB_WORKSPACE/.github/cmake-cache/openvino-base.cmake"
           -C "$GITHUB_WORKSPACE/.github/cmake-cache/openvino-macos.cmake"
-          -C "$GITHUB_WORKSPACE/.github/cmake-cache/openvino-aarch64.cmake"
         )
+
+        if [ -n "${{ steps.cache-key.outputs.arch-file }}" ]; then
+          CMAKE_ARGS+=(-C "$GITHUB_WORKSPACE/${{ steps.cache-key.outputs.arch-file }}")
+        fi
 
         cmake "${CMAKE_ARGS[@]}"
 
@@ -92,6 +104,8 @@ runs:
         libPath="$openvinoRoot/runtime/lib"
         libPath="$libPath:$openvinoRoot/runtime/lib/arm64"
         libPath="$libPath:$openvinoRoot/runtime/lib/arm64/Release"
+        libPath="$libPath:$openvinoRoot/runtime/lib/intel64"
+        libPath="$libPath:$openvinoRoot/runtime/lib/intel64/Release"
         libPath="$libPath:$(brew --prefix)/lib"
 
         echo "DYLD_LIBRARY_PATH=$libPath${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}" >> $GITHUB_ENV

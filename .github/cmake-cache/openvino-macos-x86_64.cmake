@@ -1,0 +1,5 @@
+# macOS x86_64-specific OpenVINO cache variables.
+
+set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-undef" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-undef" CACHE STRING "" FORCE)

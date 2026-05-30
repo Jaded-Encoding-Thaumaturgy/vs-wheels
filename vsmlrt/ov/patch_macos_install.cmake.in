@@ -1,0 +1,41 @@
+# macOS-specific OpenVINO library/plugin install name patching.
+# Generated at configure time via configure_file() and run at install time.
+
+set(LIB_NAMES "@_LIB_NAMES@")
+set(REAL_LIBS "@_REAL_LIBS@")
+set(REAL_NAMES "@_REAL_NAMES@")
+set(INSTALLED_DEPS "@_INSTALLED_DEPS@")
+
+# Fix install name IDs for all installed libraries
+foreach(_LIB_NAME IN LISTS LIB_NAMES)
+  execute_process(
+    COMMAND install_name_tool -id "@loader_path/${_LIB_NAME}" "${CMAKE_INSTALL_PREFIX}/${_LIB_NAME}"
+  )
+endforeach()
+
+# Fix references in all installed libraries/plugins
+list(LENGTH LIB_NAMES _LEN)
+math(EXPR _MAX_IDX "${_LEN} - 1")
+if(_MAX_IDX GREATER_EQUAL 0)
+  foreach(_IDX RANGE ${_MAX_IDX})
+    list(GET LIB_NAMES ${_IDX} _LIB_NAME)
+    list(GET REAL_LIBS ${_IDX} _REAL_LIB)
+    list(GET REAL_NAMES ${_IDX} _REAL_NAME)
+
+    foreach(_DEP_NAME IN LISTS INSTALLED_DEPS)
+      if(_DEP_NAME STREQUAL "vsov")
+        set(_DEP_FILE_NAME "libvsov.dylib")
+      else()
+        set(_DEP_FILE_NAME "${_DEP_NAME}")
+      endif()
+
+      execute_process(
+        COMMAND install_name_tool
+          -change "${_REAL_LIB}" "@loader_path/${_LIB_NAME}"
+          -change "@rpath/${_LIB_NAME}" "@loader_path/${_LIB_NAME}"
+          -change "@rpath/${_REAL_NAME}" "@loader_path/${_LIB_NAME}"
+          "${CMAKE_INSTALL_PREFIX}/${_DEP_FILE_NAME}"
+      )
+    endforeach()
+  endforeach()
+endif()

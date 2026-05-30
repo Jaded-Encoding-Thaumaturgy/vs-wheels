@@ -111,6 +111,10 @@ else()
     "${OpenVINO_DIR}/../lib/intel64/*.so"
     "${OpenVINO_DIR}/../lib/intel64/*.so.*"
     "${OpenVINO_DIR}/../lib/intel64/*.json"
+    "${OpenVINO_DIR}/../lib/intel64/*.dylib"
+    "${OpenVINO_DIR}/../lib/intel64/*.dylib.*"
+    "${OpenVINO_DIR}/../lib/intel64/Release/*.dylib"
+    "${OpenVINO_DIR}/../lib/intel64/Release/*.so"
     "${OpenVINO_DIR}/../lib/aarch64/*.so"
     "${OpenVINO_DIR}/../lib/aarch64/*.so.*"
     "${OpenVINO_DIR}/../lib/arm64/Release/*.so"
@@ -126,6 +130,13 @@ else()
       "libopenvino_c.dylib"
       "libopenvino_onnx_frontend.dylib"
     )
+
+    # Filter dependencies and prepare installation variables
+    set(_INSTALLED_DEPS "vsov")
+    set(_REAL_LIBS "")
+    set(_LIB_NAMES "")
+    set(_REAL_NAMES "")
+
     foreach(_LIB IN LISTS _LIBS)
       get_filename_component(_LIB_NAME "${_LIB}" NAME)
 
@@ -140,36 +151,23 @@ else()
       endif()
 
       file(REAL_PATH "${_LIB}" _REAL_LIB)
+      get_filename_component(_REAL_NAME "${_REAL_LIB}" NAME)
       install(FILES "${_REAL_LIB}" DESTINATION . RENAME "${_LIB_NAME}")
 
-      if(APPLE)
-        # Fix install name ID of the library itself
-        install(
-          CODE
-            "
-          execute_process(
-            COMMAND install_name_tool -id \"@rpath/${_LIB_NAME}\" \"\${CMAKE_INSTALL_PREFIX}/${_LIB_NAME}\"
-          )
-        "
-        )
-        # Fix references to this library in other libraries/plugins
-        foreach(_DEP IN LISTS _LIBS "vsov")
-          if(_DEP STREQUAL "vsov")
-            set(_DEP_NAME "libvsov.dylib")
-          else()
-            get_filename_component(_DEP_NAME "${_DEP}" NAME)
-          endif()
-          install(
-            CODE
-              "
-            execute_process(
-              COMMAND install_name_tool -change \"${_REAL_LIB}\" \"@rpath/${_LIB_NAME}\" \"\${CMAKE_INSTALL_PREFIX}/${_DEP_NAME}\"
-            )
-          "
-          )
-        endforeach()
-      endif()
+      list(APPEND _INSTALLED_DEPS "${_LIB_NAME}")
+      list(APPEND _REAL_LIBS "${_REAL_LIB}")
+      list(APPEND _LIB_NAMES "${_LIB_NAME}")
+      list(APPEND _REAL_NAMES "${_REAL_NAME}")
     endforeach()
+
+    if(APPLE)
+      configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/patch_macos_install.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/patch_macos_install.cmake"
+        @ONLY
+      )
+      install(SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/patch_macos_install.cmake")
+    endif()
   else()
     message(WARNING "Could not find OpenVINO libraries/plugins")
   endif()

@@ -50,16 +50,22 @@ on:
         type: string
         required: false
         default: "2026.1.0"
-      openvino-macos-tag:
-        description: OpenVINO tag for macOS (https://github.com/openvinotoolkit/openvino/)
+      openvino-macos-arm64-tag:
+        description: OpenVINO tag for macOS ARM64 (https://github.com/openvinotoolkit/openvino/)
         type: string
         required: false
         default: "2026.1.0"
+      openvino-macos-x86-64-tag:
+        description: OpenVINO tag for macOS x86_64 (https://github.com/openvinotoolkit/openvino/)
+        type: string
+        required: false
+        default: "2025.2.0"
 
 env:
   OPENVINO_WINDOWS_TAG: ${{ inputs.openvino-windows-tag || '2026.1.0' }}
   OPENVINO_LINUX_TAG: ${{ inputs.openvino-linux-tag || '2026.1.0' }}
-  OPENVINO_MACOS_TAG: ${{ inputs.openvino-macos-tag || '2026.1.0' }}
+  OPENVINO_MACOS_ARM64_TAG: ${{ inputs.openvino-macos-arm64-tag || '2026.1.0' }}
+  OPENVINO_MACOS_x86_64_TAG: ${{ inputs.openvino-macos-x86-64-tag || '2025.2.0' }}
   PACKAGE_NAME: ov
 
 jobs:
@@ -68,15 +74,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Linux x64
+          - name: Linux x86_64
             os: ubuntu-24.04
             container: quay.io/pypa/manylinux_2_28_x86_64
-          - name: Linux ARM64
+          - name: Linux aarch64
             os: ubuntu-22.04-arm
-          - name: Windows x64
+          - name: Windows
             os: windows-2022
           - name: macOS ARM64
             os: macos-14
+          - name: macOS x86_64
+            os: macos-15-intel
 
     name: Build wheels on ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
@@ -113,7 +121,7 @@ jobs:
         uses: ./.github/actions/setup-openvino-windows
         with:
           openvino-tag: ${{ env.OPENVINO_WINDOWS_TAG }}
-          os: ${{ matrix.container || matrix.os }}
+          os: ${{ matrix.os }}
 
       - name: Build OpenVINO dependency (Linux)
         if: runner.os == 'Linux'
@@ -126,20 +134,20 @@ jobs:
         if: runner.os == 'macOS'
         uses: ./.github/actions/setup-openvino-macos
         with:
-          openvino-tag: ${{ env.OPENVINO_MACOS_TAG }}
-          os: ${{ matrix.container || matrix.os }}
+          openvino-tag: ${{ runner.arch == 'ARM64' && env.OPENVINO_MACOS_ARM64_TAG || env.OPENVINO_MACOS_x86_64_TAG }}
+          os: ${{ matrix.os }}
       - name: Install jq
         if: matrix.container
         run: dnf install -y jq
 
-      - name: Get ONNX version from ONNX Runtime
+      - name: Get ONNX version from OpenVINO
         id: get-onnx-version
         shell: bash
         run: |
           OV_TAG="${{ 
             runner.os == 'Windows' && env.OPENVINO_WINDOWS_TAG || 
             runner.os == 'Linux' && env.OPENVINO_LINUX_TAG || 
-            env.OPENVINO_MACOS_TAG
+            runner.arch == 'ARM64' && env.OPENVINO_MACOS_ARM64_TAG || env.OPENVINO_MACOS_x86_64_TAG
            }}"
           version=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/openvinotoolkit/openvino/contents/thirdparty/onnx/onnx?ref=$OV_TAG" | jq -r '.sha // empty')
@@ -160,7 +168,7 @@ jobs:
         with:
           onnx-tag: ${{ steps.get-onnx-version.outputs.version }}
           use-external-protobuf: true
-          os: ${{ matrix.container || matrix.os }}
+          os: ${{ matrix.os }}
 
       - name: Build ONNX dependency (Linux)
         if: runner.os == 'Linux'
@@ -176,7 +184,7 @@ jobs:
         with:
           onnx-tag: ${{ steps.get-onnx-version.outputs.version }}
           use-external-protobuf: true
-          os: ${{ matrix.container || matrix.os }}
+          os: ${{ matrix.os }}
 
       - name: Build wheel
         run: uv build --package vapoursynth-mlrt-${{ env.PACKAGE_NAME }}
@@ -197,10 +205,11 @@ jobs:
       - name: Repair wheel (macOS)
         if: runner.os == 'macOS'
         run: |
-          uvx --from delocate delocate-wheel -v dist/*.whl -w repaired_wheels
+          uv tool install delocate
+          delocate-listdeps dist/*.whl
+          delocate-wheel -v dist/*.whl -w repaired_wheels
           rm dist/*.whl
           mv repaired_wheels/*.whl dist/
-          uvx --from delocate delocate-listdeps dist/*.whl
 
       - name: Upload wheel
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -249,7 +258,8 @@ jobs:
             "version": "$VERSION",
             "openvino_windows": "${{ env.OPENVINO_WINDOWS_TAG }}",
             "openvino_linux": "${{ env.OPENVINO_LINUX_TAG }}",
-            "openvino_macos": "${{ env.OPENVINO_MACOS_TAG }}"
+            "openvino_macos_arm64": "${{ env.OPENVINO_MACOS_ARM64_TAG }}",
+            "openvino_macos_intel": "${{ env.OPENVINO_MACOS_x86_64_TAG }}",
           }
           EOF
 
