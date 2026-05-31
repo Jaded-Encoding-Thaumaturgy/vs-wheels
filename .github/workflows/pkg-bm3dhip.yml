@@ -38,7 +38,7 @@ on:
         description: HIP version for Linux (7.0, 7.2.3)
         type: string
         required: false
-        default: "7.2.3" # renovate: datasource=custom.rocm-linux depName=rocm-linux
+        default: "7.2.4" # renovate: datasource=custom.rocm-linux depName=rocm-linux
       hip-windows:
         description: HIP version for Windows (e.g., 25.Q3 -> 6.4.2 | 26.Q1 -> 7.1.1)
         type: choice
@@ -57,7 +57,7 @@ on:
           - windows-2022
 
 env:
-  HIP_LINUX: ${{ inputs.hip-linux || '7.2.3' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
+  HIP_LINUX: ${{ inputs.hip-linux || '7.2.4' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
   HIP_WINDOWS: ${{ inputs.hip-windows || '26.Q1-Win11' }}
   PACKAGE_NAME: bm3dhip
 

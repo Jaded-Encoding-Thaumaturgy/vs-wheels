@@ -36,10 +36,10 @@ on:
         description: HIP/ROCm version for Linux (7.2.3, 6.3.1)
         type: string
         required: false
-        default: "7.2.3" # renovate: datasource=custom.rocm-linux depName=rocm-linux
+        default: "7.2.4" # renovate: datasource=custom.rocm-linux depName=rocm-linux
 
 env:
-  HIP_LINUX: ${{ inputs.hip-linux || '7.2.3' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
+  HIP_LINUX: ${{ inputs.hip-linux || '7.2.4' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
   PACKAGE_NAME: migx
 
 jobs:
