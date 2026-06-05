@@ -52,7 +52,8 @@ graph TD
     Intel_OS -->|Windows| ORT_DML_intel["ORT DML"]
 
     %% Apple Silicon branch
-    HW -->|Apple Silicon / macOS| Mac_Reqs{External\ndependencies?}
+    HW -->|Apple Silicon / macOS| Mac_Reqs{External
+    dependencies?}
     Mac_Reqs -->|Yes| NCNN_VK_mac2["NCNN VK"]
     Mac_Reqs -->|No| ORT_COREML["ORT COREML"]
 
@@ -66,3 +67,12 @@ graph TD
     class HW,NV_Usage,NV_OS,NV_RTX,AMD_OS,AMD_Usage,Intel_Dev,Intel_Usage,Mac_Usage,Intel_OS,Mac_Reqs,CPU_Platform decision;
     class TRT_RTX,TRT,ORT_CUDA,NV_OS_win,MIGX,NV_OS_linux,NCNN_VK_AMD,OV_GPU_intel,ORT_DML_intel,ORT_DML,OV_NPU,OV_GPU,OV_CPU,ORT_COREML,NCNN_VK_mac2,NCNN_VK_mac,OV_CPU_gen,ORT_CPU choice;
 ```
+
+## Notes
+
+- The MIGX backend requires MIGraphX and ROCm/HIP to be installed separately.
+  Install `migraphx` through your system package manager, for example `dnf install migraphx`.
+- On macOS, the NCNN backend requires Vulkan support through MoltenVK.
+  Install it with Homebrew, for example `brew install molten-vk`.
+- The TRT and TRT RTX wheels do not bundle `trtexec` or `tensorrt_rtx`.
+  Use the `vsscale` (vsjetpack) Python API for engine generation, or provide the matching external executable yourself.
