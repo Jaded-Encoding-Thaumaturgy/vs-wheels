@@ -7,6 +7,72 @@
 Matches upstream release v10
 
 
+## fmtc
+
+### Version 31.post1 (2026-06-09)
+
+Available for Windows, Linux, and macOS
+
+
+## migx
+
+### Version 15.16 (2026-06-09)
+
+- **HIP Linux**: 7.2.4
+
+## ncnn
+
+### Version 15.16 (2026-06-09)
+
+- **ONNX Windows**: v1.21.0
+- **ONNX Linux**: v1.21.0
+- **ONNX macOS**: v1.21.0
+- **NCNN Windows**: 20260526
+- **NCNN Linux**: 20260526
+- **NCNN macOS**: 20260526
+- **Vulkan Windows**: 1.4.350.0
+- **Vulkan Linux**: 1.4.350.1
+- **Vulkan macOS**: 1.4.350.0
+
+## ort
+
+### Version 15.16.post2 (2026-06-09)
+
+- **ONNXruntime Windows**: v1.26.0
+- **ONNXruntime Linux**: v1.26.0
+- **CUDA Windows**: 13.0.1
+- **CUDA Linux**: 13.0
+- **Cudnn Windows**: 9.23.0.39
+- **Cudnn Linux**: 9.23.0.39
+
+## trt
+
+### Version 15.16.post1 (2026-06-09)
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
+- **Tensorrt Windows**: 11.0.0.114
+- **Tensorrt Linux**: 11.0.0.114-1.cuda13.2
+
+## trt_rtx
+
+### Version 15.16 (2026-06-09)
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
+- **Tensorrt Rtx Windows**: 1.5.0.114
+- **Tensorrt Rtx Linux**: 1.5.0.114
+
+## vapoursynth-ares
+
+### Version 0.4.0 (2026-06-09)
+
+
+## vapoursynth-atools
+
+### Version 0.1.1 (2026-06-09)
+
+
 ## vapoursynth-bm3dcpu
 
 ### Version 2.16.5 (2026-05-16)
@@ -16,6 +82,10 @@ Matches upstream R2.16. Requires VapourSynth R75.
 
 ## vapoursynth-bm3dcuda
 
+### Version 2.16.3 (2026-06-09)
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
 ### Version 2.16.2 (2026-06-07)
 
 Downgrade CUDA version for Linux because 13.x is segfaulting
@@ -51,6 +121,10 @@ Matches upstream release v10
 
 ## vapoursynth-dfttest2_cuda
 
+### Version 10.4 (2026-06-09)
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
 ### Version 10.3.post1 (2026-06-07)
 
 - **CUDA Linux**: 13.2
@@ -94,6 +168,10 @@ Matches upstream release v10
 ## vapoursynth-dfttest2_nvrtc
 
 ### Version 11.dev1 (2026-05-16)
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
+### Version 10.2 (2026-06-09)
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
@@ -159,17 +237,17 @@ Matches upstream release R31.
 - **ONNXruntime Linux**: v1.26.0
 - **CUDA Windows**: 13.0.1
 - **CUDA Linux**: 13.0
-- **cuDNN Windows**: 9.23.0.39
-- **cuDNN Linux**: 9.23.0.39
+- **Cudnn Windows**: 9.23.0.39
+- **Cudnn Linux**: 9.23.0.39
 
 ## vapoursynth-mlrt-ov
 
 ### Version 15.16 (2026-06-07)
 
-- **OpenVINO Windows**: 2026.2.0
-- **OpenVINO Linux**: 2026.2.0
-- **OpenVINO macOS Arm64**: 2026.2.0
-- **OpenVINO macOS Intel**: 2026.2.0
+- **Openvino Windows**: 2026.2.0
+- **Openvino Linux**: 2026.2.0
+- **Openvino macOS Arm64**: 2026.2.0
+- **Openvino macOS Intel**: 2026.2.0
 
 ## vapoursynth-mlrt-trt
 
@@ -177,8 +255,8 @@ Matches upstream release R31.
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
-- **TensorRT Windows**: 11.0.0.114
-- **TensorRT Linux**: 11.0.0.114-1.cuda13.2
+- **Tensorrt Windows**: 11.0.0.114
+- **Tensorrt Linux**: 11.0.0.114-1.cuda13.2
 
 ## vapoursynth-mlrt-trt_rtx
 
@@ -186,6 +264,6 @@ Matches upstream release R31.
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
-- **TensorRT RTX Windows**: 1.5.0.114
-- **TensorRT RTX Linux**: 1.5.0.114
+- **Tensorrt Rtx Windows**: 1.5.0.114
+- **Tensorrt Rtx Linux**: 1.5.0.114
 

@@ -25,6 +25,13 @@
       "cuda_windows": "13.2.1",
       "release_date": "2026-06-07",
       "notes": "Downgrade CUDA version for Linux because 13.x is segfaulting"
+    },
+    "2.16.3": {
+      "package": "vapoursynth-bm3dcuda",
+      "version": "2.16.3",
+      "cuda_linux": "13.2",
+      "cuda_windows": "13.2.1",
+      "release_date": "2026-06-09"
     }
   },
   "vapoursynth-bm3dhip": {
@@ -74,6 +81,13 @@
       "cuda_windows": "13.2.1",
       "cuda_linux": "13.2",
       "release_date": "2026-05-25"
+    },
+    "10.2": {
+      "package": "vapoursynth-dfttest2_nvrtc",
+      "version": "10.2",
+      "cuda_windows": "13.2.1",
+      "cuda_linux": "13.2",
+      "release_date": "2026-06-09"
     }
   },
   "vapoursynth-dfttest2_cuda": {
@@ -91,6 +105,13 @@
       "cuda_linux": "13.2",
       "cuda_windows": "13.2.1",
       "release_date": "2026-06-07"
+    },
+    "10.4": {
+      "package": "vapoursynth-dfttest2_cuda",
+      "version": "10.4",
+      "cuda_linux": "13.2",
+      "cuda_windows": "13.2.1",
+      "release_date": "2026-06-09"
     }
   },
   "vapoursynth-dfttest2_hip": {
@@ -211,6 +232,87 @@
       "version": "31.post1",
       "notes": "Available for Windows, Linux, and macOS",
       "release_date": "2026-06-07"
+    }
+  },
+  "vapoursynth-atools": {
+    "0.1.1": {
+      "package": "vapoursynth-atools",
+      "version": "0.1.1",
+      "release_date": "2026-06-09"
+    }
+  },
+  "fmtc": {
+    "31.post1": {
+      "package": "fmtc",
+      "version": "31.post1",
+      "notes": "Available for Windows, Linux, and macOS",
+      "release_date": "2026-06-09"
+    }
+  },
+  "migx": {
+    "15.16": {
+      "package": "migx",
+      "version": "15.16",
+      "hip_linux": "7.2.4",
+      "release_date": "2026-06-09"
+    }
+  },
+  "trt": {
+    "15.16.post1": {
+      "package": "trt",
+      "version": "15.16.post1",
+      "cuda_windows": "13.2.1",
+      "cuda_linux": "13.2",
+      "tensorrt_windows": "11.0.0.114",
+      "tensorrt_linux": "11.0.0.114-1.cuda13.2",
+      "release_date": "2026-06-09"
+    }
+  },
+  "trt_rtx": {
+    "15.16": {
+      "package": "trt_rtx",
+      "version": "15.16",
+      "cuda_windows": "13.2.1",
+      "cuda_linux": "13.2",
+      "tensorrt_rtx_windows": "1.5.0.114",
+      "tensorrt_rtx_linux": "1.5.0.114",
+      "release_date": "2026-06-09"
+    }
+  },
+  "ncnn": {
+    "15.16": {
+      "package": "ncnn",
+      "version": "15.16",
+      "onnx_windows": "v1.21.0",
+      "onnx_linux": "v1.21.0",
+      "onnx_macos": "v1.21.0",
+      "ncnn_windows": "20260526",
+      "ncnn_linux": "20260526",
+      "ncnn_macos": "20260526",
+      "vulkan_windows": "1.4.350.0",
+      "vulkan_linux": "1.4.350.1",
+      "vulkan_macos": "1.4.350.0",
+      "release_date": "2026-06-09"
+    }
+  },
+  "ort": {
+    "15.16.post2": {
+      "package": "ort",
+      "version": "15.16.post2",
+      "onnxruntime_windows": "v1.26.0",
+      "onnxruntime_linux": "v1.26.0",
+      "cuda_windows": "13.0.1",
+      "cuda_linux": "13.0",
+      "cudnn_windows": "9.23.0.39",
+      "cudnn_linux": "9.23.0.39",
+      "release_date": "2026-06-09"
+    }
+  },
+  "vapoursynth-ares": {
+    "0.4.0": {
+      "package": "vapoursynth-ares",
+      "version": "0.4.0",
+      "release_date": "2026-06-09"
     }
   }
 }
