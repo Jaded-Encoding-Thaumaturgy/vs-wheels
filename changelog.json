@@ -25,6 +25,13 @@
       "cuda_windows": "13.2.1",
       "release_date": "2026-06-07",
       "notes": "Downgrade CUDA version for Linux because 13.x is segfaulting"
+    },
+    "2.16.3": {
+      "package": "vapoursynth-bm3dcuda",
+      "version": "2.16.3",
+      "cuda_linux": "13.2",
+      "cuda_windows": "13.2.1",
+      "release_date": "2026-06-09"
     }
   },
   "vapoursynth-bm3dhip": {
@@ -74,6 +81,13 @@
       "cuda_windows": "13.2.1",
       "cuda_linux": "13.2",
       "release_date": "2026-05-25"
+    },
+    "10.2": {
+      "package": "vapoursynth-dfttest2_nvrtc",
+      "version": "10.2",
+      "cuda_windows": "13.2.1",
+      "cuda_linux": "13.2",
+      "release_date": "2026-06-09"
     }
   },
   "vapoursynth-dfttest2_cuda": {
@@ -91,6 +105,13 @@
       "cuda_linux": "13.2",
       "cuda_windows": "13.2.1",
       "release_date": "2026-06-07"
+    },
+    "10.4": {
+      "package": "vapoursynth-dfttest2_cuda",
+      "version": "10.4",
+      "cuda_linux": "13.2",
+      "cuda_windows": "13.2.1",
+      "release_date": "2026-06-09"
     }
   },
   "vapoursynth-dfttest2_hip": {
@@ -211,6 +232,22 @@
       "version": "31.post1",
       "notes": "Available for Windows, Linux, and macOS",
       "release_date": "2026-06-07"
+    }
+  },
+  "vapoursynth-ares": {
+    "0.4.0": {
+      "package": "vapoursynth-ares",
+      "version": "0.4.0",
+      "release_date": "2026-06-09",
+      "notes": "Matches upstream 0.4.0."
+    }
+  },
+  "vapoursynth-atools": {
+    "0.1.1": {
+      "package": "vapoursynth-atools",
+      "version": "0.1.1",
+      "release_date": "2026-06-09",
+      "notes": "Matches upstream master."
     }
   }
 }

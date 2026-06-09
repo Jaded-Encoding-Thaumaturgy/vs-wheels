@@ -7,6 +7,20 @@
 Matches upstream release v10
 
 
+## vapoursynth-ares
+
+### Version 0.4.0 (2026-06-09)
+
+Matches upstream 0.4.0.
+
+
+## vapoursynth-atools
+
+### Version 0.1.1 (2026-06-09)
+
+Matches upstream master.
+
+
 ## vapoursynth-bm3dcpu
 
 ### Version 2.16.5 (2026-05-16)
@@ -16,6 +30,10 @@ Matches upstream R2.16. Requires VapourSynth R75.
 
 ## vapoursynth-bm3dcuda
 
+### Version 2.16.3 (2026-06-09)
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
 ### Version 2.16.2 (2026-06-07)
 
 Downgrade CUDA version for Linux because 13.x is segfaulting
@@ -51,6 +69,10 @@ Matches upstream release v10
 
 ## vapoursynth-dfttest2_cuda
 
+### Version 10.4 (2026-06-09)
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
 ### Version 10.3.post1 (2026-06-07)
 
 - **CUDA Linux**: 13.2
@@ -94,6 +116,10 @@ Matches upstream release v10
 ## vapoursynth-dfttest2_nvrtc
 
 ### Version 11.dev1 (2026-05-16)
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
+### Version 10.2 (2026-06-09)
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
@@ -155,8 +181,8 @@ Matches upstream release R31.
 
 ### Version 15.16.post2 (2026-06-07)
 
-- **ONNXruntime Windows**: v1.26.0
-- **ONNXruntime Linux**: v1.26.0
+- **ONNX Runtime Windows**: v1.26.0
+- **ONNX Runtime Linux**: v1.26.0
 - **CUDA Windows**: 13.0.1
 - **CUDA Linux**: 13.0
 - **cuDNN Windows**: 9.23.0.39
