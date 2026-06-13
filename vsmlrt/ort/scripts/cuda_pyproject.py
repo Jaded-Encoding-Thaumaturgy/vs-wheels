@@ -29,6 +29,7 @@ def main(pyproject: Path) -> None:
             "nvidia-cuda-cupti~=13.0.85",
             "nvidia-cuda-nvrtc~=13.0.88",
             "nvidia-nvjitlink~=13.0.88",
+            "nvidia-curand~=10.4.0.35",
         ]
     )
 
