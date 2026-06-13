@@ -15,7 +15,7 @@ license-files = ["vs-dfttest2/LICENSE"]
 requires-python = ">=3.12"
 authors = [{ name = "WolframRhodium" }]
 maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
-dependencies = ["vapoursynth>=75"]
+dependencies = ["vapoursynth>=75", "nvidia-cufft>=12.0.0,<13.0.0"]
 
 [project.urls]
 "Source Code" = "https://github.com/AmusementClub/vs-dfttest2"

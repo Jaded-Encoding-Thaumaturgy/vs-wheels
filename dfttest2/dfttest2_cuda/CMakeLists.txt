@@ -1,7 +1,23 @@
 cmake_minimum_required(VERSION 3.22)
 project(DFTTEST2_CUDA_Package)
 
+# === Apply patches ===
+include("${CMAKE_CURRENT_SOURCE_DIR}/ApplyPatch.cmake")
+
+set(SRC_DFTTEST2_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-dfttest2")
+set(BIN_DFTTEST2_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-dfttest2")
+
+add_patched_source(
+  PATCHED_WIN32
+  "${SRC_DFTTEST2_DIR}/cuda_source/win32.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/patches/nvidia-wheel-paths.patch"
+)
+
 # === C++ Standard & Options ===
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(VS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include" CACHE PATH "Path to VapourSynth headers")
 
 if(SKBUILD_PROJECT_VERSION)
@@ -19,18 +35,32 @@ set(ENABLE_HIP OFF CACHE BOOL "" FORCE)
 find_package(CUDAToolkit REQUIRED)
 
 # === Target Definition & Configuration ===
-# Add the submodule but skip its internal install rules
-add_subdirectory(vs-dfttest2 EXCLUDE_FROM_ALL)
+add_library(dfttest2_cuda MODULE vs-dfttest2/cuda_source/source.cpp "${PATCHED_WIN32}")
+
+target_include_directories(
+  dfttest2_cuda
+  PRIVATE "${VS_INCLUDE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DFTTEST2_DIR}"
+)
+
+configure_file(vs-dfttest2/common/config.h.in config.h)
+
+target_link_libraries(dfttest2_cuda PRIVATE CUDA::cuda_driver CUDA::cufft)
+
+if(MSVC)
+  target_link_options(dfttest2_cuda PRIVATE "delayimp.lib" "/DELAYLOAD:cufft64_12.dll")
+  target_link_libraries(dfttest2_cuda PRIVATE Ws2_32 ntdll)
+endif()
 
 # Hide static and internal symbols to avoid conflicts with dynamically loaded CUDA libraries
 if(UNIX)
   set_target_properties(dfttest2_cuda PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN ON)
+  set_target_properties(dfttest2_cuda PROPERTIES INSTALL_RPATH "$ORIGIN;$ORIGIN/../../../nvidia/cu13/lib")
 endif()
 
 add_custom_target(build_cuda ALL DEPENDS dfttest2_cuda)
 
 # === Link Libraries Setup ===
-# Post-process the submodule targets to fix Linux driver initialization
+# Post-process the target to fix Linux driver initialization
 if(UNIX)
   execute_process(
     COMMAND
@@ -40,36 +70,17 @@ if(UNIX)
 
   target_link_directories(dfttest2_cuda PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
   target_link_libraries(dfttest2_cuda PRIVATE :libcuda.so.1)
-
-  if(NOT APPLE)
-    target_link_options(dfttest2_cuda PRIVATE "-Wl,--exclude-libs,ALL")
-  endif()
+  target_link_options(dfttest2_cuda PRIVATE "-Wl,--exclude-libs,ALL")
 endif()
 
 # Link nvJitLink_static for CUDA 12+ (needed when USE_NVRTC_STATIC is ON)
 target_link_directories(dfttest2_cuda PRIVATE "${CUDAToolkit_LIBRARY_DIR}")
-target_link_libraries(dfttest2_cuda PRIVATE nvJitLink_static nvptxcompiler_static)
+target_link_libraries(
+  dfttest2_cuda
+  PRIVATE nvrtc_static nvrtc-builtins_static nvptxcompiler_static nvJitLink_static nvptxcompiler_static
+)
 
 # === Packaging & Installation ===
-if(WIN32 AND ENABLE_CUDA)
-  file(GLOB CUFFT_DLL "${CUDAToolkit_BIN_DIR}/x64/cufft64_*.dll")
-
-  if(CUFFT_DLL)
-    message(STATUS "Found cuFFT DLL: ${CUFFT_DLL}")
-    install(FILES ${CUFFT_DLL} DESTINATION vsmlrt-cuda)
-
-    add_custom_command(
-      TARGET build_cuda
-      POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:dfttest2_cuda>/vsmlrt-cuda
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CUFFT_DLL} $<TARGET_FILE_DIR:dfttest2_cuda>/vsmlrt-cuda
-      COMMENT "Copying cuFFT DLL to vsmlrt-cuda subdirectory"
-    )
-  else()
-    message(WARNING "No cuFFT DLL found in ${CUDAToolkit_BIN_DIR}/x64")
-  endif()
-endif()
-
 install(TARGETS dfttest2_cuda LIBRARY DESTINATION .)
 
 if(WIN32)

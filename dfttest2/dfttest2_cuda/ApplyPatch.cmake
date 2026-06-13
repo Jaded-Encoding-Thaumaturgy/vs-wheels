@@ -1,0 +1,22 @@
+function(add_patched_source OUT_VAR SRC_FILE)
+  find_package(Git REQUIRED)
+
+  cmake_path(RELATIVE_PATH SRC_FILE BASE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vs-dfttest2" OUTPUT_VARIABLE REL_PATH)
+  set(BIN_FILE "${CMAKE_CURRENT_BINARY_DIR}/vs-dfttest2/${REL_PATH}")
+  cmake_path(GET SRC_FILE FILENAME FILE_NAME)
+
+  list(GET ARGN 0 PATCH_FILE)
+  add_custom_command(
+    OUTPUT "${BIN_FILE}"
+    COMMAND ${CMAKE_COMMAND} -E copy "${SRC_FILE}" "${BIN_FILE}"
+    COMMAND
+      ${CMAKE_COMMAND} -E env "GIT_CEILING_DIRECTORIES=${CMAKE_CURRENT_BINARY_DIR}" ${GIT_EXECUTABLE} apply
+      "${PATCH_FILE}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/vs-dfttest2"
+    DEPENDS "${SRC_FILE}" "${PATCH_FILE}"
+    COMMENT "Copying and patching ${FILE_NAME}"
+    VERBATIM
+  )
+
+  set(${OUT_VAR} "${BIN_FILE}" PARENT_SCOPE)
+endfunction()

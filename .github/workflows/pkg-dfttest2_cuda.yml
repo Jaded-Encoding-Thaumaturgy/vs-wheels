@@ -117,6 +117,13 @@ jobs:
         if: runner.os == 'Windows'
         uses: ./.github/actions/setup-msvc
 
+      - name: Install build tools (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          uv tool install auditwheel
+          uv tool install patchelf
+          uv tool install wheel
+
       - name: Setup CUDA (Windows)
         if: runner.os == 'Windows'
         uses: ./.github/actions/setup-cuda-windows
@@ -133,10 +140,25 @@ jobs:
       - name: Repair wheel (Linux)
         if: runner.os == 'Linux'
         run: |
-          uvx auditwheel show dist/*.whl
-          uvx --with patchelf auditwheel repair --strip --exclude libcuda.so.* dist/*.whl -w repaired_wheels
+          auditwheel show dist/*.whl
+          auditwheel repair --strip --exclude libcuda.so.* --exclude libcufft.so* dist/*.whl -w repaired_wheels
           rm dist/*.whl
           mv repaired_wheels/*.whl dist/
+
+          # Fix RPATH for all bundled libraries in the repaired wheel to ensure they find each other via $ORIGIN
+          echo "=== Patching RPATHs inside repaired wheel ==="
+          wheel unpack dist/*.whl
+          UNPACKED_DIR=$(ls -d vapoursynth_dfttest2_cuda-*)
+          for f in "$UNPACKED_DIR"/vapoursynth/plugins/dfttest2_cuda/*.so*; do
+            if [ -f "$f" ] && [ ! -L "$f" ]; then
+              echo "Setting RPATH on: $(basename "$f")"
+              patchelf --set-rpath '$ORIGIN:$ORIGIN/../../../nvidia/cu13/lib' "$f"
+            fi
+          done
+          echo "Repacking wheel..."
+          rm dist/*.whl
+          wheel pack "$UNPACKED_DIR" -d dist/
+          rm -rf "$UNPACKED_DIR"
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
@@ -206,24 +228,10 @@ jobs:
           REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
         run: >-
           gh workflow run cd-publish.yml
-          -f artifact-pattern=${{ env.PACKAGE_NAME }}-sdist
+          -f artifact-pattern=${{ env.PACKAGE_NAME }}-*
           -f package=vapoursynth-${{ env.PACKAGE_NAME }}
           -f packages-dir=dist
           -f repository=${{ inputs.repository }}
           -f repository-url="$REPOSITORY_URL"
           -f run-id=${{ github.run_id }}
           --ref ${{ github.ref_name }}
-
-  upload-release:
-    name: Upload to GitHub Release
-    if: github.event_name == 'workflow_dispatch' && inputs.publish
-    needs: [build-wheels, build-sdist]
-    permissions:
-      contents: write
-      id-token: write
-    uses: ./.github/workflows/cd-upload-release.yml
-    with:
-      wheel-pattern: dfttest2_cuda-wheels-*
-      sdist-name: dfttest2_cuda-sdist
-      display-name: vapoursynth-dfttest2_cuda
-      upload-hf: true
