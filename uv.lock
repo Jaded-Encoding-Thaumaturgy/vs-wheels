@@ -1041,8 +1041,12 @@ wheels = [
 [[package]]
 name = "tensorrt-cu13-libs"
 version = "11.0.0.114"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/dd/34/869c03b3d4baad93b291a4642d04ec5b1830a985244faef5287df716c71a/tensorrt_cu13_libs-11.0.0.114.tar.gz", hash = "sha256:0476172146eb733ac8a8d9dfb9685022d19dab9b8b7be2e3e1a2571a832283f3", size = 15759, upload-time = "2026-05-27T18:19:03.008Z" }
+source = { registry = "https://pypi.nvidia.com/" }
+wheels = [
+    { url = "https://pypi.nvidia.com/tensorrt-cu13-libs/tensorrt_cu13_libs-11.0.0.114-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:2ea58e15b359f65991b2f1b99b23fed59dca50ee82dc08bfcb3c24cbf6de85fe" },
+    { url = "https://pypi.nvidia.com/tensorrt-cu13-libs/tensorrt_cu13_libs-11.0.0.114-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:58debb693e0708cf7722868845f3e5286fb9c4d5ac2a1bf3b3806eb4706be39b" },
+    { url = "https://pypi.nvidia.com/tensorrt-cu13-libs/tensorrt_cu13_libs-11.0.0.114-py3-none-win_amd64.whl", hash = "sha256:259447305433ce6aedbef99f854818fa76285f2e4eaa61334f280ae33f45ab1f" },
+]
 
 [[package]]
 name = "tensorrt-rtx-cu13-libs"
@@ -1315,13 +1319,13 @@ requires-dist = [{ name = "vapoursynth", specifier = ">=75" }]
 name = "vapoursynth-mlrt-trt"
 source = { editable = "vsmlrt/trt" }
 dependencies = [
-    { name = "tensorrt-cu13-libs", marker = "sys_platform == 'linux'" },
+    { name = "tensorrt-cu13-libs" },
     { name = "vapoursynth" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "tensorrt-cu13-libs", marker = "sys_platform == 'linux'", specifier = "==11.0.0.114" },
+    { name = "tensorrt-cu13-libs", specifier = "==11.0.0.114", index = "https://pypi.nvidia.com/" },
     { name = "vapoursynth", specifier = ">=75" },
 ]
 

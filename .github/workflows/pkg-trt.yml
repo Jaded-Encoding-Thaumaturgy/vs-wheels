@@ -279,23 +279,10 @@ jobs:
           REPOSITORY_URL: ${{ inputs.repository == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
         run: >-
           gh workflow run cd-publish.yml
-          -f artifact-pattern=${{ env.PACKAGE_NAME }}-sdist
+          -f artifact-pattern=${{ env.PACKAGE_NAME }}-*
           -f package=vapoursynth-mlrt-${{ env.PACKAGE_NAME }}
           -f packages-dir=dist
           -f repository=${{ inputs.repository }}
           -f repository-url="$REPOSITORY_URL"
           -f run-id=${{ github.run_id }}
           --ref ${{ github.ref_name }}
-
-  upload-release:
-    name: Upload to GitHub Release
-    if: github.event_name == 'workflow_dispatch' && inputs.publish
-    needs: [build-wheels, build-sdist]
-    permissions:
-      contents: write
-    uses: ./.github/workflows/cd-upload-release.yml
-
-    with:
-      wheel-pattern: trt-wheels-*
-      sdist-name: trt-sdist
-      display-name: vapoursynth-mlrt-trt

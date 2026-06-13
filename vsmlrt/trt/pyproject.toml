@@ -15,10 +15,7 @@ license-files = ["vs-mlrt/LICENSE"]
 requires-python = ">=3.12"
 authors = [{ name = "AmusementClub" }]
 maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
-dependencies = [
-    "vapoursynth>=75",
-    "tensorrt-cu13-libs==11.0.0.114 ; platform_system == 'Linux'",
-]
+dependencies = ["vapoursynth>=75", "tensorrt-cu13-libs==11.0.0.114"]
 
 [project.urls]
 "Source Code" = "https://github.com/AmusementClub/vs-mlrt"
@@ -63,3 +60,10 @@ cmake.define.CMAKE_CXX_FLAGS = "-Wall -ffast-math -march=armv8.2-a"
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
 fragments = [{ path = "README.md" }, { path = "vs-mlrt/vstrt/README.md" }]
+
+[tool.uv.sources]
+tensorrt-cu13-libs = { index = "nvidia" }
+
+[[tool.uv.index]]
+name = "nvidia"
+url = "https://pypi.nvidia.com/"
