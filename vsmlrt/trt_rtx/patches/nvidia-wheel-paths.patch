@@ -1,0 +1,13 @@
+diff --git a/vstrt/win32.cpp b/vstrt/win32.cpp
+index 1686183..d50ed0d 100644
+--- a/vstrt/win32.cpp
++++ b/vstrt/win32.cpp
+@@ -6,7 +6,7 @@
+ #include <stdexcept>
+ #include <filesystem>
+ 
+-#define DLL_DIR L"vsmlrt-cuda"
++#define DLL_DIR L"../../../tensorrt_rtx_libs"
+ 
+ #include <iostream>
+ 

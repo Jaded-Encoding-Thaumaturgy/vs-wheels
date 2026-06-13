@@ -1,6 +1,18 @@
 cmake_minimum_required(VERSION 3.22)
 project(VSTRT_RTX_Package)
 
+# === Apply patches ===
+include("${CMAKE_CURRENT_SOURCE_DIR}/ApplyPatch.cmake")
+
+set(SRC_VSTRT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt")
+set(BIN_VSTRT_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-mlrt")
+
+add_patched_source(
+  PATCHED_WIN32
+  "${SRC_VSTRT_DIR}/vstrt/win32.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/patches/nvidia-wheel-paths.patch"
+)
+
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -55,7 +67,7 @@ endif()
 find_package(CUDAToolkit REQUIRED)
 
 # === Target Definition & Configuration ===
-add_library(vstrt_rtx SHARED vs-mlrt/vstrt/vs_tensorrt.cpp vs-mlrt/vstrt/win32.cpp)
+add_library(vstrt_rtx SHARED vs-mlrt/vstrt/vs_tensorrt.cpp "${PATCHED_WIN32}")
 
 set_target_properties(
   vstrt_rtx
@@ -102,16 +114,6 @@ endif()
 
 # === Packaging & Installation ===
 install(TARGETS vstrt_rtx LIBRARY DESTINATION . RUNTIME DESTINATION .)
-
-# Helper runtime DLL/SO copying/installing logic
-if(WIN32)
-  file(GLOB _DLLS "${_TENSORRT_RTX_HOME}/bin/tensorrt_rtx${TENSORRT_RTX_LIBRARY_SUFFIX}.dll")
-  if(_DLLS)
-    install(FILES ${_DLLS} DESTINATION "vsmlrt-cuda")
-  else()
-    message(WARNING "Could not find TensorRT-RTX DLLs")
-  endif()
-endif()
 
 # Write VapourSynth Manifest
 if(WIN32)
