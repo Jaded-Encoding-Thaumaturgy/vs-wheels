@@ -1,0 +1,30 @@
+diff --git a/vsort/win32.cpp b/vsort/win32.cpp
+index 0c7026e..08fa077 100644
+--- a/vsort/win32.cpp
++++ b/vsort/win32.cpp
+@@ -10,6 +10,8 @@
+ 
+ #define DLL_DIR L"vsort"
+ #define COMMON_CUDA_DIR L"vsmlrt-cuda"
++#define NVIDIA_CUDA_DIR  L"../../../nvidia/cu13/bin/x86_64"
++#define NVIDIA_CUDNN_DIR L"../../../nvidia/cudnn/bin"
+ 
+ namespace {
+ std::vector<std::wstring> dlls = {
+@@ -27,6 +29,7 @@ static std::vector<std::wstring> cudaDlls {
+     L"cudnn_graph64",
+     L"cudnn_engines_precompiled64", L"cudnn_heuristic64", L"cudnn_engines_runtime_compiled64",
+     L"cudnn_ops64", L"cudnn_cnn64", L"cudnn_adv64",
++    L"cudnn_engines_tensor_ir64", L"cudnn_ext64",
+     L"cudnn64",
+     L"cupti64",
+ };
+@@ -137,6 +140,8 @@ bool preloadCudaDlls() {
+     const fs::path dir = dllDir();
+     findDllIn(dir / DLL_DIR);
+     findDllIn(dir / COMMON_CUDA_DIR);
++    findDllIn(dir / NVIDIA_CUDA_DIR);
++    findDllIn(dir / NVIDIA_CUDNN_DIR);
+ 
+     if (verbose()) {
+         for (const auto pair: dllmap)

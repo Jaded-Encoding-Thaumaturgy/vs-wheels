@@ -204,14 +204,14 @@ jobs:
           rm dist/*.whl
           mv repaired_wheels/*.whl dist/
 
-          # Fix RPATH for all bundled libraries in the repaired wheel to ensure they find each other via $ORIGIN&
+          # Fix RPATH for all bundled libraries in the repaired wheel to ensure they find each other via $ORIGIN
           echo "=== Patching RPATHs inside repaired wheel ==="
           wheel unpack dist/*.whl
           UNPACKED_DIR=$(ls -d vapoursynth_mlrt_ort_cuda-*)
           for f in "$UNPACKED_DIR"/vapoursynth/plugins/ort-cuda/*.so*; do
             if [ -f "$f" ] && [ ! -L "$f" ]; then
-              echo "Setting RPATH to \$ORIGIN on: $(basename "$f")"
-              patchelf --set-rpath '$ORIGIN' "$f"
+              echo "Setting RPATH on: $(basename "$f")"
+              patchelf --set-rpath '$ORIGIN:$ORIGIN/../../../nvidia/cu13/lib:$ORIGIN/../../../nvidia/cudnn/lib' "$f"
             fi
           done
           echo "Repacking wheel..."

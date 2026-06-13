@@ -10,7 +10,7 @@ set(BIN_VSORT_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-mlrt")
 add_patched_source(
   PATCHED_WIN32
   "${SRC_VSORT_DIR}/vsort/win32.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/patches/more-cudnn-libs.patch"
+  "${CMAKE_CURRENT_SOURCE_DIR}/patches/nvidia-wheel-paths.patch"
 )
 
 # === C++ Standard & Options ===
@@ -63,7 +63,14 @@ if(UNIX)
   if(APPLE)
     set_target_properties(vsort PROPERTIES INSTALL_RPATH "@loader_path")
   else()
-    set_target_properties(vsort PROPERTIES INSTALL_RPATH "$ORIGIN")
+    if(ENABLE_CUDA)
+      set_target_properties(
+        vsort
+        PROPERTIES INSTALL_RPATH "$ORIGIN;$ORIGIN/../../../nvidia/cu13/lib;$ORIGIN/../../../nvidia/cudnn/lib"
+      )
+    else()
+      set_target_properties(vsort PROPERTIES INSTALL_RPATH "$ORIGIN")
+    endif()
   endif()
 endif()
 
@@ -135,86 +142,14 @@ if(WIN32)
       message(WARNING "Could not find DirectML DLL. DML_DIR='${DML_DIR}'")
     endif()
   endif()
-
-  if(ENABLE_CUDA)
-    # Convert Windows paths to CMake paths (backslashes -> forward slashes) to avoid string parsing syntax errors
-    if(DEFINED ENV{CUDA_PATH})
-      file(TO_CMAKE_PATH "$ENV{CUDA_PATH}" _CUDA_PATH)
-    endif()
-    if(DEFINED ENV{CUDNN_PATH})
-      file(TO_CMAKE_PATH "$ENV{CUDNN_PATH}" _CUDNN_PATH)
-    endif()
-    if(DEFINED ENV{CUDNN_HOME})
-      file(TO_CMAKE_PATH "$ENV{CUDNN_HOME}" _CUDNN_HOME)
-    endif()
-
-    # Copy CUDA Toolkit DLLs
-    file(
-      GLOB _CUDA_DLLS
-      "${_CUDA_PATH}/bin/x64/cublas64_*.dll"
-      "${_CUDA_PATH}/bin/x64/cublasLt64_*.dll"
-      "${_CUDA_PATH}/bin/x64/cudart64_*.dll"
-      "${_CUDA_PATH}/bin/x64/cufft64_*.dll"
-      "${_CUDA_PATH}/bin/x64/cufftw64_*.dll"
-      "${_CUDA_PATH}/bin/x64/nvblas64_*.dll"
-      "${_CUDA_PATH}/extras/CUPTI/lib64/cupti64_*.dll"
-    )
-
-    # Copy cuDNN DLLs
-    file(
-      GLOB _CUDNN_DLLS
-      "${_CUDNN_PATH}/bin/*.dll"
-      "${_CUDNN_HOME}/bin/*.dll"
-      "${_CUDNN_PATH}/bin/x64/*.dll"
-      "${_CUDNN_HOME}/bin/x64/*.dll"
-    )
-
-    set(_ALL_CUDA_DLLS ${_CUDA_DLLS} ${_CUDNN_DLLS})
-    if(_ALL_CUDA_DLLS)
-      message(STATUS "Found CUDA and cuDNN DLLs to bundle: ${_ALL_CUDA_DLLS}")
-      install(FILES ${_ALL_CUDA_DLLS} DESTINATION "vsmlrt-cuda")
-    else()
-      message(
-        WARNING
-        "Could not find CUDA or cuDNN DLLs to bundle. CUDA_PATH='${_CUDA_PATH}', CUDNN_PATH='${_CUDNN_PATH}'"
-      )
-    endif()
-  endif()
 endif()
 
 if(UNIX AND NOT APPLE AND ENABLE_CUDA)
   get_filename_component(_ROOT "${onnxruntime_DIR}/../../.." ABSOLUTE)
-  if(DEFINED ENV{CUDA_PATH})
-    file(TO_CMAKE_PATH "$ENV{CUDA_PATH}" _CUDA_PATH)
-  endif()
-  if(DEFINED ENV{CUDNN_PATH})
-    file(TO_CMAKE_PATH "$ENV{CUDNN_PATH}" _CUDNN_PATH)
-  endif()
-  if(DEFINED ENV{CUDNN_HOME})
-    file(TO_CMAKE_PATH "$ENV{CUDNN_HOME}" _CUDNN_HOME)
-  endif()
 
   # Glob candidate libraries to bundle
   file(
     GLOB _LINUX_LIBS_PATHS
-    # cuDNN
-    "${_CUDNN_PATH}/lib/libcudnn*.so*"
-    "${_CUDNN_HOME}/lib/libcudnn*.so*"
-    "${_CUDNN_PATH}/lib64/libcudnn*.so*"
-    "${_CUDNN_HOME}/lib64/libcudnn*.so*"
-    # CUDA
-    "${_CUDA_PATH}/lib64/libcublas*.so*"
-    "${_CUDA_PATH}/lib64/libcudart*.so*"
-    "${_CUDA_PATH}/lib64/libcufft*.so*"
-    "${_CUDA_PATH}/lib64/libcurand*.so*"
-    "${_CUDA_PATH}/targets/*-linux/lib/libcublas*.so*"
-    "${_CUDA_PATH}/targets/*-linux/lib/libcudart*.so*"
-    "${_CUDA_PATH}/targets/*-linux/lib/libcufft*.so*"
-    "${_CUDA_PATH}/targets/*-linux/lib/libcurand*.so*"
-    "/usr/lib64/libcublas*.so*"
-    "/usr/lib64/libcudart*.so*"
-    "/usr/lib64/libcufft*.so*"
-    "/usr/lib64/libcurand*.so*"
     # ONNX Runtime provider libraries
     "${_ROOT}/lib/libonnxruntime*.so*"
     "${_ROOT}/lib64/libonnxruntime*.so*"
@@ -255,7 +190,7 @@ if(UNIX AND NOT APPLE AND ENABLE_CUDA)
       endif()
     endforeach()
   else()
-    message(WARNING "Could not find any Linux CUDA, cuDNN, or ORT libraries to bundle")
+    message(WARNING "Could not find any Linux ORT libraries to bundle")
   endif()
 endif()
 
