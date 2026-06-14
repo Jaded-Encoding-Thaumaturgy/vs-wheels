@@ -69,6 +69,12 @@ Matches upstream release v10
 
 ## vapoursynth-dfttest2_cuda
 
+### Version 10.5 (2026-06-14)
+
+The cuFFT dependency is now pulled from the NVIDIA PyPI package.
+
+- **CUDA Linux**: 13.2
+- **CUDA Windows**: 13.2.1
 ### Version 10.4 (2026-06-09)
 
 - **CUDA Linux**: 13.2
@@ -187,6 +193,16 @@ Matches upstream release R31.
 - **CUDA Linux**: 13.0
 - **cuDNN Windows**: 9.23.0.39
 - **cuDNN Linux**: 9.23.0.39
+### Version 15.16.2 (2026-06-14)
+
+CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
+
+- **ONNX Runtime Windows**: v1.26.0
+- **ONNX Runtime Linux**: v1.26.0
+- **CUDA Windows**: 13.0.3
+- **CUDA Linux**: 13.0
+- **cuDNN Windows**: 9.23.1.3
+- **cuDNN Linux**: 9.23.1.3
 
 ## vapoursynth-mlrt-ov
 
@@ -205,9 +221,25 @@ Matches upstream release R31.
 - **CUDA Linux**: 13.2
 - **TensorRT Windows**: 11.0.0.114
 - **TensorRT Linux**: 11.0.0.114-1.cuda13.2
+### Version 15.16.1 (2026-06-14)
+
+The TensorRT dependency is now pulled from the NVIDIA PyPI package for both Linux and Windows.
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
+- **TensorRT Windows**: 11.0.0.114
+- **TensorRT Linux**: 11.0.0.114-1.cuda13.2
 
 ## vapoursynth-mlrt-trt_rtx
 
+### Version 15.16.1 (2026-06-14)
+
+The TensorRT RTX dependency is now pulled from the NVIDIA PyPI package for both Linux and Windows.
+
+- **CUDA Windows**: 13.2.1
+- **CUDA Linux**: 13.2
+- **TensorRT RTX Windows**: 1.5.0.114
+- **TensorRT RTX Linux**: 1.5.0.114
 ### Version 15.16 (2026-06-07)
 
 - **CUDA Windows**: 13.2.1
