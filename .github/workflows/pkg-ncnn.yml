@@ -40,17 +40,17 @@ on:
         description: ONNX tag for Windows (https://github.com/onnx/onnx)
         type: string
         required: false
-        default: "v1.21.0" # renovate: datasource=github-tags depName=onnx/onnx
+        default: "v1.22.0" # renovate: datasource=github-tags depName=onnx/onnx
       onnx-linux-tag:
         description: ONNX tag for Linux (https://github.com/onnx/onnx)
         type: string
         required: false
-        default: "v1.21.0" # renovate: datasource=github-tags depName=onnx/onnx
+        default: "v1.22.0" # renovate: datasource=github-tags depName=onnx/onnx
       onnx-macos-tag:
         description: ONNX tag for macOS (https://github.com/onnx/onnx)
         type: string
         required: false
-        default: "v1.21.0" # renovate: datasource=github-tags depName=onnx/onnx
+        default: "v1.22.0" # renovate: datasource=github-tags depName=onnx/onnx
       ncnn-windows-tag:
         description: NCNN tag for Windows (https://github.com/Tencent/ncnn)
         type: string
@@ -86,9 +86,9 @@ on:
         default: "1.4.350.0" # renovate: datasource=custom.vulkan-sdk-mac depName=vulkan-mac
 
 env:
-  ONNX_WINDOWS_TAG: ${{ inputs.onnx-windows-tag || 'v1.21.0' }} # renovate: datasource=github-tags depName=onnx/onnx
-  ONNX_LINUX_TAG: ${{ inputs.onnx-linux-tag || 'v1.21.0' }} # renovate: datasource=github-tags depName=onnx/onnx
-  ONNX_MACOS_TAG: ${{ inputs.onnx-macos-tag || 'v1.21.0' }} # renovate: datasource=github-tags depName=onnx/onnx
+  ONNX_WINDOWS_TAG: ${{ inputs.onnx-windows-tag || 'v1.22.0' }} # renovate: datasource=github-tags depName=onnx/onnx
+  ONNX_LINUX_TAG: ${{ inputs.onnx-linux-tag || 'v1.22.0' }} # renovate: datasource=github-tags depName=onnx/onnx
+  ONNX_MACOS_TAG: ${{ inputs.onnx-macos-tag || 'v1.22.0' }} # renovate: datasource=github-tags depName=onnx/onnx
   NCNN_WINDOWS_TAG: ${{ inputs.ncnn-windows-tag || '20260526' }} # renovate: datasource=github-tags depName=Tencent/ncnn
   NCNN_LINUX_TAG: ${{ inputs.ncnn-linux-tag || '20260526' }} # renovate: datasource=github-tags depName=Tencent/ncnn
   NCNN_MACOS_TAG: ${{ inputs.ncnn-macos-tag || '20260526' }} # renovate: datasource=github-tags depName=Tencent/ncnn
