@@ -40,40 +40,40 @@ on:
         description: CUDA version for Windows
         type: string
         required: false
-        default: "13.2.1"
+        default: "13.3.0"
       cuda-linux-x86-64:
         description: CUDA version for Linux x86_64
         type: string
         required: false
-        default: "13.2"
+        default: "13.3"
       cuda-linux-aarch64:
         description: CUDA version for Linux AARCH64
         type: string
         required: false
-        default: "13.2"
+        default: "13.3"
       tensorrt-windows:
         description: TensorRT version for Windows (https://developer.nvidia.com/tensorrt/download/)
         type: string
         required: false
-        default: "11.0.0.114" # renovate: datasource=pypi depName=tensorrt-cu13-libs
+        default: "11.1.0.106" # renovate: datasource=pypi depName=tensorrt-cu13-libs
       tensorrt-linux:
         description: TensorRT version for Linux x86_64 (https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/)
         type: string
         required: false
-        default: "11.0.0.114-1.cuda13.2" # renovate: datasource=custom.nvidia-tensorrt-rhel8-cuda13-2 depName=nvidia-tensorrt-rhel8-cuda13-2
+        default: "11.1.0.106-1.cuda13.3" # renovate: datasource=custom.nvidia-tensorrt-rhel8-cuda13-3 depName=nvidia-tensorrt-rhel8-cuda13-3
       tensorrt-linux-aarch64:
         description: TensorRT version for Linux AARCH64 (https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbsa/)
         type: string
         required: false
-        default: "11.0.0.114-1+cuda13.2" # renovate: datasource=custom.nvidia-tensorrt-ubuntu2404-cuda13-2 depName=nvidia-tensorrt-ubuntu2404-cuda13-2
+        default: "11.1.0.106-1+cuda13.3" # renovate: datasource=custom.nvidia-tensorrt-ubuntu2404-cuda13-3 depName=nvidia-tensorrt-ubuntu2404-cuda13-3
 
 env:
-  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.2.1' }}
-  CUDA_LINUX_x86_64_VERSION: ${{ inputs.cuda-linux-x86-64 || '13.2' }}
-  CUDA_LINUX_AARCH64_VERSION: ${{ inputs.cuda-linux-aarch64 || '13.2' }}
-  TENSORRT_WINDOWS_VERSION: ${{ inputs.tensorrt-windows || '11.0.0.114' }} # renovate: datasource=pypi depName=tensorrt-cu13-libs
-  TENSORRT_LINUX_VERSION: ${{ inputs.tensorrt-linux || '11.0.0.114-1.cuda13.2' }} # renovate: datasource=custom.nvidia-tensorrt-rhel8-cuda13-2 depName=nvidia-tensorrt-rhel8-cuda13-2
-  TENSORRT_LINUX_AARCH64_VERSION: ${{ inputs.tensorrt-linux-aarch64 || '11.0.0.114-1+cuda13.2' }} # renovate: datasource=custom.nvidia-tensorrt-ubuntu2404-cuda13-2 depName=nvidia-tensorrt-ubuntu2404-cuda13-2
+  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.3.0' }}
+  CUDA_LINUX_x86_64_VERSION: ${{ inputs.cuda-linux-x86-64 || '13.3' }}
+  CUDA_LINUX_AARCH64_VERSION: ${{ inputs.cuda-linux-aarch64 || '13.3' }}
+  TENSORRT_WINDOWS_VERSION: ${{ inputs.tensorrt-windows || '11.1.0.106' }} # renovate: datasource=pypi depName=tensorrt-cu13-libs
+  TENSORRT_LINUX_VERSION: ${{ inputs.tensorrt-linux || '11.1.0.106-1.cuda13.3' }} # renovate: datasource=custom.nvidia-tensorrt-rhel8-cuda13-3 depName=nvidia-tensorrt-rhel8-cuda13-3
+  TENSORRT_LINUX_AARCH64_VERSION: ${{ inputs.tensorrt-linux-aarch64 || '11.1.0.106-1+cuda13.3' }} # renovate: datasource=custom.nvidia-tensorrt-ubuntu2404-cuda13-3 depName=nvidia-tensorrt-ubuntu2404-cuda13-3
   PACKAGE_NAME: trt
 
 jobs:
