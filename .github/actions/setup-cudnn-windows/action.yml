@@ -31,7 +31,7 @@ runs:
     - name: Restore cuDNN
       id: cache-cudnn
       if: inputs.cache != 'false'
-      uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      uses: actions/cache/restore@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
       with:
         path: cudnn-windows-x86_64-${{ inputs.cudnn-version }}_cuda${{ inputs.cuda-version }}-archive
         key: ${{ steps.cache-key.outputs.key }}
@@ -46,7 +46,7 @@ runs:
 
     - name: Save cuDNN
       if: inputs.cache != 'false' && steps.cache-cudnn.outputs.cache-hit != 'true'
-      uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
       with:
         path: cudnn-windows-x86_64-${{ inputs.cudnn-version }}_cuda${{ inputs.cuda-version }}-archive
         key: ${{ steps.cache-key.outputs.key }}
