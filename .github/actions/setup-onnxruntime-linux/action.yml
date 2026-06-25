@@ -91,6 +91,7 @@ runs:
           cuda-nvrtc,
           cuda-nvrtc-devel,
           cuda-crt,
+          cuda-driver-devel,
           libnvptxcompiler,
           libnvvm
 
