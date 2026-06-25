@@ -2,7 +2,7 @@
 
 set(onnxruntime_USE_FLASH_ATTENTION OFF CACHE BOOL "")
 set(onnxruntime_USE_LEAN_ATTENTION OFF CACHE BOOL "")
-set(onnxruntime_USE_MEMORY_EFFICIENT_ATTENTION OFF CACHE BOOL "")
+set(onnxruntime_USE_MEMORY_EFFICIENT_ATTENTION ON CACHE BOOL "")  # Different from AmusementClub to make it work in ONNXRuntime 1.27.0
 set(onnxruntime_USE_FPA_INTB_GEMM OFF CACHE BOOL "")
 
 set(onnxruntime_USE_CUDA ON CACHE BOOL "")
