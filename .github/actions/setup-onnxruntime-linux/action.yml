@@ -88,6 +88,8 @@ runs:
           libcusparse-devel,
           cuda-cupti,
           cuda-nvtx,
+          cuda-nvrtc,
+          cuda-nvrtc-devel,
           cuda-crt,
           libnvptxcompiler,
           libnvvm
