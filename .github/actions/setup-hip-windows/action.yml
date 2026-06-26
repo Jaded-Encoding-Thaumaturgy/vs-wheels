@@ -19,7 +19,7 @@ runs:
     - name: Restore ROCm HIP
       id: cache-hip
       if: inputs.cache != 'false'
-      uses: actions/cache/restore@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: C:\Program Files\AMD\ROCM
         key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
@@ -38,7 +38,7 @@ runs:
 
     - name: Save ROCm HIP
       if: inputs.cache != 'false' && steps.cache-hip.outputs.cache-hit != 'true'
-      uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: C:\Program Files\AMD\ROCM
         key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
