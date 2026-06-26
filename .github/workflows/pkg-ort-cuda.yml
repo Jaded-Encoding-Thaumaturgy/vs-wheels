@@ -199,6 +199,8 @@ jobs:
             --exclude libcudart.so* \
             --exclude libcufft.so* \
             --exclude libcurand.so* \
+            --exclude libnvrtc.so* \
+            --exclude libcuda.so* \
             --strip dist/*.whl \
             -w repaired_wheels
           rm dist/*.whl
