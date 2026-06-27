@@ -36,7 +36,7 @@ wheel.expand-macos-universal-tags = true
 wheel.py-api = "py3"
 cmake.source-dir = "."
 cmake.args = ["-G", "Ninja"]
-cmake.define.CMAKE_BUILD_TYPE = "Release"
+cmake.define.CMAKE_BUILD_TYPE = "MinSizeRel"
 ninja.make-fallback = false
 ninja.version = ">=1.5"
 

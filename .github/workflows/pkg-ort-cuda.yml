@@ -171,6 +171,7 @@ jobs:
         with:
           onnx-tag: ${{ steps.get-onnx-version.outputs.version }}
           os: ${{ matrix.container || matrix.os }}
+          msvc-runtime: MultiThreadedDLL
 
       - name: Build ONNX dependency (Linux)
         if: runner.os == 'Linux'

@@ -11,6 +11,10 @@ inputs:
     description: Use protobuf from CMAKE_PREFIX_PATH instead of building from submodule
     required: false
     default: "false"
+  msvc-runtime:
+    description: MSVC runtime library (e.g. MultiThreaded or MultiThreadedDLL)
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -20,12 +24,13 @@ runs:
       shell: pwsh
       run: |
         $protoMode = if ("${{ inputs.use-external-protobuf }}" -eq "true") { "external" } else { "custom" }
+        $runtimePart = if ("${{ inputs.msvc-runtime }}" -ne "") { "${{ inputs.msvc-runtime }}" } else { "default" }
         "key=${{ format(
           'setup-onnx-{0}-{1}-{2}',
           inputs.os,
           inputs.onnx-tag,
           hashFiles('.github/cmake-cache/onnx-base.cmake', '.github/cmake-cache/onnx-windows.cmake')
-        ) }}-$protoMode" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        ) }}-$runtimePart-$protoMode" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
     - name: Restore ONNX
       id: cache-onnx
@@ -56,6 +61,12 @@ runs:
         )
         if ("${{ inputs.use-external-protobuf }}" -eq "true") {
           $cmakeArgs += "-DONNX_BUILD_CUSTOM_PROTOBUF=OFF"
+        }
+        if ("${{ inputs.msvc-runtime }}" -ne "") {
+          $cmakeArgs += "-D", "CMAKE_MSVC_RUNTIME_LIBRARY=${{ inputs.msvc-runtime }}"
+          $cmakeArgs += "-D", "ONNX_USE_MSVC_STATIC_RUNTIME=OFF"
+          $cmakeArgs += "-D", "protobuf_MSVC_STATIC_RUNTIME=OFF"
+          $cmakeArgs += "-D", "ABSL_MSVC_STATIC_RUNTIME=OFF"
         }
         cmake @cmakeArgs
 

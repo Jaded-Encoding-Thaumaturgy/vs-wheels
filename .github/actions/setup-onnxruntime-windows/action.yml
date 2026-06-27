@@ -168,6 +168,10 @@ runs:
           $cmakeArgs += "-D", "onnxruntime_CUDA_HOME=$env:CUDA_PATH"
           $cmakeArgs += "-D", "onnxruntime_CUDNN_HOME=$env:CUDNN_HOME"
           $cmakeArgs += "-D", "CMAKE_CUDA_COMPILER=$env:CUDA_PATH\bin\nvcc.exe"
+          $cmakeArgs += "-D", "CMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL"
+          $cmakeArgs += "-D", "ONNX_USE_MSVC_STATIC_RUNTIME=OFF"
+          $cmakeArgs += "-D", "protobuf_MSVC_STATIC_RUNTIME=OFF"
+          $cmakeArgs += "-D", "ABSL_MSVC_STATIC_RUNTIME=OFF"
         } else {
           $cmakeArgs += "-D", "onnxruntime_USE_CUDA=OFF"
         }
