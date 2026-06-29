@@ -32,6 +32,8 @@ def main(pyproject: Path) -> None:
     for override in data["tool"]["scikit-build"]["overrides"]:
         if override["if"]["platform-system"] in ["win32", "linux"]:
             override["cmake"]["define"]["ENABLE_CUDA"] = "ON"
+        if override["if"]["platform-system"] == "win32":
+            override["cmake"]["define"]["CMAKE_MSVC_RUNTIME_LIBRARY"] = "MultiThreadedDLL"
 
     pyproject.write_text(tomli_w.dumps(data), encoding="utf-8")
 

@@ -46,12 +46,12 @@ on:
         description: ONNX tag for Windows (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.26.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.27.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
       onnxruntime-linux-tag:
         description: ONNX tag for Linux (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.26.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.27.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
       cuda-windows:
         description: CUDA version for Windows (https://developer.nvidia.com/cuda-toolkit-archive)
         type: string
@@ -74,8 +74,8 @@ on:
         default: "9.23.2.1" # renovate: datasource=pypi depName=nvidia-cudnn-cu13
 
 env:
-  ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.26.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
-  ONNXRUNTIME_LINUX_TAG: ${{ inputs.onnxruntime-linux-tag || 'v1.26.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.27.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  ONNXRUNTIME_LINUX_TAG: ${{ inputs.onnxruntime-linux-tag || 'v1.27.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
   CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.0.3' }}
   CUDA_LINUX_VERSION: ${{ inputs.cuda-linux || '13.0' }}
   CUDNN_WINDOWS_VERSION: ${{ inputs.cudnn-windows || '9.23.2.1' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
@@ -171,6 +171,7 @@ jobs:
         with:
           onnx-tag: ${{ steps.get-onnx-version.outputs.version }}
           os: ${{ matrix.container || matrix.os }}
+          msvc-runtime: MultiThreadedDLL
 
       - name: Build ONNX dependency (Linux)
         if: runner.os == 'Linux'
@@ -199,6 +200,8 @@ jobs:
             --exclude libcudart.so* \
             --exclude libcufft.so* \
             --exclude libcurand.so* \
+            --exclude libnvrtc.so* \
+            --exclude libcuda.so* \
             --strip dist/*.whl \
             -w repaired_wheels
           rm dist/*.whl
@@ -218,6 +221,31 @@ jobs:
           rm dist/*.whl
           wheel pack "$UNPACKED_DIR" -d dist/
           rm -rf "$UNPACKED_DIR"
+
+      - name: Re-compress wheel with DEFLATED (level 9)
+        shell: uv run --python 3.12 --no-sync --no-project python {0}
+        run: |
+          import zipfile
+          from pathlib import Path
+
+          for whl_path in Path("dist").glob("*.whl"):
+              print(f"Re-compressing {whl_path} with DEFLATED (level 9)...")
+              temp_whl = whl_path.with_suffix(".whl.tmp")
+
+              with (
+                  zipfile.ZipFile(whl_path, "r") as z_in,
+                  zipfile.ZipFile(temp_whl, "w") as z_out,
+              ):
+                  for info in z_in.infolist():
+                      data = z_in.read(info.filename)
+                      new_info = zipfile.ZipInfo(info.filename)
+                      new_info.date_time = info.date_time
+                      new_info.external_attr = info.external_attr
+
+                      z_out.writestr(new_info, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+
+              temp_whl.replace(whl_path)
+              print(f"Done! New size: {whl_path.stat().st_size / (1024 * 1024):.2f} MB")
 
       - name: Upload wheel
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
