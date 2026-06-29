@@ -295,3 +295,6 @@ node_modules/
 ncnn-dist/
 onnx-dist/
 onnxruntime-dist/
+
+# JET files
+.vsjet
