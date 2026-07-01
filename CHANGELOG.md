@@ -23,6 +23,8 @@ Matches upstream master.
 
 ## vapoursynth-bm3dcpu
 
+### Version 2.17 (2026-07-01)
+
 ### Version 2.16.5 (2026-05-16)
 
 Matches upstream R2.16. Requires VapourSynth R75.
@@ -30,6 +32,10 @@ Matches upstream R2.16. Requires VapourSynth R75.
 
 ## vapoursynth-bm3dcuda
 
+### Version 2.17 (2026-07-01)
+
+- **CUDA Linux**: 13.3
+- **CUDA Windows**: 13.3.0
 ### Version 2.16.3 (2026-06-09)
 
 - **CUDA Linux**: 13.2
@@ -55,6 +61,10 @@ Downgrade CUDA version for Linux because 13.x is segfaulting
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 2.17 (2026-07-01)
+
+- **HIP Linux**: 7.2.4
+- **HIP Windows**: 26.Q1-Win11
 ### Version 2.16 (2026-05-16)
 
 - **HIP Windows**: 6.4.2
@@ -69,6 +79,10 @@ Matches upstream release v10
 
 ## vapoursynth-dfttest2_cuda
 
+### Version 10.6 (2026-07-01)
+
+- **CUDA Linux**: 13.3
+- **CUDA Windows**: 13.3.0
 ### Version 10.5 (2026-06-14)
 
 The cuFFT dependency is now pulled from the NVIDIA PyPI package.
@@ -125,6 +139,10 @@ Matches upstream release v10
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
+### Version 10.3 (2026-07-01)
+
+- **CUDA Windows**: 13.3.0
+- **CUDA Linux**: 13.3
 ### Version 10.2 (2026-06-09)
 
 - **CUDA Windows**: 13.2.1
@@ -183,8 +201,24 @@ Matches upstream release R31.
 - **Vulkan Linux**: 1.4.350.1
 - **Vulkan macOS**: 1.4.350.0
 
+## vapoursynth-mlrt-ort
+
+### Version 16.0 (2026-07-01)
+
+- **ONNX Runtime Windows**: v1.27.0
+- **ONNX Runtime Linux**: v1.27.0
+- **ONNX Runtime macOS**: v1.27.0
+
 ## vapoursynth-mlrt-ort-cuda
 
+### Version 16.0 (2026-07-01)
+
+- **ONNX Runtime Windows**: v1.27.0
+- **ONNX Runtime Linux**: v1.27.0
+- **CUDA Windows**: 13.0.3
+- **CUDA Linux**: 13.0
+- **cuDNN Windows**: 9.23.2.1
+- **cuDNN Linux**: 9.23.2.1
 ### Version 15.16.post2 (2026-06-07)
 
 - **ONNX Runtime Windows**: v1.26.0
@@ -215,6 +249,12 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-trt
 
+### Version 16.0 (2026-07-01)
+
+- **CUDA Windows**: 13.3.0
+- **CUDA Linux**: 13.3
+- **TensorRT Windows**: 11.1.0.106
+- **TensorRT Linux**: 11.1.0.106-1.cuda13.3
 ### Version 15.16.post1 (2026-06-07)
 
 - **CUDA Windows**: 13.2.1
