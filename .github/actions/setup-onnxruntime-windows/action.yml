@@ -36,7 +36,15 @@ runs:
       id: cache-key
       shell: pwsh
       run: |
-        $cudaPart = if ("${{ inputs.build-cuda }}" -eq "true") { "cuda-${{ inputs.cuda-version }}" } else { "cpu" }
+        $cudaPart = if ("${{ inputs.build-cuda }}" -eq "true") {
+          $part = "cuda-${{ inputs.cuda-version }}"
+          if ("${{ inputs.cudnn-version }}") {
+            $part += "-cudnn-${{ inputs.cudnn-version }}"
+          }
+          $part
+        } else {
+          "cpu"
+        }
         $hash = if ("${{ inputs.build-cuda }}" -eq "true") {
           "${{ hashFiles(
             '.github/cmake-cache/onnxruntime-base.cmake',
