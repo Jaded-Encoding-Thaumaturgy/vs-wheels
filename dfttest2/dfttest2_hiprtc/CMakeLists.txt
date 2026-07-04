@@ -50,7 +50,7 @@ if(WIN32 AND ENABLE_HIP)
         COMMENT "Copying HIP/ROCm DLLs"
       )
     else()
-      message(WARNING "No HIP/ROCm DLLs found in ${HIP_DLL_SEARCH_DIRS}")
+      message(WARNING "No HIP/ROCm DLLs found in ${HIP_BIN_DIR}")
     endif()
   endif()
 endif()
