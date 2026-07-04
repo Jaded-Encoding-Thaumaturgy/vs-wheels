@@ -38,6 +38,9 @@ runs:
 
         if [ "${{ inputs.build-cuda }}" = "true" ]; then
           CUDA_PART="cuda-${{ inputs.cuda-version }}"
+          if [ -n "${{ inputs.cudnn-version }}" ]; then
+            CUDA_PART="${CUDA_PART}-cudnn-${{ inputs.cudnn-version }}"
+          fi
           HASH="${{ hashFiles(
             '.github/cmake-cache/onnxruntime-base.cmake',
             '.github/cmake-cache/onnxruntime-linux.cmake',
