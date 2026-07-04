@@ -28,31 +28,17 @@ if(WIN32 AND ENABLE_HIP)
   endif()
 
   if(HIP_ROOT_DIR)
-    set(HIP_DLL_SEARCH_DIRS "${HIP_ROOT_DIR}/bin")
-    foreach(HIP_PREFIX_PATH IN LISTS CMAKE_PREFIX_PATH)
-      list(APPEND HIP_DLL_SEARCH_DIRS "${HIP_PREFIX_PATH}/bin")
-    endforeach()
-    if(DEFINED ENV{CMAKE_PREFIX_PATH})
-      cmake_path(CONVERT "$ENV{CMAKE_PREFIX_PATH}" TO_CMAKE_PATH_LIST HIP_ENV_PREFIX_PATHS)
-      foreach(HIP_PREFIX_PATH IN LISTS HIP_ENV_PREFIX_PATHS)
-        list(APPEND HIP_DLL_SEARCH_DIRS "${HIP_PREFIX_PATH}/bin")
-      endforeach()
-    endif()
-    list(REMOVE_DUPLICATES HIP_DLL_SEARCH_DIRS)
+    set(HIP_BIN_DIR "${HIP_ROOT_DIR}/bin")
 
-    foreach(HIP_BIN_DIR IN LISTS HIP_DLL_SEARCH_DIRS)
-      file(
-        GLOB FOUND_HIP_DLLS
-        "${HIP_BIN_DIR}/amdhip64_*.dll"
-        "${HIP_BIN_DIR}/amd_comgr[0-9]*.dll"
-        "${HIP_BIN_DIR}/hipfft.dll"
-        "${HIP_BIN_DIR}/hiprtc[0-9]*.dll"
-        "${HIP_BIN_DIR}/hiprtc-builtins*.dll"
-        "${HIP_BIN_DIR}/rocfft.dll"
-      )
-      list(APPEND HIP_DLLS ${FOUND_HIP_DLLS})
-    endforeach()
-    list(REMOVE_DUPLICATES HIP_DLLS)
+    file(
+      GLOB HIP_DLLS
+      "${HIP_BIN_DIR}/amdhip64_*.dll"
+      "${HIP_BIN_DIR}/amd_comgr[0-9]*.dll"
+      "${HIP_BIN_DIR}/hipfft.dll"
+      "${HIP_BIN_DIR}/hiprtc[0-9]*.dll"
+      "${HIP_BIN_DIR}/hiprtc-builtins*.dll"
+      "${HIP_BIN_DIR}/rocfft.dll"
+    )
 
     if(HIP_DLLS)
       message(STATUS "Found HIP/ROCm DLLs: ${HIP_DLLS}")
