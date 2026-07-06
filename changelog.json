@@ -73,6 +73,14 @@
       "hip_windows": "26.Q1-Win11",
       "release_date": "2026-07-04",
       "commit": "89880d66bd8494d944fb770d781c2471f9dada60"
+    },
+    "2.17.2": {
+      "package": "vapoursynth-bm3dhip",
+      "version": "2.17.2",
+      "hip_linux": "7.2.4",
+      "hip_windows": "26.Q1-Win11",
+      "release_date": "2026-07-06",
+      "commit": "499408f4b84f5f604df4954b69c8d7ab2794ca85"
     }
   },
   "dfttest2": {
@@ -185,6 +193,14 @@
       "hip_windows": "26.Q1-Win11",
       "release_date": "2026-07-04",
       "commit": "89880d66bd8494d944fb770d781c2471f9dada60"
+    },
+    "10.4": {
+      "package": "vapoursynth-dfttest2_hip",
+      "version": "10.4",
+      "hip_linux": "7.2.4",
+      "hip_windows": "26.Q1-Win11",
+      "release_date": "2026-07-06",
+      "commit": "499408f4b84f5f604df4954b69c8d7ab2794ca85"
     }
   },
   "vapoursynth-dfttest2_hiprtc": {
@@ -205,6 +221,14 @@
       "hip_windows": "26.Q1-Win11",
       "release_date": "2026-07-04",
       "commit": "89880d66bd8494d944fb770d781c2471f9dada60"
+    },
+    "10.4": {
+      "package": "vapoursynth-dfttest2_hiprtc",
+      "version": "10.4",
+      "hip_linux": "7.2.4",
+      "hip_windows": "26.Q1-Win11",
+      "release_date": "2026-07-06",
+      "commit": "499408f4b84f5f604df4954b69c8d7ab2794ca85"
     }
   },
   "vapoursynth-ffms2": {

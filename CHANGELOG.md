@@ -63,6 +63,11 @@ Downgrade CUDA version for Linux because 13.x is segfaulting
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 2.17.2 (2026-07-06)
+
+- **HIP Linux**: 7.2.4
+- **HIP Windows**: 26.Q1-Win11
+- **Commit**: [499408f](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/499408f4b84f5f604df4954b69c8d7ab2794ca85)
 ### Version 2.17.1 (2026-07-04)
 
 - **HIP Linux**: 7.2.4
@@ -125,6 +130,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 10.4 (2026-07-06)
+
+- **HIP Linux**: 7.2.4
+- **HIP Windows**: 26.Q1-Win11
+- **Commit**: [499408f](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/499408f4b84f5f604df4954b69c8d7ab2794ca85)
 ### Version 10.3 (2026-07-04)
 
 - **HIP Linux**: 7.2.4
@@ -141,6 +151,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 10.4 (2026-07-06)
+
+- **HIP Linux**: 7.2.4
+- **HIP Windows**: 26.Q1-Win11
+- **Commit**: [499408f](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/499408f4b84f5f604df4954b69c8d7ab2794ca85)
 ### Version 10.3 (2026-07-04)
 
 - **HIP Linux**: 7.2.4
