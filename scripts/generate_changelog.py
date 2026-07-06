@@ -87,6 +87,7 @@ class Downloader:
             for run in runs:
                 run_id = run["id"]
                 run_date = run["created_at"][:10]
+                run_sha = run["head_sha"]
 
                 art_response = await self.session.get(f"runs/{run_id}/artifacts")
                 if art_response.status_code != 200:
@@ -122,6 +123,7 @@ class Downloader:
                 async for jf in wf_dir.glob("**/*.json"):
                     data = json.loads(await jf.read_text())
                     data["release_date"] = run_date
+                    data["commit"] = run_sha
                     await jf.write_text(json.dumps(data, indent=2))
 
                 logger.info("Successfully downloaded metadata from run %s for %s (Run date: %s)", run_id, wf, run_date)
@@ -172,7 +174,7 @@ def generate_changelog(metadata_dir: os.PathLike[str]) -> None:
                 cl_content += f"{data['notes']}\n\n"
 
             for k, v in data.items():
-                if k not in ["package", "version", "release_date", "notes"]:
+                if k not in ["package", "version", "release_date", "notes", "commit"]:
                     formatted_key = k.replace("_", " ").title()
                     formatted_key = (
                         formatted_key.replace("Macos", "macOS")
@@ -187,6 +189,10 @@ def generate_changelog(metadata_dir: os.PathLike[str]) -> None:
                         .replace("Rtx", "RTX")
                     )
                     cl_content += f"- **{formatted_key}**: {v}\n"
+
+            if "commit" in data:
+                commit_sha = data["commit"]
+                cl_content += f"- **Commit**: [{commit_sha[:7]}](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/{commit_sha})\n"
         cl_content += "\n"
 
     Path("CHANGELOG.md").write_text(cl_content)
