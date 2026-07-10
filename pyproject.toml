@@ -17,6 +17,7 @@ dev = [
     "cyclopts>=4.17.0",
     "dumb-pypi>=1.15.0",
     "gersemi>=0.27.2",
+    "hatchling",
     "huggingface-hub>=1.19.0",
     "mypy>=1.20.2",
     "niquests>=3.18.7",
