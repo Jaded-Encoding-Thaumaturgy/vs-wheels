@@ -44,22 +44,22 @@ on:
         description: ONNX tag for Windows (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.27.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.27.1" # renovate: datasource=github-tags depName=microsoft/onnxruntime
       onnxruntime-linux-tag:
         description: ONNX tag for Linux (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.27.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.27.1" # renovate: datasource=github-tags depName=microsoft/onnxruntime
       onnxruntime-macos-tag:
         description: ONNX tag for macOS (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.27.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.27.1" # renovate: datasource=github-tags depName=microsoft/onnxruntime
 
 env:
-  ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.27.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
-  ONNXRUNTIME_LINUX_TAG: ${{ inputs.onnxruntime-linux-tag || 'v1.27.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
-  ONNXRUNTIME_MACOS_TAG: ${{ inputs.onnxruntime-macos-tag || 'v1.27.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.27.1' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  ONNXRUNTIME_LINUX_TAG: ${{ inputs.onnxruntime-linux-tag || 'v1.27.1' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  ONNXRUNTIME_MACOS_TAG: ${{ inputs.onnxruntime-macos-tag || 'v1.27.1' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
   PACKAGE_NAME: ort
 
 jobs:
