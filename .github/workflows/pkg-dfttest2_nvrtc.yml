@@ -91,7 +91,7 @@ jobs:
           git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           enable-cache: false
 
@@ -155,7 +155,7 @@ jobs:
         run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           enable-cache: false
 
