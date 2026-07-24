@@ -1,67 +1,105 @@
 name: "Setup HIP (Linux)"
-description: "Installs and configures AMD ROCm HIP for Linux (RHEL/Manylinux)"
+description: "Installs and configures the AMD ROCm Core SDK for Linux (RHEL/Manylinux)"
 inputs:
   hip-version:
-    description: "HIP version (e.g., 7.0)"
+    description: "ROCm version (e.g., 7.14.0)"
     required: true
   hip-components:
-    description: "Comma-separated list of HIP components to install"
+    description: "Comma-separated list of additional system packages to install"
     required: true
+  rocm-components:
+    description: "Comma-separated ROCm development component names (e.g., runtime-devel,llvm,fft-devel)"
+    required: true
+  install-migraphx:
+    description: "Whether to install MIGraphX from the ROCm Extras repository"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
-    - name: Install HIP
+    - name: Install ROCm Core SDK
       shell: bash
       run: |
         dnf install -y dnf-plugins-core
-        rpm --import https://repo.radeon.com/rocm/rocm.gpg.key
         tee /etc/yum.repos.d/rocm.repo > /dev/null <<EOF
         [rocm]
-        name=ROCm ${{ inputs.hip-version }} repository
-        baseurl=https://repo.radeon.com/rocm/el8/${{ inputs.hip-version }}/main
+        name=ROCm ${{ inputs.hip-version }}
+        baseurl=https://repo.amd.com/rocm/packages-multi-arch/rhel8/x86_64
         enabled=1
-        priority=50
         gpgcheck=1
-        gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
+        gpgkey=https://repo.amd.com/rocm/packages-multi-arch/gpg/rocm.gpg
+        priority=50
         EOF
-        dnf -y install $(echo "${{ inputs.hip-components }}" | tr -d ',')
+        dnf clean all
+
+        rocm_series="${{ inputs.hip-version }}"
+        rocm_series="${rocm_series%.*}"
+        IFS=',' read -r -a rocm_components <<< "${{ inputs.rocm-components }}"
+        rocm_packages=()
+        for component in "${rocm_components[@]}"; do
+          rocm_packages+=("amdrocm-${component}${rocm_series}")
+        done
+        dnf -y install "${rocm_packages[@]}" $(echo "${{ inputs.hip-components }}" | tr ',' ' ')
+
+        if [ "${{ inputs.install-migraphx }}" = "true" ]; then
+          tee /etc/yum.repos.d/rocm-migraphx.repo > /dev/null <<'EOF'
+        [rocm-migraphx]
+        name=ROCm Extras - MIGraphX
+        baseurl=https://rocm.frameworks.amd.com/rpm-multi-arch/amdrocm-migraphx/
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://repo.amd.com/rocm/packages-multi-arch/gpg/rocm.gpg
+        priority=50
+        EOF
+          dnf clean all
+          dnf -y install amdrocm-migraphx amdrocm-migraphx-devel
+        fi
 
     - name: Configure HIP Path
       shell: bash
       run: |
-        # Identify ROCm installation path
-        ROCM_PATH=/opt/rocm-${{ inputs.hip-version }}
-        [ ! -d "$ROCM_PATH" ] && ROCM_PATH=/opt/rocm
+        rocm_series="${{ inputs.hip-version }}"
+        rocm_series="${rocm_series%.*}"
+        AMDCLANG_PATH=$(rpm -ql "amdrocm-llvm${rocm_series}" | grep '/bin/amdclang$' | head -n 1)
+        if [ -z "$AMDCLANG_PATH" ]; then
+          echo "Unable to locate amdclang from amdrocm-llvm${rocm_series}" >&2
+          exit 1
+        fi
 
-        # GCC Toolset 14 is required for C++20 on Manylinux 2.28
+        LLVM_BIN_DIR=$(dirname "$AMDCLANG_PATH")
+        if [ "$(basename "$(dirname "$LLVM_BIN_DIR")")" = "llvm" ]; then
+          ROCM_PATH=$(dirname "$(dirname "$(dirname "$LLVM_BIN_DIR")")")
+        else
+          ROCM_PATH=$(dirname "$LLVM_BIN_DIR")
+        fi
+        ROCM_EXTRAS_PATH="$(dirname "$ROCM_PATH")/extras-7"
+        MIGRAPHX_DIR=""
+        if rpm -q amdrocm-migraphx-devel > /dev/null 2>&1; then
+          MIGRAPHX_CONFIG=$(rpm -ql amdrocm-migraphx-devel | grep '/migraphx-config.cmake$' | head -n 1)
+          [ -n "$MIGRAPHX_CONFIG" ] && MIGRAPHX_DIR=$(dirname "$MIGRAPHX_CONFIG")
+        fi
+
+        # GCC Toolset 14 is required for C++20 on Manylinux 2.28.
         source /opt/rh/gcc-toolset-14/enable
         GCC_ROOT=/opt/rh/gcc-toolset-14/root/usr
         GCC_VER=$(gcc -dumpversion)
         GCC_TRIPLET=$(gcc -dumpmachine)
 
-        # Add ROCm binaries to PATH
-        echo "$ROCM_PATH/bin" >> $GITHUB_PATH
+        echo "$ROCM_EXTRAS_PATH/bin:$ROCM_PATH/bin:$LLVM_BIN_DIR" >> "$GITHUB_PATH"
 
-        # Export environment variables for the compiler and CMake
         {
           echo "ROCM_PATH=$ROCM_PATH"
+          echo "ROCM_EXTRAS_PATH=$ROCM_EXTRAS_PATH"
+          [ -n "$MIGRAPHX_DIR" ] && echo "MIGRAPHX_DIR=$MIGRAPHX_DIR"
           echo "HIP_PATH=$ROCM_PATH"
-          echo "CC=$ROCM_PATH/bin/amdclang"
-          echo "CXX=$ROCM_PATH/bin/amdclang++"
-
-          # Pass toolchain to Clang
+          echo "CC=$AMDCLANG_PATH"
+          echo "CXX=$LLVM_BIN_DIR/amdclang++"
           echo "CFLAGS=--gcc-toolchain=$GCC_ROOT"
           echo "CXXFLAGS=--gcc-toolchain=$GCC_ROOT"
           echo "LDFLAGS=--gcc-toolchain=$GCC_ROOT"
-
-          # Explicitly set include and library paths to help the linker find libstdc++
           echo "CPLUS_INCLUDE_PATH=$GCC_ROOT/include/c++/$GCC_VER:$GCC_ROOT/include/c++/$GCC_VER/$GCC_TRIPLET${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
           echo "LIBRARY_PATH=$GCC_ROOT/lib/gcc/$GCC_TRIPLET/$GCC_VER:/usr/lib64${LIBRARY_PATH:+:${LIBRARY_PATH}}"
-
-          # Help CMake find ROCm components
-          echo "CMAKE_PREFIX_PATH=$ROCM_PATH"
-
-          # Ensure libraries are found at runtime (for build tools and auditwheel)
-          echo "LD_LIBRARY_PATH=$ROCM_PATH/lib:$ROCM_PATH/lib64:$GCC_ROOT/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+          echo "CMAKE_PREFIX_PATH=$ROCM_PATH:$ROCM_EXTRAS_PATH"
+          echo "LD_LIBRARY_PATH=$ROCM_EXTRAS_PATH/lib:$ROCM_PATH/lib:$ROCM_PATH/lib64:$GCC_ROOT/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
         } >> "$GITHUB_ENV"

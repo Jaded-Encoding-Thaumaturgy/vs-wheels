@@ -1,8 +1,8 @@
 name: "Setup HIP (Windows)"
-description: "Downloads, caches, and installs AMD ROCm HIP for Windows"
+description: "Downloads, caches, and configures the AMD ROCm TheRock SDK for Windows"
 inputs:
   hip-version:
-    description: "HIP version (e.g., 25.Q3-WinSvr2022, 26.Q1-Win11)"
+    description: "ROCm TheRock SDK version (e.g., 7.14.0)"
     required: true
   cache:
     description: Whether to enable cache
@@ -16,42 +16,52 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Restore ROCm HIP
-      id: cache-hip
-      if: inputs.cache != 'false'
-      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-      with:
-        path: C:\Program Files\AMD\ROCM
-        key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
+    # - name: Restore ROCm TheRock SDK
+    #   id: cache-hip
+    #   if: inputs.cache != 'false'
+    #   uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+    #   with:
+    #     path: C:\TheRock\build
+    #     key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
 
-    - name: Download HIP Installer
+    - name: Download TheRock SDK
       if: steps.cache-hip.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        curl -s -o hip_installer.exe -L https://download.amd.com/developer/eula/rocm-hub/AMD-Software-PRO-Edition-${{ inputs.hip-version }}-For-HIP.exe
+        $archive = "therock-dist-windows-multiarch-${{ inputs.hip-version }}.tar.gz"
+        $archivePath = Join-Path $env:RUNNER_TEMP $archive
+        curl.exe --fail --location --retry 3 --output $archivePath "https://repo.amd.com/rocm/tarball-multi-arch/$archive"
 
-    - name: Install HIP
+    - name: Extract TheRock SDK
       if: steps.cache-hip.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        Start-Process hip_installer.exe -ArgumentList '-install' -NoNewWindow -Wait
+        $archive = "therock-dist-windows-multiarch-${{ inputs.hip-version }}.tar.gz"
+        $archivePath = Join-Path $env:RUNNER_TEMP $archive
+        New-Item -ItemType Directory -Path 'C:\TheRock\build' -Force | Out-Null
+        tar.exe -xzf $archivePath -C 'C:\TheRock\build' --strip-components=1
 
-    - name: Save ROCm HIP
-      if: inputs.cache != 'false' && steps.cache-hip.outputs.cache-hit != 'true'
-      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-      with:
-        path: C:\Program Files\AMD\ROCM
-        key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
+    # - name: Save ROCm TheRock SDK
+    #   if: inputs.cache != 'false' && steps.cache-hip.outputs.cache-hit != 'true'
+    #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+    #   with:
+    #     path: C:\TheRock\build
+    #     key: setup-hip-windows-${{ runner.os }}-${{ inputs.hip-version }}-${{ inputs.cache-key }}
 
     - name: Configure HIP Path
       shell: pwsh
       run: |
-        $hipVersion = "${{ inputs.hip-version }}"
-        $hipVersionShort = ($hipVersion -eq '25.Q3-WinSvr2022') ? '6.4' : '7.1'
-        $rocmRoot = "C:/Program Files/AMD/ROCm/$hipVersionShort"
+        $rocmRoot = 'C:/TheRock/build'
+        $llvmRoot = "$rocmRoot/lib/llvm"
 
-        "CC=$rocmRoot/bin/clang.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
-        "CXX=$rocmRoot/bin/clang++.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "CC=$llvmRoot/bin/clang.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "CXX=$llvmRoot/bin/clang++.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "ROCM_PATH=$rocmRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
         "HIP_PATH=$rocmRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
         "HIP_DIR=$rocmRoot/lib/cmake/hip" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "HIP_DEVICE_LIB_PATH=$llvmRoot/amdgcn/bitcode" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "HIP_PLATFORM=amd" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "LLVM_PATH=$llvmRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "CMAKE_PREFIX_PATH=$rocmRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
         "$rocmRoot/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+        "$llvmRoot/bin" | Out-File -FilePath $env:GITHUB_PATH -Append

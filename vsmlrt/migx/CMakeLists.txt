@@ -32,6 +32,16 @@ endif()
 # Add ROCm path to CMake search prefix
 list(APPEND CMAKE_PREFIX_PATH "${_ROCM_PATH}")
 
+# MIGraphX is distributed as a ROCm Extras package with its own prefix.
+if(DEFINED ENV{ROCM_EXTRAS_PATH})
+  file(TO_CMAKE_PATH "$ENV{ROCM_EXTRAS_PATH}" _ROCM_EXTRAS_PATH)
+  list(APPEND CMAKE_PREFIX_PATH "${_ROCM_EXTRAS_PATH}")
+endif()
+
+if(DEFINED ENV{MIGRAPHX_DIR})
+  file(TO_CMAKE_PATH "$ENV{MIGRAPHX_DIR}" migraphx_DIR)
+endif()
+
 find_package(migraphx REQUIRED CONFIG)
 find_package(hip REQUIRED CONFIG)
 
