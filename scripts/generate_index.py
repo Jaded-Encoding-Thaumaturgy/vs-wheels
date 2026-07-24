@@ -95,6 +95,7 @@ def fetch_hf_files(bucket_id: str) -> dict[str, str]:
             }
     except Exception as e:
         logger.warning("Failed to fetch HuggingFace files: %s", e)
+        logger.debug("", exc_info=e)
         return {}
 
 
@@ -118,6 +119,7 @@ def fetch_requires_python(asset: dict[str, Any], token: str | None) -> str | Non
                     return line.split(":", 1)[1].strip()
     except Exception as e:
         logger.warning(f"Failed to fetch or parse metadata from {url}: {e}")
+        logger.debug("", exc_info=e)
     return None
 
 
@@ -144,7 +146,7 @@ def collect_assets(releases: list[dict[str, Any]], token: str | None = None) -> 
             assets[name] = AssetInfo(
                 url=url,
                 hash=digest.split(":", 1)[1],
-                upload_timestamp=int(datetime.strptime(updated_at, "%Y-%m-%dT%H:%M:%SZ").timestamp()),
+                upload_timestamp=int(datetime.strptime(updated_at, "%Y-%m-%dT%H:%M:%SZ").astimezone().timestamp()),
             )
 
             # Check if a .metadata file exists in the release assets

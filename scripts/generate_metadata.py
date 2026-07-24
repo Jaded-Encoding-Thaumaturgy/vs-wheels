@@ -25,7 +25,7 @@ def catch_exception(func: Callable[[str], None]) -> Callable[[str], None]:
     def wrapper(arg: str) -> None:
         try:
             func(arg)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"Failed to {func.__name__} for {arg}: {e}", file=sys.stderr)
 
     return wrapper

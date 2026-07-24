@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import zipfile
 from contextlib import suppress
-from datetime import datetime
+from datetime import UTC, datetime
 from functools import cached_property
 from pathlib import Path
 from typing import Any
@@ -128,8 +128,7 @@ class Downloader:
 
                 logger.info("Successfully downloaded metadata from run %s for %s (Run date: %s)", run_id, wf, run_date)
                 return
-            else:
-                logger.info("No metadata found in the last 10 successful runs for %s", wf)
+            logger.info("No metadata found in the last 10 successful runs for %s", wf)
 
 
 def get_github_token() -> str:
@@ -156,7 +155,7 @@ def generate_changelog(metadata_dir: os.PathLike[str]) -> None:
         data = json.loads(mf.read_text())
         if (pkg := data.get("package")) and (version := data.get("version")):
             db.setdefault(pkg, {}).setdefault(version, {}).update(data)
-            db[pkg][version].setdefault("release_date", datetime.now().strftime("%Y-%m-%d"))
+            db[pkg][version].setdefault("release_date", datetime.now(UTC).strftime("%Y-%m-%d"))
 
     db_file.write_text(json.dumps(db, indent=2))
 
