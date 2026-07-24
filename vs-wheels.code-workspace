@@ -88,7 +88,7 @@
       "editor.tabSize": 2,
     },
     "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.tabSize": 2,
     },
     "[toml]": {
@@ -96,7 +96,7 @@
       "editor.tabSize": 4,
     },
     "[github-actions-workflow]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
       "editor.tabSize": 2,
     },
     "[powershell]": {
@@ -126,7 +126,7 @@
     "recommendations": [
       "skellock.just",
       "tamasfe.even-better-toml",
-      "esbenp.prettier-vscode",
+      "oxc.oxc-vscode",
       "ms-vscode.cmake-tools",
       "ms-python.python",
       "charliermarsh.ruff",
