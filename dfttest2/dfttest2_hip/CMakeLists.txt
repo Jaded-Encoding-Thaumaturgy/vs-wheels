@@ -34,6 +34,7 @@ if(WIN32 AND ENABLE_HIP)
       GLOB HIP_DLLS
       "${HIP_BIN_DIR}/amdhip64_*.dll"
       "${HIP_BIN_DIR}/amd_comgr[0-9]*.dll"
+      "${HIP_BIN_DIR}/amd_comgr.dll"
       "${HIP_BIN_DIR}/hipfft.dll"
       "${HIP_BIN_DIR}/hiprtc[0-9]*.dll"
       "${HIP_BIN_DIR}/hiprtc-builtins*.dll"

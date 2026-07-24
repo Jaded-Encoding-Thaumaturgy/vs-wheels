@@ -33,13 +33,13 @@ on:
         type: string
         required: false
       hip-linux:
-        description: HIP/ROCm version for Linux (7.2.3, 6.3.1)
+        description: ROCm version for Linux
         type: string
         required: false
-        default: "7.2.4" # renovate: datasource=custom.rocm-linux depName=rocm-linux
+        default: "7.14.0" # renovate: datasource=custom.rocm-linux depName=rocm-linux
 
 env:
-  HIP_LINUX: ${{ inputs.hip-linux || '7.2.4' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
+  HIP_LINUX: ${{ inputs.hip-linux || '7.14.0' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
   PACKAGE_NAME: migx
 
 jobs:
@@ -74,17 +74,9 @@ jobs:
         uses: ./.github/actions/setup-hip-linux
         with:
           hip-version: ${{ env.HIP_LINUX }}
-          hip-components: >-
-            hip-devel,
-            hip-runtime-amd,
-            rocm-device-libs,
-            migraphx-devel,
-            miopen-hip-devel,
-            rocblas-devel,
-            hipblaslt-devel,
-            hsa-rocr-devel,
-            libxml2,
-            libstdc++-devel
+          hip-components: libxml2, libstdc++-devel
+          rocm-components: base,runtime-devel,llvm,blas-devel,hipblas-common-devel,dnn-devel
+          install-migraphx: true
 
       - name: Build wheels
         run: uv build --wheel --package vapoursynth-mlrt-${{ env.PACKAGE_NAME }}

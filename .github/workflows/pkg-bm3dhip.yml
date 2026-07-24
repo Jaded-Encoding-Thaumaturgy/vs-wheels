@@ -35,17 +35,15 @@ on:
         type: string
         required: false
       hip-linux:
-        description: HIP version for Linux (7.0, 7.2.3)
+        description: ROCm version for Linux
         type: string
         required: false
-        default: "7.2.4" # renovate: datasource=custom.rocm-linux depName=rocm-linux
+        default: "7.14.0" # renovate: datasource=custom.rocm-linux depName=rocm-linux
       hip-windows:
-        description: HIP version for Windows (e.g., 25.Q3 -> 6.4.2 | 26.Q1 -> 7.1.1)
-        type: choice
-        required: true
-        options:
-          - 26.Q1-Win11
-          - 25.Q3-WinSvr2022
+        description: ROCm TheRock SDK version for Windows
+        type: string
+        required: false
+        default: "7.14.0" # renovate: datasource=custom.rocm-linux depName=rocm-windows
       windows-runner:
         description: Windows runner to use
         type: choice
@@ -57,8 +55,8 @@ on:
           - windows-2022
 
 env:
-  HIP_LINUX: ${{ inputs.hip-linux || '7.2.4' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
-  HIP_WINDOWS: ${{ inputs.hip-windows || '26.Q1-Win11' }}
+  HIP_LINUX: ${{ inputs.hip-linux || '7.14.0' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
+  HIP_WINDOWS: ${{ inputs.hip-windows || '7.14.0' }} # renovate: datasource=custom.rocm-linux depName=rocm-windows
   PACKAGE_NAME: bm3dhip
 
 jobs:
@@ -98,7 +96,8 @@ jobs:
         uses: ./.github/actions/setup-hip-linux
         with:
           hip-version: ${{ env.HIP_LINUX }}
-          hip-components: hip-devel, hip-runtime-amd, rocm-device-libs, libxml2, libstdc++-devel
+          hip-components: libxml2, libstdc++-devel
+          rocm-components: base,runtime-devel,llvm
 
       - name: Setup MSVC
         if: runner.os == 'Windows'
