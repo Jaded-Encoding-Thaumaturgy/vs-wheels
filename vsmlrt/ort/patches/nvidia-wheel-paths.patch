@@ -1,5 +1,5 @@
 diff --git a/vsort/win32.cpp b/vsort/win32.cpp
-index 0c7026e..08fa077 100644
+index 0c7026e..fa12b26 100644
 --- a/vsort/win32.cpp
 +++ b/vsort/win32.cpp
 @@ -10,6 +10,8 @@
@@ -11,7 +11,16 @@ index 0c7026e..08fa077 100644
  
  namespace {
  std::vector<std::wstring> dlls = {
-@@ -27,6 +29,7 @@ static std::vector<std::wstring> cudaDlls {
+@@ -21,12 +23,16 @@ std::vector<std::wstring> dlls = {
+ static std::vector<std::wstring> cudaDlls {
+     L"cudart64",
+     L"cublasLt64", L"cublas64",
++};
++
++static std::vector<std::wstring> optionalCudaDlls {
+     L"cufft64",
+     // follows the dependency graph in 
+     // https://docs.nvidia.com/deeplearning/cudnn/backend/v9.12.0/api/overview.html#backend-api-overview
      L"cudnn_graph64",
      L"cudnn_engines_precompiled64", L"cudnn_heuristic64", L"cudnn_engines_runtime_compiled64",
      L"cudnn_ops64", L"cudnn_cnn64", L"cudnn_adv64",
@@ -19,7 +28,22 @@ index 0c7026e..08fa077 100644
      L"cudnn64",
      L"cupti64",
  };
-@@ -137,6 +140,8 @@ bool preloadCudaDlls() {
+@@ -132,11 +138,23 @@ bool preloadCudaDlls() {
+                     break;
+                 }
+             }
++            for (const auto &dll: optionalCudaDlls) {
++                if (dllmap.count(dll) > 0)
++                    continue;
++                if (filename.find(dll) == 0) {
++                    if (verbose())
++                        std::wcerr << DLL_DIR << L": found " << path << L" for optional " << dll << std::endl;
++                    dllmap.insert({ dll, path });
++                    break;
++                }
++            }
+         }
+     };
      const fs::path dir = dllDir();
      findDllIn(dir / DLL_DIR);
      findDllIn(dir / COMMON_CUDA_DIR);
@@ -28,3 +52,28 @@ index 0c7026e..08fa077 100644
  
      if (verbose()) {
          for (const auto pair: dllmap)
+@@ -146,8 +162,8 @@ bool preloadCudaDlls() {
+         if (dllmap.count(dll) == 0) {
+             if (verbose()) {
+                 std::wcerr << DLL_DIR << L": unable to preload " << dll << L": not found" << std::endl;
+-                return false;
+             }
++            return false;
+         }
+         std::wstring p = dllmap[dll];
+         HMODULE h = LoadLibraryW(p.c_str());
+@@ -155,6 +171,14 @@ bool preloadCudaDlls() {
+             std::wcerr << DLL_DIR << L": preloading " << p << L": " << h << std::endl;
+         if (!h) return false;
+     }
++    for (const auto &dll: optionalCudaDlls) {
++        if (dllmap.count(dll) > 0) {
++            std::wstring p = dllmap[dll];
++            HMODULE h = LoadLibraryW(p.c_str());
++            if (verbose())
++                std::wcerr << DLL_DIR << L": preloading optional " << p << L": " << h << std::endl;
++        }
++    }
+     return true;
+ }
+ #endif
