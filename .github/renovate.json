@@ -60,9 +60,16 @@
     },
     "rocm-linux": {
       "defaultRegistryUrlTemplate": "https://repo.amd.com/rocm/tarball-multi-arch/",
-      "format": "html",
+      "format": "plain",
       "transformTemplates": [
-        "{\"releases\": [releases[version ~> /^therock-dist-linux-multiarch-[0-9]+\\.[0-9]+\\.[0-9]+\\.tar\\.gz$/].{\"version\": $replace($replace(version, \"therock-dist-linux-multiarch-\", \"\"), \".tar.gz\", \"\")}]}"
+        "{\"releases\": $match($, /therock-dist-linux-multiarch-[0-9]+\\.[0-9]+\\.[0-9]+\\.tar\\.gz/).{\"version\": $replace($replace(match, \"therock-dist-linux-multiarch-\", \"\"), \".tar.gz\", \"\")}}"
+      ]
+    },
+    "rocm-windows": {
+      "defaultRegistryUrlTemplate": "https://repo.amd.com/rocm/tarball-multi-arch/",
+      "format": "plain",
+      "transformTemplates": [
+        "{\"releases\": $match($, /therock-dist-windows-multiarch-[0-9]+\\.[0-9]+\\.[0-9]+\\.tar\\.gz/).{\"version\": $replace($replace(match, \"therock-dist-windows-multiarch-\", \"\"), \".tar.gz\", \"\")}}"
       ]
     },
     "nvidia-tensorrt-rhel8-cuda13-3": {

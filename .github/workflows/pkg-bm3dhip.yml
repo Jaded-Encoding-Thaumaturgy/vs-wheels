@@ -43,7 +43,7 @@ on:
         description: ROCm TheRock SDK version for Windows
         type: string
         required: false
-        default: "7.14.0" # renovate: datasource=custom.rocm-linux depName=rocm-windows
+        default: "7.14.0" # renovate: datasource=custom.rocm-windows depName=rocm-windows
       windows-runner:
         description: Windows runner to use
         type: choice
@@ -56,7 +56,7 @@ on:
 
 env:
   HIP_LINUX: ${{ inputs.hip-linux || '7.14.0' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
-  HIP_WINDOWS: ${{ inputs.hip-windows || '7.14.0' }} # renovate: datasource=custom.rocm-linux depName=rocm-windows
+  HIP_WINDOWS: ${{ inputs.hip-windows || '7.14.0' }} # renovate: datasource=custom.rocm-windows depName=rocm-windows
   PACKAGE_NAME: bm3dhip
 
 jobs:
