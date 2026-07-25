@@ -39,6 +39,7 @@ if(WIN32 AND ENABLE_HIP)
       "${HIP_BIN_DIR}/hiprtc[0-9]*.dll"
       "${HIP_BIN_DIR}/hiprtc-builtins*.dll"
       "${HIP_BIN_DIR}/rocfft.dll"
+      "${HIP_BIN_DIR}/rocm_kpack.dll"
     )
 
     if(HIP_DLLS)
