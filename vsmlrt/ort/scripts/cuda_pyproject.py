@@ -22,12 +22,14 @@ def main(pyproject: Path) -> None:
             "nvidia-cublas>=13.0.0,<14.0.0",  # renovate: datasource=pypi depName=nvidia-cublas
             "nvidia-cuda-runtime>=13.0.0,<14.0.0",  # renovate: datasource=pypi depName=nvidia-cuda-runtime
             "nvidia-cudnn-cu13>=9.0.0,<10.0.0",  # renovate: datasource=pypi depName=nvidia-cudnn-cu13
-            "nvidia-cufft>=12.0.0,<13.0.0",  # renovate: datasource=pypi depName=nvidia-cufft
             "nvidia-cuda-cupti>=13.0.0,<14.0.0",  # renovate: datasource=pypi depName=nvidia-cuda-cupti
-            "nvidia-cuda-nvrtc>=13.0.0,<14.0.0",  # renovate: datasource=pypi depName=nvidia-cuda-nvrtc
             "nvidia-curand>=10.0.0,<11.0.0",  # renovate: datasource=pypi depName=nvidia-curand
         ]
     )
+    data["project"].setdefault("optional-dependencies", {})
+    data["project"]["optional-dependencies"]["cufft"] = [
+        "nvidia-cufft>=12.0.0,<13.0.0",  # renovate: datasource=pypi depName=nvidia-cufft
+    ]
 
     for override in data["tool"]["scikit-build"]["overrides"]:
         if override["if"]["platform-system"] in ["win32", "linux"]:

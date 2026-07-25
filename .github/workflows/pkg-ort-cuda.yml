@@ -46,22 +46,22 @@ on:
         description: ONNX tag for Windows (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.27.1" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.28.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
       onnxruntime-linux-tag:
         description: ONNX tag for Linux (https://github.com/microsoft/onnxruntime)
         type: string
         required: false
-        default: "v1.27.1" # renovate: datasource=github-tags depName=microsoft/onnxruntime
+        default: "v1.28.0" # renovate: datasource=github-tags depName=microsoft/onnxruntime
       cuda-windows:
         description: CUDA version for Windows (https://developer.nvidia.com/cuda-toolkit-archive)
         type: string
         required: false
-        default: "13.0.3"
+        default: "13.3.1"
       cuda-linux:
         description: CUDA version for Linux (https://developer.nvidia.com/cuda-toolkit-archive)
         type: string
         required: false
-        default: "13.0"
+        default: "13.3"
       cudnn-windows:
         description: cuDNN version for Windows (https://developer.nvidia.com/cudnn-downloads, https://developer.nvidia.com/cudnn-archive)
         type: string
@@ -74,10 +74,10 @@ on:
         default: "9.25.0.15" # renovate: datasource=pypi depName=nvidia-cudnn-cu13
 
 env:
-  ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.27.1' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
-  ONNXRUNTIME_LINUX_TAG: ${{ inputs.onnxruntime-linux-tag || 'v1.27.1' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
-  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.0.3' }}
-  CUDA_LINUX_VERSION: ${{ inputs.cuda-linux || '13.0' }}
+  ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.28.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  ONNXRUNTIME_LINUX_TAG: ${{ inputs.onnxruntime-linux-tag || 'v1.28.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
+  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.3.1' }}
+  CUDA_LINUX_VERSION: ${{ inputs.cuda-linux || '13.3' }}
   CUDNN_WINDOWS_VERSION: ${{ inputs.cudnn-windows || '9.25.0.15' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
   CUDNN_LINUX_VERSION: ${{ inputs.cudnn-linux || '9.25.0.15' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
   PACKAGE_NAME: ort
@@ -97,7 +97,7 @@ jobs:
             container: quay.io/pypa/manylinux_2_28_aarch64
             cuda_repo: rhel8/sbsa
           - name: Windows x64 CUDA
-            os: windows-2022
+            os: windows-2025-vs2026
 
     name: Build wheels on ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
