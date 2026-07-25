@@ -201,6 +201,14 @@
       "hip_windows": "26.Q1-Win11",
       "release_date": "2026-07-06",
       "commit": "499408f4b84f5f604df4954b69c8d7ab2794ca85"
+    },
+    "10.5": {
+      "package": "vapoursynth-dfttest2_hip",
+      "version": "10.5",
+      "hip_linux": "7.14.0",
+      "hip_windows": "7.14.0",
+      "release_date": "2026-07-25",
+      "commit": "9f4f8ece874b5503d93193bbd64405f39216b6bd"
     }
   },
   "vapoursynth-dfttest2_hiprtc": {
@@ -229,6 +237,14 @@
       "hip_windows": "26.Q1-Win11",
       "release_date": "2026-07-06",
       "commit": "499408f4b84f5f604df4954b69c8d7ab2794ca85"
+    },
+    "10.5": {
+      "package": "vapoursynth-dfttest2_hiprtc",
+      "version": "10.5",
+      "hip_linux": "7.14.0",
+      "hip_windows": "7.14.0",
+      "release_date": "2026-07-25",
+      "commit": "9f4f8ece874b5503d93193bbd64405f39216b6bd"
     }
   },
   "vapoursynth-ffms2": {
@@ -406,6 +422,15 @@
       "onnxruntime_macos": "v1.27.0",
       "release_date": "2026-07-01",
       "commit": "cd410ed2e299b83451ea7b8fe8b74a3939efc8c7"
+    },
+    "16.1": {
+      "package": "vapoursynth-mlrt-ort",
+      "version": "16.1",
+      "onnxruntime_windows": "v1.28.0",
+      "onnxruntime_linux": "v1.28.0",
+      "onnxruntime_macos": "v1.28.0",
+      "release_date": "2026-07-25",
+      "commit": "f57b1ac6dcecc3c34f607e94bfedfa01e9d67939"
     }
   }
 }
