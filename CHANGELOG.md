@@ -130,6 +130,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 10.5 (2026-07-25)
+
+- **HIP Linux**: 7.14.0
+- **HIP Windows**: 7.14.0
+- **Commit**: [9f4f8ec](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/9f4f8ece874b5503d93193bbd64405f39216b6bd)
 ### Version 10.4 (2026-07-06)
 
 - **HIP Linux**: 7.2.4
@@ -151,6 +156,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 10.5 (2026-07-25)
+
+- **HIP Linux**: 7.14.0
+- **HIP Windows**: 7.14.0
+- **Commit**: [9f4f8ec](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/9f4f8ece874b5503d93193bbd64405f39216b6bd)
 ### Version 10.4 (2026-07-06)
 
 - **HIP Linux**: 7.2.4
@@ -237,6 +247,12 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ort
 
+### Version 16.1 (2026-07-25)
+
+- **ONNX Runtime Windows**: v1.28.0
+- **ONNX Runtime Linux**: v1.28.0
+- **ONNX Runtime macOS**: v1.28.0
+- **Commit**: [f57b1ac](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/f57b1ac6dcecc3c34f607e94bfedfa01e9d67939)
 ### Version 16.0 (2026-07-01)
 
 - **ONNX Runtime Windows**: v1.27.0
