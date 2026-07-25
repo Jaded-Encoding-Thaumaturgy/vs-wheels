@@ -81,6 +81,14 @@
       "hip_windows": "26.Q1-Win11",
       "release_date": "2026-07-06",
       "commit": "499408f4b84f5f604df4954b69c8d7ab2794ca85"
+    },
+    "2.17.3": {
+      "package": "vapoursynth-bm3dhip",
+      "version": "2.17.3",
+      "hip_linux": "7.14.0",
+      "hip_windows": "7.14.0",
+      "release_date": "2026-07-25",
+      "commit": "cece636c9aa7b7652740a81d30121389040cee19"
     }
   },
   "dfttest2": {
