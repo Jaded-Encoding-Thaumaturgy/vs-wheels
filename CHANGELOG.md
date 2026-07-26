@@ -63,6 +63,11 @@ Downgrade CUDA version for Linux because 13.x is segfaulting
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 2.17.4 (2026-07-25)
+
+- **HIP Linux**: 7.14.0
+- **HIP Windows**: 7.14.0
+- **Commit**: [55c5e82](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/55c5e82801c6d326795ef6a16de878f89e5cb7e0)
 ### Version 2.17.3 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -135,6 +140,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 10.6 (2026-07-25)
+
+- **HIP Linux**: 7.14.0
+- **HIP Windows**: 7.14.0
+- **Commit**: [55c5e82](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/55c5e82801c6d326795ef6a16de878f89e5cb7e0)
 ### Version 10.5 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -161,6 +171,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 10.6 (2026-07-25)
+
+- **HIP Linux**: 7.14.0
+- **HIP Windows**: 7.14.0
+- **Commit**: [55c5e82](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/55c5e82801c6d326795ef6a16de878f89e5cb7e0)
 ### Version 10.5 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -232,6 +247,10 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-migx
 
+### Version 16.0 (2026-07-25)
+
+- **HIP Linux**: 7.14.0
+- **Commit**: [68edb3c](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/68edb3ceac2d661a4829b1309d3d2dc9e8af407e)
 ### Version 15.16 (2026-06-07)
 
 - **HIP Linux**: 7.2.4
@@ -267,6 +286,15 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ort-cuda
 
+### Version 16.1 (2026-07-26)
+
+- **ONNX Runtime Windows**: v1.28.0
+- **ONNX Runtime Linux**: v1.28.0
+- **CUDA Windows**: 13.3.1
+- **CUDA Linux**: 13.3
+- **cuDNN Windows**: 9.25.0.15
+- **cuDNN Linux**: 9.25.0.15
+- **Commit**: [55c5e82](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/55c5e82801c6d326795ef6a16de878f89e5cb7e0)
 ### Version 16.0 (2026-07-01)
 
 - **ONNX Runtime Windows**: v1.27.0
