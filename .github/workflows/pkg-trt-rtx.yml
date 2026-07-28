@@ -48,18 +48,18 @@ on:
         description: TensorRT version for Windows (https://developer.nvidia.com/tensorrt-rtx)
         type: string
         required: false
-        default: "1.5.0.114" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+        default: "1.6.1.120" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
       tensorrt-rtx-linux:
         description: TensorRT version for Linux x86_64 (https://developer.nvidia.com/tensorrt-rtx)
         type: string
         required: false
-        default: "1.5.0.114" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+        default: "1.6.1.120" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
 
 env:
   CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.2.1' }}
   CUDA_LINUX_VERSION: ${{ inputs.cuda-linux|| '13.2' }}
-  TENSORRT_RTX_WINDOWS_VERSION: ${{ inputs.tensorrt-rtx-windows || '1.5.0.114' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
-  TENSORRT_RTX_LINUX_VERSION: ${{ inputs.tensorrt-rtx-linux || '1.5.0.114' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+  TENSORRT_RTX_WINDOWS_VERSION: ${{ inputs.tensorrt-rtx-windows || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+  TENSORRT_RTX_LINUX_VERSION: ${{ inputs.tensorrt-rtx-linux || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
   PACKAGE_NAME: trt_rtx
 
 jobs:
