@@ -358,6 +358,13 @@ The TensorRT dependency is now pulled from the NVIDIA PyPI package for both Linu
 
 ## vapoursynth-mlrt-trt_rtx
 
+### Version 16.0 (2026-07-29)
+
+- **CUDA Windows**: 13.4.0
+- **CUDA Linux**: 13.4
+- **TensorRT RTX Windows**: 1.6.1.120
+- **TensorRT RTX Linux**: 1.6.1.120
+- **Commit**: [7122137](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/7122137fdf86ab2853c1899700d403ffa58d1dad)
 ### Version 15.16.1 (2026-06-14)
 
 The TensorRT RTX dependency is now pulled from the NVIDIA PyPI package for both Linux and Windows.

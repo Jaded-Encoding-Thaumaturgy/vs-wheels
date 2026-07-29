@@ -438,6 +438,16 @@
       "tensorrt_rtx_linux": "1.5.0.114",
       "release_date": "2026-06-14",
       "notes": "The TensorRT RTX dependency is now pulled from the NVIDIA PyPI package for both Linux and Windows."
+    },
+    "16.0": {
+      "package": "vapoursynth-mlrt-trt_rtx",
+      "version": "16.0",
+      "cuda_windows": "13.4.0",
+      "cuda_linux": "13.4",
+      "tensorrt_rtx_windows": "1.6.1.120",
+      "tensorrt_rtx_linux": "1.6.1.120",
+      "release_date": "2026-07-29",
+      "commit": "7122137fdf86ab2853c1899700d403ffa58d1dad"
     }
   },
   "vapoursynth-fmtc": {
