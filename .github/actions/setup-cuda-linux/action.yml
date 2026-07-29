@@ -10,6 +10,11 @@ inputs:
   cuda-components:
     description: "Comma-separated list of CUDA components to install"
     required: true
+  preview-link:
+    description: Link to preview build
+    type: boolean
+    required: false
+    default: false
 
 runs:
   using: "composite"
@@ -23,7 +28,11 @@ runs:
         CUDA_REPO_ARR=(${CUDA_REPO//// })
         CUDA_REPO_VER=${CUDA_REPO_ARR[0]}
         dnf install -y 'dnf-command(config-manager)'
-        dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/${CUDA_REPO}/cuda-${CUDA_REPO_VER}.repo
+        if [ "${{ inputs.preview-link }}" = "true" ]; then
+          rpm -i https://packages.nvidia.com/${CUDA_REPO_VER#rh}/nvidia-preview-keyring.rpm
+        else
+          dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/${CUDA_REPO}/cuda-${CUDA_REPO_VER}.repo
+        fi
         dnf clean all
         IFS=', ' read -ra ADDR <<< "${{ inputs.cuda-components }}"
         PKG_LIST=""
