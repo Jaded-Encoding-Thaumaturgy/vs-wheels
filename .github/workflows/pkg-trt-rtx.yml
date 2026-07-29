@@ -38,28 +38,34 @@ on:
         description: CUDA version for Windows
         type: string
         required: false
-        default: "13.2.1"
+        default: "13.4.0"
       cuda-linux:
         description: CUDA version for Linux x86_64
         type: string
         required: false
-        default: "13.2"
+        default: "13.4"
       tensorrt-rtx-windows:
         description: TensorRT version for Windows (https://developer.nvidia.com/tensorrt-rtx)
         type: string
         required: false
-        default: "1.5.0.114" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+        default: "1.6.1.120" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
       tensorrt-rtx-linux:
         description: TensorRT version for Linux x86_64 (https://developer.nvidia.com/tensorrt-rtx)
         type: string
         required: false
-        default: "1.5.0.114" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+        default: "1.6.1.120" # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+      preview-link:
+        description: Link to preview build
+        type: boolean
+        required: false
+        default: true
 
 env:
-  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.2.1' }}
-  CUDA_LINUX_VERSION: ${{ inputs.cuda-linux|| '13.2' }}
-  TENSORRT_RTX_WINDOWS_VERSION: ${{ inputs.tensorrt-rtx-windows || '1.5.0.114' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
-  TENSORRT_RTX_LINUX_VERSION: ${{ inputs.tensorrt-rtx-linux || '1.5.0.114' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.4.0' }}
+  CUDA_LINUX_VERSION: ${{ inputs.cuda-linux|| '13.4' }}
+  TENSORRT_RTX_WINDOWS_VERSION: ${{ inputs.tensorrt-rtx-windows || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+  TENSORRT_RTX_LINUX_VERSION: ${{ inputs.tensorrt-rtx-linux || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
+  PREVIEW_LINK: ${{ inputs.preview-link || 'true' }}
   PACKAGE_NAME: trt_rtx
 
 jobs:
@@ -121,6 +127,16 @@ jobs:
             crt,
             nvptxcompiler
           cache-key: ${{ matrix.os }}
+          preview-link: ${{ env.PREVIEW_LINK }}
+
+      - name: Setup CUDA (Linux)
+        if: runner.os == 'Linux'
+        uses: ./.github/actions/setup-cuda-linux
+        with:
+          cuda-version: ${{ env.CUDA_LINUX_VERSION }}
+          cuda-repo: ${{ matrix.cuda-repo }}
+          cuda-components: cuda-nvcc, cuda-cudart-devel
+          preview-link: ${{ env.PREVIEW_LINK }}
 
       - name: Setup TensorRT RTX (Windows)
         if: runner.os == 'Windows'
@@ -134,7 +150,6 @@ jobs:
         uses: ./.github/actions/setup-tensorrt-rtx-linux
         with:
           tensorrt-rtx-version: ${{ env.TENSORRT_RTX_LINUX_VERSION }}
-          cuda-repo: ${{ matrix.cuda-repo }}
           cuda-version: ${{ env.CUDA_LINUX_VERSION }}
 
       - name: Build wheel

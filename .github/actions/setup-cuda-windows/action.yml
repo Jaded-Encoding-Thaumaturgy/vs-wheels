@@ -11,6 +11,11 @@ inputs:
     description: "Extra cache key part"
     required: false
     default: "default"
+  preview-link:
+    description: Link to preview build
+    type: boolean
+    required: false
+    default: false
 
 runs:
   using: "composite"
@@ -45,8 +50,13 @@ runs:
       run: |
         $cudaVersion = $env:CUDA_VERSION_WINDOWS
         $cudaShort = $env:CUDA_VERSION_WINDOWS_SHORT
-        curl.exe -s -o cuda_installer.exe -L `
-          "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_network.exe"
+        if ("${{ inputs.preview-link }}" -eq "true") {
+          $url = "https://packages.nvidia.com/prerelease/cuda/$cudaVersion/local_installers/cuda_${cudaVersion}_windows_x86_64.exe"
+        } else {
+          $url = "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_network.exe"
+        }
+        Write-Host "Downloading CUDA from $url"
+        curl.exe -s -o cuda_installer.exe -L $url
         $components = "${{ inputs.cuda-components }}".Split(',') | ForEach-Object { $_.Trim() }
         $installArgs = @("-s")
         foreach ($comp in $components) {

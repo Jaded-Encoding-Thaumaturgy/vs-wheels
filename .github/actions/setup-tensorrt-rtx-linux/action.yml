@@ -4,27 +4,13 @@ inputs:
   tensorrt-rtx-version:
     description: TensorRT RTX version (e.g., 1.4.0.76)
     required: true
-  cuda-repo:
-    description: CUDA repository path (e.g., rhel8/x86_64)
-    required: true
   cuda-version:
     description: CUDA version (e.g., 13.2)
     required: true
-  cuda-components:
-    description: Comma-separated list of CUDA components to install
-    required: false
-    default: cuda-nvcc, cuda-cudart-devel
 
 runs:
   using: composite
   steps:
-    - name: Setup CUDA (Linux)
-      uses: ./.github/actions/setup-cuda-linux
-      with:
-        cuda-version: ${{ inputs.cuda-version }}
-        cuda-repo: ${{ inputs.cuda-repo }}
-        cuda-components: ${{ inputs.cuda-components }}
-
     - name: Download TensorRT RTX
       shell: bash
       run: |
