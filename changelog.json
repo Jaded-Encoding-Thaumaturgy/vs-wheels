@@ -417,6 +417,16 @@
       "tensorrt_linux": "11.1.0.106-1.cuda13.3",
       "release_date": "2026-07-01",
       "commit": "b60b0ea6fc1123fe4a9972ca5a2c9a421dc0ef22"
+    },
+    "16.1": {
+      "package": "vapoursynth-mlrt-trt",
+      "version": "16.1",
+      "cuda_windows": "13.3.1",
+      "cuda_linux": "13.3",
+      "tensorrt_windows": "11.2.1.2",
+      "tensorrt_linux": "11.2.1.2-1.cuda13.3",
+      "release_date": "2026-07-31",
+      "commit": "53a4c695a5027b4b3081cf8036ec7d2be6e50be3"
     }
   },
   "vapoursynth-mlrt-trt_rtx": {

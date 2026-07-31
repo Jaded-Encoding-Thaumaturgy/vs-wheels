@@ -334,6 +334,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-trt
 
+### Version 16.1 (2026-07-31)
+
+- **CUDA Windows**: 13.3.1
+- **CUDA Linux**: 13.3
+- **TensorRT Windows**: 11.2.1.2
+- **TensorRT Linux**: 11.2.1.2-1.cuda13.3
+- **Commit**: [53a4c69](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/53a4c695a5027b4b3081cf8036ec7d2be6e50be3)
 ### Version 16.0 (2026-07-01)
 
 - **CUDA Windows**: 13.3.0
