@@ -325,6 +325,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-ov
 
+### Version 16.0 (2026-08-04)
+
+- **OpenVINO Windows**: 2026.3.0
+- **OpenVINO Linux**: 2026.3.0
+- **OpenVINO macOS Arm64**: 2026.3.0
+- **OpenVINO macOS Intel**: 2026.3.0
+- **Commit**: [3c79495](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/3c794955c6bce102591ca14fc95339d7b655369a)
 ### Version 15.16 (2026-06-07)
 
 - **OpenVINO Windows**: 2026.2.0
