@@ -59,7 +59,7 @@ on:
         description: OpenVINO tag for macOS x86_64 (https://github.com/openvinotoolkit/openvino/)
         type: string
         required: false
-        default: "2026.2.0"
+        default: "2026.3.0" # renovate: datasource=github-tags depName=openvinotoolkit/openvino
 
 env:
   OPENVINO_WINDOWS_TAG: ${{ inputs.openvino-windows-tag || '2026.3.0' }} # renovate: datasource=github-tags depName=openvinotoolkit/openvino
