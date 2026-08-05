@@ -204,7 +204,7 @@ jobs:
           os: ${{ matrix.container || matrix.os }}
 
       - name: Build wheel
-        run: uv build --package vapoursynth-mlrt-${{ env.PACKAGE_NAME }}
+        run: uv build --package vapoursynth-mlrt-${{ env.PACKAGE_NAME }} -C "cmake.define.INSTALL_CUDA=OFF"
         env:
           DML_DIR: ${{ steps.setup-onnxruntime-windows.outputs.dml-path }}
           SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_MLRT_ORT: ${{ inputs.version }}
@@ -236,20 +236,24 @@ jobs:
           rm dist/*.whl
           mv repaired_wheels/*.whl dist/
 
-          # Fix RPATH for all bundled libraries in the repaired wheel to ensure they find each other via $ORIGIN
-          echo "=== Patching RPATHs inside repaired wheel ==="
-          wheel unpack dist/*.whl
-          UNPACKED_DIR=$(ls -d vapoursynth_mlrt_ort-*)
-          for f in "$UNPACKED_DIR"/vapoursynth/plugins/ort/*.so*; do
-            if [ -f "$f" ] && [ ! -L "$f" ]; then
-              echo "Setting RPATH on: $(basename "$f")"
-              patchelf --set-rpath '$ORIGIN:$ORIGIN/../../../nvidia/cu13/lib:$ORIGIN/../../../nvidia/cudnn/lib' "$f"
-            fi
+          # Fix RPATH for all bundled libraries in repaired wheels to ensure they find nvidia PyPI packages via $ORIGIN
+          echo "=== Patching RPATHs inside repaired wheels ==="
+          for whl in dist/*.whl; do
+            [ -f "$whl" ] || continue
+            echo "Processing wheel: $(basename "$whl")"
+            tmpdir=$(mktemp -d)
+            wheel unpack "$whl" -d "$tmpdir"
+            unpacked=$(ls -d "$tmpdir"/*)
+            for f in "$unpacked"/vapoursynth/plugins/ort/*.so*; do
+              if [ -f "$f" ] && [ ! -L "$f" ]; then
+                echo "  Setting RPATH on: $(basename "$f")"
+                patchelf --set-rpath '$ORIGIN:$ORIGIN/../../../nvidia/cu13/lib:$ORIGIN/../../../nvidia/cudnn/lib' "$f"
+              fi
+            done
+            rm "$whl"
+            wheel pack "$unpacked" -d dist/
+            rm -rf "$tmpdir"
           done
-          echo "Repacking wheel..."
-          rm dist/*.whl
-          wheel pack "$UNPACKED_DIR" -d dist/
-          rm -rf "$UNPACKED_DIR"
 
       - name: Repair wheel (macOS)
         if: runner.os == 'macOS'
@@ -259,85 +263,20 @@ jobs:
           mv repaired_wheels/*.whl dist/
           uvx --from delocate delocate-listdeps dist/*.whl
 
-      - name: Split CUDA provider
-        if: runner.os == 'Windows' || runner.os == 'Linux'
-        shell: uv run --with wheel --python 3.12 --no-sync --no-project python {0}
-        run: |
-          import shutil
-          import subprocess
-          import sys
-          import tempfile
-          from pathlib import Path
-
-          wheel = next(Path("dist").glob("*.whl"))
-
-          with tempfile.TemporaryDirectory() as temp_dir:
-              subprocess.run(
-                  [sys.executable, "-m", "wheel", "unpack", str(wheel), "-d", temp_dir],
-                  check=True,
-              )
-
-              unpacked_dir = next(Path(temp_dir).iterdir())
-              provider = unpacked_dir / (
-                  "vapoursynth/plugins/ort/vsort/onnxruntime_providers_cuda.dll"
-                  if sys.platform == "win32"
-                  else "vapoursynth/plugins/ort/libonnxruntime_providers_cuda.so"
-              )
-              provider_dir = Path("vsmlrt/ort/cuda/provider")
-              provider_dir.mkdir()
-              shutil.move(provider, provider_dir)
-
-              wheel.unlink()
-              subprocess.run(
-                  [sys.executable, "-m", "wheel", "pack", str(unpacked_dir), "-d", "dist"],
-                  check=True,
-              )
-
-      - name: Build CUDA provider wheel
-        if: runner.os == 'Windows' || runner.os == 'Linux'
-        run: uv build --wheel --out-dir cuda_dist vsmlrt/ort/cuda
-        env:
-          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_MLRT_ORT_CUDA: ${{ inputs.version }}
-          SKBUILD_WHEEL_TAGS: py3-none-${{ matrix.cuda_tag }}
-
-      - name: Re-compress wheel with DEFLATED (level 9)
-        shell: uv run --python 3.12 --no-sync --no-project python {0}
-        run: |
-          import zipfile
-          from pathlib import Path
-
-          for dist_dir in (Path("dist"), Path("cuda_dist")):
-              for whl_path in dist_dir.glob("*.whl"):
-                  print(f"Re-compressing {whl_path} with DEFLATED (level 9)...")
-                  temp_whl = whl_path.with_suffix(".whl.tmp")
-
-                  with (
-                      zipfile.ZipFile(whl_path, "r") as z_in,
-                      zipfile.ZipFile(temp_whl, "w") as z_out,
-                  ):
-                      for info in z_in.infolist():
-                          data = z_in.read(info.filename)
-                          new_info = zipfile.ZipInfo(info.filename)
-                          new_info.date_time = info.date_time
-                          new_info.external_attr = info.external_attr
-
-                          z_out.writestr(new_info, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
-
-                  temp_whl.replace(whl_path)
-                  print(f"Done! New size: {whl_path.stat().st_size / (1024 * 1024):.2f} MB")
-
       - name: Upload wheel
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: ${{ env.PACKAGE_NAME }}-generic-wheels-${{ matrix.name }}
-          path: ./dist/*.whl
+          path: |
+            ./dist/*.whl
+            !./dist/*_cuda-*.whl
 
       - name: Upload CUDA provider wheel
         if: runner.os == 'Windows' || runner.os == 'Linux'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: ${{ env.PACKAGE_NAME }}-cuda-wheels-${{ matrix.name }}
-          path: ./cuda_dist/*.whl
+          path: ./dist/*_cuda-*.whl
 
   build-sdist:
     name: Build source distribution
