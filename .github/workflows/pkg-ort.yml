@@ -100,15 +100,12 @@ jobs:
             os: ubuntu-24.04
             container: quay.io/pypa/manylinux_2_28_x86_64
             cuda_repo: rhel8/x86_64
-            cuda_tag: manylinux_2_28_x86_64
           - name: Linux ARM64
             os: ubuntu-24.04-arm
             container: quay.io/pypa/manylinux_2_28_aarch64
             cuda_repo: rhel8/sbsa
-            cuda_tag: manylinux_2_28_aarch64
           - name: Windows x64
             os: windows-2025-vs2026
-            cuda_tag: win_amd64
           - name: macOS ARM64
             os: macos-15
           - name: macOS x64
@@ -211,6 +208,12 @@ jobs:
         env:
           DML_DIR: ${{ steps.setup-onnxruntime-windows.outputs.dml-path }}
           SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_MLRT_ORT: ${{ inputs.version }}
+
+      - name: Build CUDA provider wheel
+        if: runner.os == 'Windows' || runner.os == 'Linux'
+        run: uv build --wheel --package vapoursynth-mlrt-${{ env.PACKAGE_NAME }}-cuda
+        env:
+          SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_MLRT_ORT_CUDA: ${{ inputs.version }}
 
       - name: Repair wheel (Linux)
         if: runner.os == 'Linux'

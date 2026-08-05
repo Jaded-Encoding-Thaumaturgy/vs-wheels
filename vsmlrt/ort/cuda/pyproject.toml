@@ -47,6 +47,7 @@ metadata.dependencies.result = [
 ]
 wheel.install-dir = "vapoursynth/plugins/ort"
 wheel.py-api = "py3"
+wheel.platlib = true
 cmake.source-dir = "."
 cmake.args = ["-G", "Ninja"]
 ninja.make-fallback = false
