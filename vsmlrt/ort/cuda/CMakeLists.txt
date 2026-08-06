@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSORT_CUDA_Package LANGUAGES NONE)
-
+project(VSORT_CUDA_Package LANGUAGES CXX)
 # === Dependencies ===
 find_package(onnxruntime REQUIRED)
 
