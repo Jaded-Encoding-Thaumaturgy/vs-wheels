@@ -13,11 +13,7 @@
     ":semanticCommitTypeAll(deps)"
   ],
   "pep723": {
-    "managerFilePatterns": [
-      "**/cuda_pyproject.py",
-      "scripts/*.py",
-      "check_release.py"
-    ]
+    "managerFilePatterns": ["scripts/*.py"]
   },
   "customManagers": [
     {
