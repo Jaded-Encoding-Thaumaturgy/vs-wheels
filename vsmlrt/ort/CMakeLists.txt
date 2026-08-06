@@ -23,6 +23,12 @@ set(ENABLE_CUDA OFF CACHE BOOL "Enable CUDA backend")
 set(ENABLE_DML OFF CACHE BOOL "Enable DirectML backend")
 set(ENABLE_COREML OFF CACHE BOOL "Enable CoreML support")
 
+if(NOT DEFINED INSTALL_CUDA)
+    set(INSTALL_CUDA ${ENABLE_CUDA} CACHE BOOL "Install the CUDA libs")
+else()
+    set(INSTALL_CUDA "${INSTALL_CUDA}" CACHE BOOL "Install the CUDA libs")
+endif()
+
 set(
   VAPOURSYNTH_INCLUDE_DIRECTORY
   "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
@@ -115,7 +121,7 @@ if(WIN32)
   get_filename_component(_ROOT "${onnxruntime_DIR}/../../.." ABSOLUTE)
   file(GLOB _DLLS "${_ROOT}/bin/*.dll")
   # Copy CUDA providers DLL if CUDA is enabled
-  if(ENABLE_CUDA)
+  if(ENABLE_CUDA AND INSTALL_CUDA)
     file(GLOB _LIB_DLLS "${_ROOT}/lib/*.dll")
     list(APPEND _DLLS ${_LIB_DLLS})
   endif()
@@ -159,6 +165,9 @@ if(UNIX AND NOT APPLE AND ENABLE_CUDA)
     list(REMOVE_DUPLICATES _LINUX_LIBS_PATHS)
     foreach(_LIB_PATH IN LISTS _LINUX_LIBS_PATHS)
       get_filename_component(_LIB_NAME "${_LIB_PATH}" NAME)
+      if(NOT INSTALL_CUDA AND _LIB_NAME MATCHES "^libonnxruntime_providers_cuda\\.so")
+        continue()
+      endif()
       get_filename_component(_REAL_PATH "${_LIB_PATH}" REALPATH)
 
       # Check if the filename ends in ".so"

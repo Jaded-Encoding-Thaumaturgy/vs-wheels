@@ -58,6 +58,7 @@ members = [
     "dfttest2/dfttest2_hiprtc",
     "vsmlrt/ncnn",
     "vsmlrt/ort",
+    "vsmlrt/ort/cuda",
     "vsmlrt/ov",
     "vsmlrt/trt",
     "vsmlrt/trt_rtx",
