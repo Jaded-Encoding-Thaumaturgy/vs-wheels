@@ -20,21 +20,21 @@
       "customType": "regex",
       "managerFilePatterns": ["/^\\.github/workflows/pkg-.*\\.yml$/"],
       "matchStrings": [
-        "(?:default:|\\|\\|)\\s+['\"](?<currentValue>[a-zA-Z0-9\\.]+)(?:[-+][^'\"]+)?['\"].*?# renovate: datasource=(?<datasource>[a-z-\\.]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?"
+        "(?:default:|\\|\\|)\\s+['\"](?<currentValue>[a-zA-Z0-9\\.]+)(?:[-+][^'\"]+)?['\"].*?# renovate: datasource=(?<datasource>[a-z0-9._-]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?"
       ]
     },
     {
       "customType": "regex",
       "managerFilePatterns": ["/^\\.github/workflows/pkg-.*\\.yml$/"],
       "matchStrings": [
-        "-\\s+(?<currentValue>[a-zA-Z0-9\\.]+)\\s+# renovate: datasource=(?<datasource>[a-z-\\.]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?"
+        "-\\s+(?<currentValue>[a-zA-Z0-9\\.]+)\\s+# renovate: datasource=(?<datasource>[a-z0-9._-]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?"
       ]
     },
     {
       "customType": "regex",
       "managerFilePatterns": ["**/cuda_pyproject.py"],
       "matchStrings": [
-        "['\"][a-zA-Z0-9-._]+(?<currentValue>[>=<~0-9a-zA-Z-._*, ]+)['\"],?\\s+# renovate: datasource=(?<datasource>[a-z-\\.]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?"
+        "['\"][a-zA-Z0-9-._]+(?<currentValue>[>=<~0-9a-zA-Z-._*, ]+)['\"],?\\s+# renovate: datasource=(?<datasource>[a-z0-9._-]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?"
       ]
     }
   ],
@@ -42,17 +42,20 @@
     "vulkan-sdk-windows": {
       "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
       "format": "json",
-      "transformTemplates": ["{\"releases\": [{\"version\": $.windows}]}"]
+      "transformTemplates": ["{\"releases\": [{\"version\": $.windows}]}"],
+      "versioning": "loose"
     },
     "vulkan-sdk-linux": {
       "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
       "format": "json",
-      "transformTemplates": ["{\"releases\": [{\"version\": $.linux}]}"]
+      "transformTemplates": ["{\"releases\": [{\"version\": $.linux}]}"],
+      "versioning": "loose"
     },
     "vulkan-sdk-mac": {
       "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
       "format": "json",
-      "transformTemplates": ["{\"releases\": [{\"version\": $.mac}]}"]
+      "transformTemplates": ["{\"releases\": [{\"version\": $.mac}]}"],
+      "versioning": "loose"
     },
     "rocm-linux": {
       "defaultRegistryUrlTemplate": "https://repo.amd.com/rocm/tarball-multi-arch/",
@@ -139,6 +142,10 @@
     {
       "matchManagers": ["custom.regex"],
       "automerge": false
+    },
+    {
+      "matchPackageNames": ["vulkan-windows", "vulkan-linux", "vulkan-mac"],
+      "versioning": "loose"
     }
   ]
 }
