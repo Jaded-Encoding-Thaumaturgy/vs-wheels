@@ -83,7 +83,7 @@ on:
         description: Vulkan version for macOS (https://vulkan.lunarg.com/sdk/home)
         type: string
         required: false
-        default: "1.4.350.0" # renovate: datasource=custom.vulkan-sdk-mac depName=vulkan-mac versioning=loose
+        default: "1.4.357.0" # renovate: datasource=custom.vulkan-sdk-mac depName=vulkan-mac versioning=loose
 
 env:
   ONNX_WINDOWS_TAG: ${{ inputs.onnx-windows-tag || 'v1.22.0' }} # renovate: datasource=github-tags depName=onnx/onnx
@@ -94,7 +94,7 @@ env:
   NCNN_MACOS_TAG: ${{ inputs.ncnn-macos-tag || '20260526' }} # renovate: datasource=github-tags depName=Tencent/ncnn
   VULKAN_WINDOWS_VERSION: ${{ inputs.vulkan-windows-version || '1.4.350.0' }} # renovate: datasource=custom.vulkan-sdk-windows depName=vulkan-windows versioning=loose
   VULKAN_LINUX_VERSION: ${{ inputs.vulkan-linux-version || '1.4.350.1' }} # renovate: datasource=custom.vulkan-sdk-linux depName=vulkan-linux versioning=loose
-  VULKAN_MACOS_VERSION: ${{ inputs.vulkan-macos-version || '1.4.350.0' }} # renovate: datasource=custom.vulkan-sdk-mac depName=vulkan-mac versioning=loose
+  VULKAN_MACOS_VERSION: ${{ inputs.vulkan-macos-version || '1.4.357.0' }} # renovate: datasource=custom.vulkan-sdk-mac depName=vulkan-mac versioning=loose
   PACKAGE_NAME: ncnn
 
 jobs:
