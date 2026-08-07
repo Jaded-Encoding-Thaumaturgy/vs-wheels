@@ -42,20 +42,17 @@
     "vulkan-sdk-windows": {
       "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
       "format": "json",
-      "transformTemplates": ["{\"releases\": [{\"version\": $.windows}]}"],
-      "versioning": "loose"
+      "transformTemplates": ["{\"releases\": [{\"version\": $.windows}]}"]
     },
     "vulkan-sdk-linux": {
       "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
       "format": "json",
-      "transformTemplates": ["{\"releases\": [{\"version\": $.linux}]}"],
-      "versioning": "loose"
+      "transformTemplates": ["{\"releases\": [{\"version\": $.linux}]}"]
     },
     "vulkan-sdk-mac": {
       "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
       "format": "json",
-      "transformTemplates": ["{\"releases\": [{\"version\": $.mac}]}"],
-      "versioning": "loose"
+      "transformTemplates": ["{\"releases\": [{\"version\": $.mac}]}"]
     },
     "rocm-linux": {
       "defaultRegistryUrlTemplate": "https://repo.amd.com/rocm/tarball-multi-arch/",
