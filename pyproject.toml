@@ -18,11 +18,10 @@ dev = [
     "dumb-pypi>=1.15.0",
     "gersemi>=0.27.2",
     "hatchling",
-    "mypy>=1.20.2",
-    "niquests>=3.18.7",
+    "mypy>=2.0.0",
+    "niquests>=3.19.0",
     "rich>=15.0.0",
-    "ruff>=0.15.12",
-    "tomli-w>=1.2.0",
+    "ruff>=0.16.0",
 ]
 
 [tool.hatch.version]
