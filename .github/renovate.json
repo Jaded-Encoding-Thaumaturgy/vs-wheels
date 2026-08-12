@@ -118,17 +118,17 @@
     },
     {
       "matchManagers": ["git-submodules"],
-      "matchPackageNames": ["vsmlrt/**"],
+      "matchPackageNames": ["/^vsmlrt//"],
       "groupName": "vs-mlrt submodules"
     },
     {
       "matchManagers": ["git-submodules"],
-      "matchPackageNames": ["dfttest2/**"],
+      "matchPackageNames": ["/^dfttest2//"],
       "groupName": "dfttest2 submodules"
     },
     {
       "matchManagers": ["git-submodules"],
-      "matchPackageNames": ["bm3dcuda/**"],
+      "matchPackageNames": ["/^bm3dcuda//"],
       "groupName": "bm3dcuda submodules"
     },
     {
