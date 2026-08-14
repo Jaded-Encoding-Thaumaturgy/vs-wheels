@@ -257,6 +257,18 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ncnn
 
+### Version 16.0 (2026-08-14)
+
+- **ONNX Windows**: v1.22.0
+- **ONNX Linux**: v1.22.0
+- **ONNX macOS**: v1.22.0
+- **NCNN Windows**: 20260526
+- **NCNN Linux**: 20260526
+- **NCNN macOS**: 20260526
+- **Vulkan Windows**: 1.4.357.0
+- **Vulkan Linux**: 1.4.357.1
+- **Vulkan macOS**: 1.4.357.0
+- **Commit**: [cfac6e1](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/cfac6e1f4c9ce9c6851c32bbc7d2eec3b673b99a)
 ### Version 15.16 (2026-06-07)
 
 - **ONNX Windows**: v1.21.0
@@ -271,6 +283,16 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ort
 
+### Version 16.2 (2026-08-14)
+
+- **ONNX Runtime Windows**: v1.29.0
+- **ONNX Runtime Linux**: v1.29.0
+- **ONNX Runtime macOS**: v1.29.0
+- **CUDA Windows**: 13.3.1
+- **CUDA Linux**: 13.3
+- **cuDNN Windows**: 9.25.0.15
+- **cuDNN Linux**: 9.25.0.15
+- **Commit**: [cfac6e1](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/cfac6e1f4c9ce9c6851c32bbc7d2eec3b673b99a)
 ### Version 16.1 (2026-07-25)
 
 - **ONNX Runtime Windows**: v1.28.0

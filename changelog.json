@@ -311,6 +311,21 @@
       "vulkan_macos": "1.4.350.0",
       "package": "vapoursynth-mlrt-ncnn",
       "version": "15.16"
+    },
+    "16.0": {
+      "package": "vapoursynth-mlrt-ncnn",
+      "version": "16.0",
+      "onnx_windows": "v1.22.0",
+      "onnx_linux": "v1.22.0",
+      "onnx_macos": "v1.22.0",
+      "ncnn_windows": "20260526",
+      "ncnn_linux": "20260526",
+      "ncnn_macos": "20260526",
+      "vulkan_windows": "1.4.357.0",
+      "vulkan_linux": "1.4.357.1",
+      "vulkan_macos": "1.4.357.0",
+      "release_date": "2026-08-14",
+      "commit": "cfac6e1f4c9ce9c6851c32bbc7d2eec3b673b99a"
     }
   },
   "vapoursynth-mlrt-migx": {
@@ -512,6 +527,19 @@
       "onnxruntime_macos": "v1.28.0",
       "release_date": "2026-07-25",
       "commit": "f57b1ac6dcecc3c34f607e94bfedfa01e9d67939"
+    },
+    "16.2": {
+      "package": "vapoursynth-mlrt-ort",
+      "version": "16.2",
+      "onnxruntime_windows": "v1.29.0",
+      "onnxruntime_linux": "v1.29.0",
+      "onnxruntime_macos": "v1.29.0",
+      "cuda_windows": "13.3.1",
+      "cuda_linux": "13.3",
+      "cudnn_windows": "9.25.0.15",
+      "cudnn_linux": "9.25.0.15",
+      "release_date": "2026-08-14",
+      "commit": "cfac6e1f4c9ce9c6851c32bbc7d2eec3b673b99a"
     }
   }
 }
