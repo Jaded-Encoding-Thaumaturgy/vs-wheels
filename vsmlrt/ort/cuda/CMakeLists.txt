@@ -13,7 +13,6 @@ else()
   set(ORT_CUDA_DESTINATION ".")
 endif()
 
-
 if(NOT EXISTS "${ORT_CUDA_PROVIDER}")
   message(FATAL_ERROR "Missing ${ORT_CUDA_PROVIDER}")
 endif()

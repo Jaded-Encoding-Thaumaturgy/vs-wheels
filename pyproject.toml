@@ -87,7 +87,13 @@ fixed_format_cache = true
 
 [tool.ruff]
 line-length = 120
-extend-exclude = ["vapoursynth", "vs-dfttest2", "vs-mlrt"]
+extend-exclude = [
+    "vapoursynth",
+    "vs-dfttest2",
+    "vs-mlrt",
+    "atools/atools",
+    "ares/ares",
+]
 
 [tool.ruff.format]
 docstring-code-format = true

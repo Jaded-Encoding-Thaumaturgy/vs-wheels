@@ -24,9 +24,9 @@ set(ENABLE_DML OFF CACHE BOOL "Enable DirectML backend")
 set(ENABLE_COREML OFF CACHE BOOL "Enable CoreML support")
 
 if(NOT DEFINED INSTALL_CUDA)
-    set(INSTALL_CUDA ${ENABLE_CUDA} CACHE BOOL "Install the CUDA libs")
+  set(INSTALL_CUDA ${ENABLE_CUDA} CACHE BOOL "Install the CUDA libs")
 else()
-    set(INSTALL_CUDA "${INSTALL_CUDA}" CACHE BOOL "Install the CUDA libs")
+  set(INSTALL_CUDA "${INSTALL_CUDA}" CACHE BOOL "Install the CUDA libs")
 endif()
 
 set(
