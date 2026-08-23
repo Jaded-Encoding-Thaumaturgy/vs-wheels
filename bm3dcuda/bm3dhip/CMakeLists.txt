@@ -22,8 +22,7 @@ if(WIN32)
 
   if(HIP_ROOT_DIR)
     set(HIP_BIN_DIR "${HIP_ROOT_DIR}/bin")
-    file(GLOB _DLLS "${HIP_BIN_DIR}/amdhip64_*.dll")
-    file(GLOB _DLLS "${HIP_BIN_DIR}/rocm_kpack.dll")
+    file(GLOB _DLLS "${HIP_BIN_DIR}/amdhip64_*.dll" "${HIP_BIN_DIR}/rocm_kpack.dll")
 
     if(_DLLS)
       install(FILES ${_DLLS} DESTINATION .)
