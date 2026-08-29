@@ -73,12 +73,12 @@ on:
         description: cuDNN version for Windows (https://developer.nvidia.com/cudnn-downloads, https://developer.nvidia.com/cudnn-archive)
         type: string
         required: false
-        default: "9.25.0.15" # renovate: datasource=pypi depName=nvidia-cudnn-cu13
+        default: "9.25.1.1" # renovate: datasource=pypi depName=nvidia-cudnn-cu13
       cudnn-linux:
         description: cuDNN version for Linux (https://developer.nvidia.com/cudnn-downloads, https://developer.nvidia.com/cudnn-archive)
         type: string
         required: false
-        default: "9.25.0.15" # renovate: datasource=pypi depName=nvidia-cudnn-cu13
+        default: "9.25.1.1" # renovate: datasource=pypi depName=nvidia-cudnn-cu13
 
 env:
   ONNXRUNTIME_WINDOWS_TAG: ${{ inputs.onnxruntime-windows-tag || 'v1.29.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
@@ -86,8 +86,8 @@ env:
   ONNXRUNTIME_MACOS_TAG: ${{ inputs.onnxruntime-macos-tag || 'v1.29.0' }} # renovate: datasource=github-tags depName=microsoft/onnxruntime
   CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.3.1' }}
   CUDA_LINUX_VERSION: ${{ inputs.cuda-linux || '13.3' }}
-  CUDNN_WINDOWS_VERSION: ${{ inputs.cudnn-windows || '9.25.0.15' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
-  CUDNN_LINUX_VERSION: ${{ inputs.cudnn-linux || '9.25.0.15' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
+  CUDNN_WINDOWS_VERSION: ${{ inputs.cudnn-windows || '9.25.1.1' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
+  CUDNN_LINUX_VERSION: ${{ inputs.cudnn-linux || '9.25.1.1' }} # renovate: datasource=pypi depName=nvidia-cudnn-cu13
   PACKAGE_NAME: ort
 
 jobs:
