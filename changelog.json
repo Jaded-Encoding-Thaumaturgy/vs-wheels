@@ -97,6 +97,14 @@
       "hip_windows": "7.14.0",
       "release_date": "2026-07-25",
       "commit": "55c5e82801c6d326795ef6a16de878f89e5cb7e0"
+    },
+    "2.17.5": {
+      "package": "vapoursynth-bm3dhip",
+      "version": "2.17.5",
+      "hip_linux": "7.14.0",
+      "hip_windows": "7.14.0",
+      "release_date": "2026-08-29",
+      "commit": "54d8e254419d04f9be5217b5c06f5faf4a910686"
     }
   },
   "dfttest2": {
@@ -411,6 +419,16 @@
       "openvino_macos_intel": "2026.3.0",
       "release_date": "2026-08-04",
       "commit": "3c794955c6bce102591ca14fc95339d7b655369a"
+    },
+    "16.1": {
+      "package": "vapoursynth-mlrt-ov",
+      "version": "16.1",
+      "openvino_windows": "2026.3.1",
+      "openvino_linux": "2026.3.1",
+      "openvino_macos_arm64": "2026.3.1",
+      "openvino_macos_intel": "2026.3.1",
+      "release_date": "2026-08-29",
+      "commit": "54d8e254419d04f9be5217b5c06f5faf4a910686"
     }
   },
   "vapoursynth-mlrt-trt": {
