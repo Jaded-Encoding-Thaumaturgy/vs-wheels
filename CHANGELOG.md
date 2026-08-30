@@ -63,6 +63,11 @@ Downgrade CUDA version for Linux because 13.x is segfaulting
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 2.17.5 (2026-08-29)
+
+- **HIP Linux**: 7.14.0
+- **HIP Windows**: 7.14.0
+- **Commit**: [54d8e25](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/54d8e254419d04f9be5217b5c06f5faf4a910686)
 ### Version 2.17.4 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -347,6 +352,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-ov
 
+### Version 16.1 (2026-08-29)
+
+- **OpenVINO Windows**: 2026.3.1
+- **OpenVINO Linux**: 2026.3.1
+- **OpenVINO macOS Arm64**: 2026.3.1
+- **OpenVINO macOS Intel**: 2026.3.1
+- **Commit**: [54d8e25](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/54d8e254419d04f9be5217b5c06f5faf4a910686)
 ### Version 16.0 (2026-08-04)
 
 - **OpenVINO Windows**: 2026.3.0
