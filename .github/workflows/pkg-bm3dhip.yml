@@ -38,7 +38,7 @@ on:
         description: ROCm version for Linux
         type: string
         required: false
-        default: "7.14.0" # renovate: datasource=custom.rocm-linux depName=rocm-linux
+        default: "7.14.1" # renovate: datasource=custom.rocm-linux depName=rocm-linux
       hip-windows:
         description: ROCm TheRock SDK version for Windows
         type: string
@@ -55,7 +55,7 @@ on:
           - windows-2022
 
 env:
-  HIP_LINUX: ${{ inputs.hip-linux || '7.14.0' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
+  HIP_LINUX: ${{ inputs.hip-linux || '7.14.1' }} # renovate: datasource=custom.rocm-linux depName=rocm-linux
   HIP_WINDOWS: ${{ inputs.hip-windows || '7.14.0' }} # renovate: datasource=custom.rocm-windows depName=rocm-windows
   PACKAGE_NAME: bm3dhip
 
