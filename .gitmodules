@@ -60,40 +60,22 @@
 	url = https://github.com/vapoursynth/vapoursynth
 [submodule "vsmlrt/trt/vs-mlrt"]
 	path = vsmlrt/trt/vs-mlrt
-	url = https://github.com/AmusementClub/vs-mlrt/
+	url = https://github.com/Ichunjo/vs-mlrt
 [submodule "vsmlrt/trt_rtx/vs-mlrt"]
 	path = vsmlrt/trt_rtx/vs-mlrt
-	url = https://github.com/AmusementClub/vs-mlrt/
+	url = https://github.com/Ichunjo/vs-mlrt
 [submodule "vsmlrt/ov/vs-mlrt"]
 	path = vsmlrt/ov/vs-mlrt
-	url = https://github.com/AmusementClub/vs-mlrt/
+	url = https://github.com/Ichunjo/vs-mlrt
 [submodule "vsmlrt/ort/vs-mlrt"]
 	path = vsmlrt/ort/vs-mlrt
-	url = https://github.com/AmusementClub/vs-mlrt/
+	url = https://github.com/Ichunjo/vs-mlrt
 [submodule "vsmlrt/ncnn/vs-mlrt"]
 	path = vsmlrt/ncnn/vs-mlrt
-	url = https://github.com/AmusementClub/vs-mlrt/
+	url = https://github.com/Ichunjo/vs-mlrt
 [submodule "vsmlrt/migx/vs-mlrt"]
 	path = vsmlrt/migx/vs-mlrt
-	url = https://github.com/AmusementClub/vs-mlrt/
-[submodule "vsmlrt/ncnn/vapoursynth"]
-	path = vsmlrt/ncnn/vapoursynth
-	url = https://github.com/vapoursynth/vapoursynth.git
-[submodule "vsmlrt/ort/vapoursynth"]
-	path = vsmlrt/ort/vapoursynth
-	url = https://github.com/vapoursynth/vapoursynth/
-[submodule "vsmlrt/ov/vapoursynth"]
-	path = vsmlrt/ov/vapoursynth
-	url = https://github.com/vapoursynth/vapoursynth/
-[submodule "vsmlrt/trt/vapoursynth"]
-	path = vsmlrt/trt/vapoursynth
-	url = https://github.com/vapoursynth/vapoursynth/
-[submodule "vsmlrt/trt_rtx/vapoursynth"]
-	path = vsmlrt/trt_rtx/vapoursynth
-	url = https://github.com/vapoursynth/vapoursynth/
-[submodule "vsmlrt/migx/vapoursynth"]
-	path = vsmlrt/migx/vapoursynth
-	url = https://github.com/vapoursynth/vapoursynth.git
+	url = https://github.com/Ichunjo/vs-mlrt
 [submodule "atools/atools"]
 	path = atools/atools
 	url = https://github.com/ropagr/VS-AudioTools
