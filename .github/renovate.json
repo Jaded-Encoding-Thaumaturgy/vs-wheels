@@ -40,17 +40,17 @@
   ],
   "customDatasources": {
     "vulkan-sdk-windows": {
-      "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
+      "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest/windows.json",
       "format": "json",
       "transformTemplates": ["{\"releases\": [{\"version\": $.windows}]}"]
     },
     "vulkan-sdk-linux": {
-      "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
+      "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest/linux.json",
       "format": "json",
       "transformTemplates": ["{\"releases\": [{\"version\": $.linux}]}"]
     },
     "vulkan-sdk-mac": {
-      "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest.json",
+      "defaultRegistryUrlTemplate": "https://vulkan.lunarg.com/sdk/latest/mac.json",
       "format": "json",
       "transformTemplates": ["{\"releases\": [{\"version\": $.mac}]}"]
     },
