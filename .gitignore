@@ -295,6 +295,9 @@ node_modules/
 ncnn-dist/
 onnx-dist/
 onnxruntime-dist/
+openvino-dist/
+TensorRT-*/
+TensorRT-RTX-*/
 
 # JET files
 .vsjet
