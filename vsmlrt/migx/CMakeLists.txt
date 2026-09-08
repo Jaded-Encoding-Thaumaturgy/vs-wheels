@@ -10,12 +10,26 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(
-  VAPOURSYNTH_INCLUDE_DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
-  CACHE PATH
-  "Path to VapourSynth headers"
+find_path(
+  VAPOURSYNTH_INCLUDE_DIR
+  NAMES VapourSynth4.h VapourSynth.h
+  HINTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth"
+  PATH_SUFFIXES vapoursynth/include vapoursynth include
+  DOC "Path to VapourSynth headers"
 )
+
+if(VAPOURSYNTH_INCLUDE_DIR)
+  message(STATUS "Found VapourSynth headers: ${VAPOURSYNTH_INCLUDE_DIR}")
+else()
+  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
+endif()
 
 if(SKBUILD_PROJECT_VERSION)
   set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
@@ -57,7 +71,7 @@ set_target_properties(vsmigx PROPERTIES INSTALL_RPATH "$ORIGIN")
 
 target_include_directories(
   vsmigx
-  PRIVATE "${VAPOURSYNTH_INCLUDE_DIRECTORY}" "vs-mlrt/vsmigx"
+  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsmigx"
   PUBLIC "${PROJECT_BINARY_DIR}"
 )
 
