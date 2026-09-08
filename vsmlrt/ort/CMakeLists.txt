@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSORT_Package)
+
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
+
+project(VSORT_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
 
 # === C++ Standard & Options ===
@@ -39,10 +44,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
-endif()
 
 # === Dependencies ===
 find_package(Protobuf REQUIRED CONFIG)
@@ -86,7 +87,14 @@ endif()
 target_include_directories(
   vsort
   PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsort" "vs-mlrt/common"
-  PUBLIC "${PROJECT_BINARY_DIR}"
+)
+
+target_compile_definitions(
+  vsort
+  PRIVATE
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
 )
 
 if(ENABLE_CUDA)
@@ -101,8 +109,6 @@ endif()
 if(ENABLE_COREML)
   target_compile_definitions(vsort PRIVATE ENABLE_COREML=1)
 endif()
-
-configure_file(vs-mlrt/vsort/config.h.in config.h)
 
 # === Link Libraries Setup ===
 target_link_libraries(vsort PRIVATE ONNX::onnx onnxruntime::onnxruntime)

@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSNCNN_Package)
+
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
+
+project(VSNCNN_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
 set(SRC_VSNCNN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt")
 
@@ -29,10 +34,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
-endif()
 
 # === Dependencies ===
 find_package(ncnn REQUIRED)
@@ -67,10 +68,15 @@ target_include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt/vsncnn"
     "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt/common"
     "${VAPOURSYNTH_INCLUDE_DIR}"
-  PUBLIC "${PROJECT_BINARY_DIR}"
 )
 
-configure_file(vs-mlrt/vsncnn/config.h.in config.h)
+target_compile_definitions(
+  vsncnn
+  PRIVATE
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
+)
 
 # === Link Libraries Setup ===
 target_link_libraries(vsncnn PRIVATE ncnn ONNX::onnx Vulkan::Vulkan)

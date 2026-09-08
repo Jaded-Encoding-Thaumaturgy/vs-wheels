@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSOV_Package)
+
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
+
+project(VSOV_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
@@ -30,10 +35,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
-endif()
 
 # === Dependencies ===
 find_package(Protobuf REQUIRED CONFIG)
@@ -66,14 +67,19 @@ endif()
 target_include_directories(
   vsov
   PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsov" "vs-mlrt/common"
-  PUBLIC "${PROJECT_BINARY_DIR}"
+)
+
+target_compile_definitions(
+  vsov
+  PRIVATE
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
 )
 
 if(WIN32_SHARED_OPENVINO)
   target_compile_definitions(vsov PRIVATE WIN32_SHARED_OPENVINO)
 endif()
-
-configure_file(vs-mlrt/vsov/config.h.in config.h)
 
 # === Link Libraries Setup ===
 target_link_libraries(vsov PRIVATE ONNX::onnx openvino::runtime)
