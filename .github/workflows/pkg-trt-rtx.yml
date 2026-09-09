@@ -65,7 +65,7 @@ env:
   CUDA_LINUX_VERSION: ${{ inputs.cuda-linux|| '13.4' }}
   TENSORRT_RTX_WINDOWS_VERSION: ${{ inputs.tensorrt-rtx-windows || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
   TENSORRT_RTX_LINUX_VERSION: ${{ inputs.tensorrt-rtx-linux || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
-  PREVIEW_LINK: ${{ inputs.preview-link || 'true' }}
+  PREVIEW_LINK: ${{ inputs.preview-link || 'false' }}
   PACKAGE_NAME: trt_rtx
 
 jobs:
