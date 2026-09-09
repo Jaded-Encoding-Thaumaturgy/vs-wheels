@@ -95,13 +95,7 @@
     "dfttest2/dfttest2_gcc/vapoursynth",
     "dfttest2/dfttest2_hip/vapoursynth",
     "dfttest2/dfttest2_hiprtc/vapoursynth",
-    "dfttest2/dfttest2_nvrtc/vapoursynth",
-    "vsmlrt/ncnn/vapoursynth",
-    "vsmlrt/ort/vapoursynth",
-    "vsmlrt/ov/vapoursynth",
-    "vsmlrt/trt/vapoursynth",
-    "vsmlrt/trt_rtx/vapoursynth",
-    "vsmlrt/migx/vapoursynth"
+    "dfttest2/dfttest2_nvrtc/vapoursynth"
   ],
   "packageRules": [
     {
