@@ -38,12 +38,12 @@ on:
         description: CUDA version for Linux
         type: string
         required: false
-        default: "13.3"
+        default: "13.4"
       cuda-windows:
         description: CUDA version for Windows
         type: string
         required: false
-        default: "13.3.0"
+        default: "13.4.1"
       windows-runner:
         description: Windows runner to use
         type: choice
@@ -54,8 +54,8 @@ on:
           - windows-2022
 
 env:
-  CUDA_LINUX: ${{ inputs.cuda-linux || '13.3' }}
-  CUDA_WINDOWS: ${{ inputs.cuda-windows || '13.3.0' }}
+  CUDA_LINUX: ${{ inputs.cuda-linux || '13.4' }}
+  CUDA_WINDOWS: ${{ inputs.cuda-windows || '13.4.1' }}
   PACKAGE_NAME: dfttest2_nvrtc
 
 jobs:

@@ -13,9 +13,8 @@ inputs:
     default: "default"
   preview-link:
     description: Link to preview build
-    type: boolean
     required: false
-    default: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -52,6 +51,8 @@ runs:
         $cudaShort = $env:CUDA_VERSION_WINDOWS_SHORT
         if ("${{ inputs.preview-link }}" -eq "true") {
           $url = "https://packages.nvidia.com/prerelease/cuda/$cudaVersion/local_installers/cuda_${cudaVersion}_windows_x86_64.exe"
+        } elseif ([version]$cudaVersion -ge [version]"13.4") {
+          $url = "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_x86_64_network.exe"
         } else {
           $url = "https://developer.download.nvidia.com/compute/cuda/$cudaVersion/network_installers/cuda_${cudaVersion}_windows_network.exe"
         }
