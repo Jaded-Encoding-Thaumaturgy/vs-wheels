@@ -1,17 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSTRT_Package)
 
-# === Apply patches ===
-include("${CMAKE_CURRENT_SOURCE_DIR}/ApplyPatch.cmake")
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
 
-set(SRC_VSTRT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt")
-set(BIN_VSTRT_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-mlrt")
-
-add_patched_source(
-  PATCHED_WIN32
-  "${SRC_VSTRT_DIR}/vstrt/win32.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/patches/nvidia-wheel-paths.patch"
-)
+project(VSTRT_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
@@ -51,23 +44,33 @@ if(WIN32 AND NOT TENSORRT_LIBRARY_SUFFIX)
   set(TENSORRT_LIBRARY_SUFFIX "_${TRT_MAJOR}")
 endif()
 
-set(
-  VAPOURSYNTH_INCLUDE_DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
-  CACHE PATH
-  "Path to VapourSynth headers"
+find_path(
+  VAPOURSYNTH_INCLUDE_DIR
+  NAMES VapourSynth4.h VapourSynth.h
+  HINTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth"
+  PATH_SUFFIXES vapoursynth/include vapoursynth include
+  DOC "Path to VapourSynth headers"
 )
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
+if(VAPOURSYNTH_INCLUDE_DIR)
+  message(STATUS "Found VapourSynth headers: ${VAPOURSYNTH_INCLUDE_DIR}")
+else()
+  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
+
 
 # === Dependencies ===
 find_package(CUDAToolkit REQUIRED)
 
 # === Target Definition & Configuration ===
-add_library(vstrt SHARED vs-mlrt/vstrt/vs_tensorrt.cpp "${PATCHED_WIN32}")
+add_library(vstrt SHARED vs-mlrt/vstrt/vs_tensorrt.cpp vs-mlrt/vstrt/win32.cpp)
 
 set_target_properties(
   vstrt
@@ -84,13 +87,17 @@ endif()
 
 target_include_directories(
   vstrt
-  PRIVATE "${VAPOURSYNTH_INCLUDE_DIRECTORY}" "vs-mlrt/vstrt" "vs-mlrt/common" ${CUDAToolkit_INCLUDE_DIRS}
-  PUBLIC "${PROJECT_BINARY_DIR}"
+  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vstrt" "vs-mlrt/common" ${CUDAToolkit_INCLUDE_DIRS}
 )
 
-target_compile_definitions(vstrt PRIVATE USE_NVINFER_PLUGIN)
-
-configure_file(vs-mlrt/vstrt/config.h.in config.h)
+target_compile_definitions(
+  vstrt
+  PRIVATE
+    USE_NVINFER_PLUGIN
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
+)
 
 # === Link Libraries Setup ===
 target_link_libraries(vstrt PRIVATE "nvinfer${TENSORRT_LIBRARY_SUFFIX}" CUDA::cudart_static)

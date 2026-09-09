@@ -1,17 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSORT_Package)
 
-# === Apply patches ===
-include("${CMAKE_CURRENT_SOURCE_DIR}/ApplyPatch.cmake")
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
 
-set(SRC_VSORT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt")
-set(BIN_VSORT_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-mlrt")
+project(VSORT_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
-add_patched_source(
-  PATCHED_WIN32
-  "${SRC_VSORT_DIR}/vsort/win32.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/patches/nvidia-wheel-paths.patch"
-)
 
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
@@ -29,17 +23,27 @@ else()
   set(INSTALL_CUDA "${INSTALL_CUDA}" CACHE BOOL "Install the CUDA libs")
 endif()
 
-set(
-  VAPOURSYNTH_INCLUDE_DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
-  CACHE PATH
-  "Path to VapourSynth headers"
+find_path(
+  VAPOURSYNTH_INCLUDE_DIR
+  NAMES VapourSynth4.h VapourSynth.h
+  HINTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth"
+  PATH_SUFFIXES vapoursynth/include vapoursynth include
+  DOC "Path to VapourSynth headers"
 )
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
+if(VAPOURSYNTH_INCLUDE_DIR)
+  message(STATUS "Found VapourSynth headers: ${VAPOURSYNTH_INCLUDE_DIR}")
+else()
+  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
+
 
 # === Dependencies ===
 find_package(Protobuf REQUIRED CONFIG)
@@ -55,7 +59,7 @@ add_library(
   vsort
   SHARED
   vs-mlrt/vsort/vs_onnxruntime.cpp
-  "${PATCHED_WIN32}"
+  vs-mlrt/vsort/win32.cpp
   vs-mlrt/common/onnx_utils.cpp
   vs-mlrt/common/convert_float_to_float16.cpp
 )
@@ -82,8 +86,15 @@ endif()
 
 target_include_directories(
   vsort
-  PRIVATE "${VAPOURSYNTH_INCLUDE_DIRECTORY}" "vs-mlrt/vsort" "vs-mlrt/common"
-  PUBLIC "${PROJECT_BINARY_DIR}"
+  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsort" "vs-mlrt/common"
+)
+
+target_compile_definitions(
+  vsort
+  PRIVATE
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
 )
 
 if(ENABLE_CUDA)
@@ -98,8 +109,6 @@ endif()
 if(ENABLE_COREML)
   target_compile_definitions(vsort PRIVATE ENABLE_COREML=1)
 endif()
-
-configure_file(vs-mlrt/vsort/config.h.in config.h)
 
 # === Link Libraries Setup ===
 target_link_libraries(vsort PRIVATE ONNX::onnx onnxruntime::onnxruntime)

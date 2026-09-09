@@ -1,39 +1,39 @@
 cmake_minimum_required(VERSION 3.22)
-project(VSNCNN_Package)
 
-# === Apply patches ===
-include("${CMAKE_CURRENT_SOURCE_DIR}/ApplyPatch.cmake")
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
+
+project(VSNCNN_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
 set(SRC_VSNCNN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt")
-set(BIN_VSNCNN_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-mlrt")
-
-add_patched_source(
-  PATCHED_ONNX2NCNN
-  "${SRC_VSNCNN_DIR}/vsncnn/onnx2ncnn.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/patches/missing-kernel-shape.patch"
-)
-add_patched_source(
-  PATCHED_VS_NCNN
-  "${SRC_VSNCNN_DIR}/vsncnn/vs_ncnn.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/patches/segfault-asymmetrical-formats.patch"
-)
 
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(
-  VAPOURSYNTH_INCLUDE_DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
-  CACHE PATH
-  "Path to VapourSynth headers"
+find_path(
+  VAPOURSYNTH_INCLUDE_DIR
+  NAMES VapourSynth4.h VapourSynth.h
+  HINTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth"
+  PATH_SUFFIXES vapoursynth/include vapoursynth include
+  DOC "Path to VapourSynth headers"
 )
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
+if(VAPOURSYNTH_INCLUDE_DIR)
+  message(STATUS "Found VapourSynth headers: ${VAPOURSYNTH_INCLUDE_DIR}")
+else()
+  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
+
 
 # === Dependencies ===
 find_package(ncnn REQUIRED)
@@ -42,7 +42,12 @@ find_package(ONNX REQUIRED)
 find_package(Vulkan REQUIRED)
 
 # === Target Definition & Configuration ===
-add_library(vsncnn SHARED "${PATCHED_VS_NCNN}" "${PATCHED_ONNX2NCNN}" "${SRC_VSNCNN_DIR}/common/onnx_utils.cpp")
+add_library(
+  vsncnn SHARED
+  "${SRC_VSNCNN_DIR}/vsncnn/vs_ncnn.cpp"
+  "${SRC_VSNCNN_DIR}/vsncnn/onnx2ncnn.cpp"
+  "${SRC_VSNCNN_DIR}/common/onnx_utils.cpp"
+)
 
 set_target_properties(
   vsncnn
@@ -62,11 +67,16 @@ target_include_directories(
   PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt/vsncnn"
     "${CMAKE_CURRENT_SOURCE_DIR}/vs-mlrt/common"
-    "${VAPOURSYNTH_INCLUDE_DIRECTORY}"
-  PUBLIC "${PROJECT_BINARY_DIR}"
+    "${VAPOURSYNTH_INCLUDE_DIR}"
 )
 
-configure_file(vs-mlrt/vsncnn/config.h.in config.h)
+target_compile_definitions(
+  vsncnn
+  PRIVATE
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
+)
 
 # === Link Libraries Setup ===
 target_link_libraries(vsncnn PRIVATE ncnn ONNX::onnx Vulkan::Vulkan)
