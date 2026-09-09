@@ -38,7 +38,7 @@ on:
         description: CUDA version for Windows
         type: string
         required: false
-        default: "13.4.0"
+        default: "13.4.1"
       cuda-linux:
         description: CUDA version for Linux x86_64
         type: string
@@ -58,10 +58,10 @@ on:
         description: Link to preview build
         type: boolean
         required: false
-        default: true
+        default: false
 
 env:
-  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.4.0' }}
+  CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.4.1' }}
   CUDA_LINUX_VERSION: ${{ inputs.cuda-linux|| '13.4' }}
   TENSORRT_RTX_WINDOWS_VERSION: ${{ inputs.tensorrt-rtx-windows || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
   TENSORRT_RTX_LINUX_VERSION: ${{ inputs.tensorrt-rtx-linux || '1.6.1.120' }} # renovate: datasource=pypi depName=tensorrt-rtx-cu13-libs
