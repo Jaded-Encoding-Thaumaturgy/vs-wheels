@@ -1015,9 +1015,9 @@ wheels = [
 
 [[package]]
 name = "tensorrt-cu13-libs"
-version = "11.2.1.2"
+version = "11.3.0.99"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2c/5f/e315fbb8c4b7091e2a2b21bc50c764d4eef25196eb0897564e6809237729/tensorrt_cu13_libs-11.2.1.2.tar.gz", hash = "sha256:253b0850639295e43f06119c40711e2c9cf699bc9e5ff0e11bf44a1a4b266f74", size = 15497, upload-time = "2026-07-30T19:21:10.8Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2c/67/ac0542809deab721244bc3bd478be1a248335585c66ba22a7b44a0fbe75f/tensorrt_cu13_libs-11.3.0.99.tar.gz", hash = "sha256:a87962b8b88221ea97c9fb6d13651affffafbd3af4ecba6dfd3307271c6daf92", size = 15501, upload-time = "2026-09-09T16:32:46.295Z" }
 
 [[package]]
 name = "tensorrt-rtx-cu13-libs"
@@ -1308,7 +1308,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "tensorrt-cu13-libs", specifier = "==11.2.1.2" },
+    { name = "tensorrt-cu13-libs", specifier = "==11.3.0.99" },
     { name = "vapoursynth", specifier = ">=75" },
 ]
 
