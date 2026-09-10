@@ -60,12 +60,12 @@ on:
         description: TensorRT version for Linux x86_64 (https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/)
         type: string
         required: false
-        default: "11.3.0.9911.3.0.99-1.cuda13.3" # renovate: datasource=custom.nvidia-tensorrt-rhel8-cuda13-3 depName=nvidia-tensorrt-rhel8-cuda13-3
+        default: "11.3.0.99-1.cuda13.4" # renovate: datasource=custom.nvidia-tensorrt-rhel8-cuda13-3 depName=nvidia-tensorrt-rhel8-cuda13-3
       tensorrt-linux-aarch64:
         description: TensorRT version for Linux AARCH64 (https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbsa/)
         type: string
         required: false
-        default: "11.3.0.99-1+cuda13.3" # renovate: datasource=custom.nvidia-tensorrt-ubuntu2404-cuda13-3 depName=nvidia-tensorrt-ubuntu2404-cuda13-3
+        default: "11.3.0.99-1+cuda13.4" # renovate: datasource=custom.nvidia-tensorrt-ubuntu2404-cuda13-3 depName=nvidia-tensorrt-ubuntu2404-cuda13-3
 
 env:
   CUDA_WINDOWS_VERSION: ${{ inputs.cuda-windows || '13.4.1' }}
