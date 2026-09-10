@@ -24,22 +24,22 @@
 	url = https://github.com/AmusementClub/vs-dfttest2
 [submodule "dfttest2/dfttest2_cpu/vs-dfttest2"]
 	path = dfttest2/dfttest2_cpu/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "dfttest2/dfttest2_cuda/vs-dfttest2"]
 	path = dfttest2/dfttest2_cuda/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "dfttest2/dfttest2_gcc/vs-dfttest2"]
 	path = dfttest2/dfttest2_gcc/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "dfttest2/dfttest2_hip/vs-dfttest2"]
 	path = dfttest2/dfttest2_hip/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "dfttest2/dfttest2_hiprtc/vs-dfttest2"]
 	path = dfttest2/dfttest2_hiprtc/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "dfttest2/dfttest2_nvrtc/vs-dfttest2"]
 	path = dfttest2/dfttest2_nvrtc/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "vsmlrt/trt/vs-mlrt"]
 	path = vsmlrt/trt/vs-mlrt
 	url = https://github.com/Ichunjo/vs-mlrt
