@@ -22,7 +22,7 @@ dependencies = [
 cufft = ["nvidia-cufft>=12.0.0,<13.0.0"]
 
 [project.urls]
-"Source Code" = "https://github.com/AmusementClub/vs-mlrt"
+"Source Code" = "https://github.com/Ichunjo/vs-mlrt"
 "Bug Tracker" = "https://github.com/AmusementClub/vs-mlrt/issues"
 "Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
 

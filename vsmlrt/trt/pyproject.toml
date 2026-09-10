@@ -14,7 +14,7 @@ maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
 dependencies = ["vapoursynth>=75", "tensorrt-cu13-libs==11.3.0.99"]
 
 [project.urls]
-"Source Code" = "https://github.com/AmusementClub/vs-mlrt"
+"Source Code" = "https://github.com/Ichunjo/vs-mlrt"
 "Bug Tracker" = "https://github.com/AmusementClub/vs-mlrt/issues"
 "Repository" = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels"
 
