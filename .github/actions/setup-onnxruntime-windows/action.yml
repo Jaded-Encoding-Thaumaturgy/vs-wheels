@@ -120,6 +120,20 @@ runs:
         path: onnxruntime
         submodules: recursive
 
+    - name: Patch ONNX Runtime MEA header bug
+      if: steps.cache-onnx.outputs.cache-hit != 'true'
+      shell: pwsh
+      run: |
+        $path = "onnxruntime/onnxruntime/contrib_ops/cuda/bert/cutlass_fmha/memory_efficient_attention.h"
+        if (Test-Path $path) {
+          $content = Get-Content -Raw $path
+          if ($content -notmatch '#ifndef USE_MEMORY_EFFICIENT_ATTENTION') {
+            $patch = "namespace onnxruntime { namespace contrib { namespace cuda {`n#ifndef USE_MEMORY_EFFICIENT_ATTENTION`nconstexpr float kCutlassSafeMaskFilterValue = -1.0e+30f;`n#endif`n}}}`n#if USE_MEMORY_EFFICIENT_ATTENTION"
+            $content = $content.Replace('#if USE_MEMORY_EFFICIENT_ATTENTION', $patch)
+            Set-Content -Path $path -Value $content
+          }
+        }
+
     # The ONNX Runtime build (dml.cmake) downloads its own ancient nuget.exe v5.3.0 which has TLS reliability issues
     # causing "Unexpected EOF" on large packages like DirectML (~200MB).
     # Pre-restore the packages with a modern NuGet
@@ -189,7 +203,7 @@ runs:
     - name: Build ONNX Runtime
       shell: pwsh
       if: steps.cache-onnx.outputs.cache-hit != 'true'
-      run: cmake --build build_onnxruntime
+      run: cmake --build build_onnxruntime -j 3
 
     - name: Install ONNX runtime
       shell: pwsh

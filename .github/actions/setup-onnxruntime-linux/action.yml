@@ -114,6 +114,23 @@ runs:
         path: onnxruntime
         submodules: recursive
 
+    - name: Patch ONNX Runtime MEA header bug
+      if: steps.cache-onnx.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        TARGET="onnxruntime/onnxruntime/contrib_ops/cuda/bert/cutlass_fmha/memory_efficient_attention.h"
+        if [ -f "$TARGET" ]; then
+          python3 -c "
+        p = '$TARGET'
+        with open(p, 'r') as f:
+            c = f.read()
+        if '#ifndef USE_MEMORY_EFFICIENT_ATTENTION' not in c:
+            patch = 'namespace onnxruntime { namespace contrib { namespace cuda {\n#ifndef USE_MEMORY_EFFICIENT_ATTENTION\nconstexpr float kCutlassSafeMaskFilterValue = -1.0e+30f;\n#endif\n}}}\n#if USE_MEMORY_EFFICIENT_ATTENTION'
+            with open(p, 'w') as f:
+                f.write(c.replace('#if USE_MEMORY_EFFICIENT_ATTENTION', patch))
+        "
+        fi
+
     - name: Configure ONNX Runtime
       shell: bash
       if: steps.cache-onnx.outputs.cache-hit != 'true'
