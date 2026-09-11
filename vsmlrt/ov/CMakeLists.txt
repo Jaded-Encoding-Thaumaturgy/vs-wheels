@@ -35,7 +35,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-
 # === Dependencies ===
 find_package(Protobuf REQUIRED CONFIG)
 find_package(ONNX REQUIRED)
@@ -64,10 +63,7 @@ if(UNIX)
   endif()
 endif()
 
-target_include_directories(
-  vsov
-  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsov" "vs-mlrt/common"
-)
+target_include_directories(vsov PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsov" "vs-mlrt/common")
 
 target_compile_definitions(
   vsov

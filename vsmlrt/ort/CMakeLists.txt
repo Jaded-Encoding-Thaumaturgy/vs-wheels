@@ -6,7 +6,6 @@ endif()
 
 project(VSORT_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
-
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -43,7 +42,6 @@ if(VAPOURSYNTH_INCLUDE_DIR)
 else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
-
 
 # === Dependencies ===
 find_package(Protobuf REQUIRED CONFIG)
@@ -84,10 +82,7 @@ if(UNIX)
   endif()
 endif()
 
-target_include_directories(
-  vsort
-  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsort" "vs-mlrt/common"
-)
+target_include_directories(vsort PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsort" "vs-mlrt/common")
 
 target_compile_definitions(
   vsort

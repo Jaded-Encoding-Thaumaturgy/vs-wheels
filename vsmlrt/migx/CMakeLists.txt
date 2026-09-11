@@ -36,7 +36,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-
 # === Dependencies ===
 if(DEFINED ENV{ROCM_PATH})
   file(TO_CMAKE_PATH "$ENV{ROCM_PATH}" _ROCM_PATH)
@@ -70,10 +69,7 @@ set_target_properties(
 
 set_target_properties(vsmigx PROPERTIES INSTALL_RPATH "$ORIGIN")
 
-target_include_directories(
-  vsmigx
-  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsmigx"
-)
+target_include_directories(vsmigx PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "vs-mlrt/vsmigx")
 
 target_compile_definitions(
   vsmigx

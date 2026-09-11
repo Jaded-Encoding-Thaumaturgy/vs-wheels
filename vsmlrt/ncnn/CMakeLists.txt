@@ -34,7 +34,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-
 # === Dependencies ===
 find_package(ncnn REQUIRED)
 find_package(Protobuf REQUIRED CONFIG)
@@ -43,7 +42,8 @@ find_package(Vulkan REQUIRED)
 
 # === Target Definition & Configuration ===
 add_library(
-  vsncnn SHARED
+  vsncnn
+  SHARED
   "${SRC_VSNCNN_DIR}/vsncnn/vs_ncnn.cpp"
   "${SRC_VSNCNN_DIR}/vsncnn/onnx2ncnn.cpp"
   "${SRC_VSNCNN_DIR}/common/onnx_utils.cpp"

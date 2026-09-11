@@ -65,7 +65,6 @@ else()
   message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
 
-
 # === Dependencies ===
 find_package(CUDAToolkit REQUIRED)
 
