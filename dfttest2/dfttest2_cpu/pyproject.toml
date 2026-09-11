@@ -1,5 +1,5 @@
 [build-system]
-requires = ["scikit-build-core>=1.0.3", "setuptools-scm>=10.2.1"]
+requires = ["scikit-build-core>=1.0.3", "setuptools-scm>=10.2.1", "vapoursynth>=75"]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -35,7 +35,6 @@ ninja.version = ">=1.5"
 if.platform-system = "win32"
 inherit.cmake.define = "append"
 cmake.define.CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
-cmake.define.CMAKE_C_COMPILER = "clang.exe"
 cmake.define.CMAKE_CXX_COMPILER = "clang++.exe"
 
 [[tool.dynamic-metadata]]

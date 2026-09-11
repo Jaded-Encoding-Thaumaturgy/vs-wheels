@@ -21,7 +21,7 @@
 	url = https://gitlab.com/EleonoreMizo/fmtconv.git
 [submodule "dfttest2/dfttest2/vs-dfttest2"]
 	path = dfttest2/dfttest2/vs-dfttest2
-	url = https://github.com/AmusementClub/vs-dfttest2
+	url = https://github.com/Ichunjo/vs-dfttest2
 [submodule "dfttest2/dfttest2_cpu/vs-dfttest2"]
 	path = dfttest2/dfttest2_cpu/vs-dfttest2
 	url = https://github.com/Ichunjo/vs-dfttest2

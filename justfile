@@ -13,7 +13,7 @@ format:
   #!{{shebang}}
   $files = git ls-files --others --cached --exclude-standard | Select-String -Pattern 'CMakeLists\.txt$', '\.cmake$' | ForEach-Object { $_.ToString() }
   if ($files) {
-    uv run python -m gersemi $files -i --definitions bm3dcuda/bm3dcpu/Common.cmake vsmlrt/ncnn/ApplyPatch.cmake
+    uv run python -m gersemi $files -i --definitions bm3dcuda/bm3dcpu/Common.cmake
   }
   uv run ruff format .
 
