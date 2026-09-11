@@ -4,6 +4,11 @@ set(onnxruntime_USE_FLASH_ATTENTION OFF CACHE BOOL "")
 set(onnxruntime_USE_LEAN_ATTENTION OFF CACHE BOOL "")
 set(onnxruntime_USE_MEMORY_EFFICIENT_ATTENTION ON CACHE BOOL "")  # Different from AmusementClub to make it work in ONNXRuntime 1.27.0
 set(onnxruntime_USE_FPA_INTB_GEMM OFF CACHE BOOL "")
+set(onnxruntime_USE_TRT_FUSED_ATTENTION OFF CACHE BOOL "")
+# Disable 1.30.0 GenAI/LLM kernels not needed for video inference
+set(onnxruntime_USE_FP4_QMOE OFF CACHE BOOL "")
+set(onnxruntime_USE_INT4_KV_CACHE OFF CACHE BOOL "")
+set(onnxruntime_USE_FP8_KV_CACHE OFF CACHE BOOL "")
 
 set(onnxruntime_USE_CUDA ON CACHE BOOL "")
 set(onnxruntime_NVCC_THREADS 1 CACHE STRING "")
