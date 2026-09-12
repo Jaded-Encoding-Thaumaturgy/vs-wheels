@@ -9,7 +9,7 @@ Push-Location $RepoRoot
 try {
     Write-Host "=== Building vapoursynth-dfttest2_cpu ===" -ForegroundColor Cyan
 
-    if ($IsWindows) {
+    if ($IsWindows -or $env:OS -eq 'Windows_NT') {
         . "$RepoRoot/scripts/Enter-DevShell.ps1" 
     }
 

@@ -24,4 +24,9 @@ if (-not (Test-Path $devShellDll)) {
 Import-Module $devShellDll
 Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments '-arch=x64'
 
+$llvmPath = Join-Path $vsPath 'VC\Tools\Llvm\x64\bin'
+if (Test-Path $llvmPath) {
+    $env:PATH = "$env:PATH;$llvmPath"
+}
+
 Write-Host "Developer Environment Loaded (x64) from $vsPath" -ForegroundColor Green

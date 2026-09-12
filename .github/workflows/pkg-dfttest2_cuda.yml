@@ -88,7 +88,7 @@ jobs:
         run: |
           # Workaround for Linux containers
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
+          git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2
 
       - name: Set up uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -129,7 +129,7 @@ jobs:
         uses: ./.github/actions/setup-cuda-windows
         with:
           cuda-version: ${{ env.CUDA_WINDOWS }}
-          cuda-components: "nvcc, cudart, nvrtc_dev, nvjitlink, cufft, cufft_dev, crt, nvptxcompiler"
+          cuda-components: "nvcc, cudart, nvrtc_dev, nvjitlink, cufft, cufft_dev, crt, nvptxcompiler, nvvm"
           cache-key: ${{ matrix.os }}
 
       - name: Build wheels
@@ -174,7 +174,7 @@ jobs:
           fetch-depth: 0
 
       - name: Initialize submodules
-        run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2 dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
+        run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2
 
       - name: Set up uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0

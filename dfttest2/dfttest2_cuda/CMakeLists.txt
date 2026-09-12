@@ -1,54 +1,111 @@
 cmake_minimum_required(VERSION 3.22)
-project(DFTTEST2_CUDA_Package)
 
-# === Apply patches ===
-include("${CMAKE_CURRENT_SOURCE_DIR}/ApplyPatch.cmake")
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+  set(SKBUILD_PROJECT_VERSION "0.0.0")
+endif()
+
+project(DFTTEST2_CUDA_Package VERSION "${SKBUILD_PROJECT_VERSION}" LANGUAGES CXX)
 
 set(SRC_DFTTEST2_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vs-dfttest2")
-set(BIN_DFTTEST2_DIR "${CMAKE_CURRENT_BINARY_DIR}/vs-dfttest2")
-
-add_patched_source(
-  PATCHED_WIN32
-  "${SRC_DFTTEST2_DIR}/cuda_source/win32.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/patches/nvidia-wheel-paths.patch"
-)
 
 # === C++ Standard & Options ===
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-set(VS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include" CACHE PATH "Path to VapourSynth headers")
+# === VapourSynth Include Resolution ===
+find_path(
+  VAPOURSYNTH_INCLUDE_DIR
+  NAMES VapourSynth4.h VapourSynth.h
+  HINTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vapoursynth"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages/vapoursynth"
+  PATH_SUFFIXES vapoursynth/include vapoursynth include
+  DOC "Path to VapourSynth headers"
+)
 
-if(SKBUILD_PROJECT_VERSION)
-  set(VCS_TAG "v${SKBUILD_PROJECT_VERSION}" CACHE STRING "Version from scikit-build-core")
-  set(CMAKE_DISABLE_FIND_PACKAGE_Git ON)
+if(VAPOURSYNTH_INCLUDE_DIR)
+  message(STATUS "Found VapourSynth headers: ${VAPOURSYNTH_INCLUDE_DIR}")
+else()
+  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
 endif()
-
-set(ENABLE_CUDA ON CACHE BOOL "" FORCE)
-set(USE_NVRTC_STATIC ON CACHE BOOL "" FORCE)
-set(ENABLE_CPU OFF CACHE BOOL "" FORCE)
-set(ENABLE_GCC OFF CACHE BOOL "" FORCE)
-set(ENABLE_HIP OFF CACHE BOOL "" FORCE)
 
 # === Dependencies ===
 find_package(CUDAToolkit REQUIRED)
 
+# === Fatbin Generation ===
+find_program(NVCC_EXECUTABLE nvcc HINTS "${CUDAToolkit_BIN_DIR}")
+if(NOT NVCC_EXECUTABLE)
+  message(FATAL_ERROR "nvcc executable not found in CUDA Toolkit bin directory.")
+endif()
+
+set(KERNELS_CU "${SRC_DFTTEST2_DIR}/cuda_source/kernels.cu")
+set(FATBIN_OUT "${CMAKE_CURRENT_BINARY_DIR}/kernels.fatbin")
+set(FATBIN_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kernels_fatbin.h")
+
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+add_custom_command(
+  OUTPUT "${FATBIN_HEADER}"
+  COMMAND "${NVCC_EXECUTABLE}"
+          -fatbin
+          -O3
+          --use_fast_math
+          --threads 0
+          -gencode arch=compute_75,code=sm_75
+          -gencode arch=compute_80,code=sm_80
+          -gencode arch=compute_86,code=sm_86
+          -gencode arch=compute_89,code=sm_89
+          -gencode arch=compute_90,code=sm_90
+          -gencode arch=compute_120,code=sm_120
+          -gencode arch=compute_75,code=compute_75
+          "${KERNELS_CU}"
+          -o "${FATBIN_OUT}"
+  COMMAND "${Python3_EXECUTABLE}"
+          "${CMAKE_CURRENT_SOURCE_DIR}/bin2c.py"
+          "${FATBIN_OUT}"
+          "${FATBIN_HEADER}"
+          "kernels_fatbin"
+  DEPENDS "${KERNELS_CU}"
+  COMMENT "Compiling AOT CUDA kernels to Fatbin and embedding header..."
+)
+
+add_custom_target(generate_kernels_fatbin DEPENDS "${FATBIN_HEADER}")
+
 # === Target Definition & Configuration ===
-add_library(dfttest2_cuda MODULE vs-dfttest2/cuda_source/source.cpp "${PATCHED_WIN32}")
+add_library(dfttest2_cuda MODULE "${SRC_DFTTEST2_DIR}/cuda_source/source.cpp" "${SRC_DFTTEST2_DIR}/cuda_source/win32.cpp")
+add_dependencies(dfttest2_cuda generate_kernels_fatbin)
 
 target_include_directories(
   dfttest2_cuda
-  PRIVATE "${VS_INCLUDE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DFTTEST2_DIR}"
+  PRIVATE "${VAPOURSYNTH_INCLUDE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DFTTEST2_DIR}"
 )
 
-configure_file(vs-dfttest2/common/config.h.in config.h)
+if(NOT PROJECT_VERSION_MAJOR)
+  set(PROJECT_VERSION_MAJOR 1)
+endif()
+if(NOT PROJECT_VERSION_MINOR)
+  set(PROJECT_VERSION_MINOR 0)
+endif()
+
+target_compile_definitions(
+  dfttest2_cuda
+  PRIVATE
+    PLUGIN_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    PLUGIN_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    PLUGIN_VERSION_STRING="v${PROJECT_VERSION}"
+)
 
 target_link_libraries(dfttest2_cuda PRIVATE CUDA::cuda_driver CUDA::cufft)
 
 if(MSVC)
   target_link_options(dfttest2_cuda PRIVATE "delayimp.lib" "/DELAYLOAD:cufft64_12.dll")
-  target_link_libraries(dfttest2_cuda PRIVATE Ws2_32 ntdll)
 endif()
 
 # Hide static and internal symbols to avoid conflicts with dynamically loaded CUDA libraries
@@ -60,7 +117,6 @@ endif()
 add_custom_target(build_cuda ALL DEPENDS dfttest2_cuda)
 
 # === Link Libraries Setup ===
-# Post-process the target to fix Linux driver initialization
 if(UNIX)
   execute_process(
     COMMAND
@@ -72,13 +128,6 @@ if(UNIX)
   target_link_libraries(dfttest2_cuda PRIVATE :libcuda.so.1)
   target_link_options(dfttest2_cuda PRIVATE "-Wl,--exclude-libs,ALL")
 endif()
-
-# Link nvJitLink_static for CUDA 12+ (needed when USE_NVRTC_STATIC is ON)
-target_link_directories(dfttest2_cuda PRIVATE "${CUDAToolkit_LIBRARY_DIR}")
-target_link_libraries(
-  dfttest2_cuda
-  PRIVATE nvrtc_static nvrtc-builtins_static nvptxcompiler_static nvJitLink_static nvptxcompiler_static
-)
 
 # === Packaging & Installation ===
 install(TARGETS dfttest2_cuda LIBRARY DESTINATION .)

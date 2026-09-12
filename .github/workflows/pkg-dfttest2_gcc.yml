@@ -60,10 +60,7 @@ jobs:
           fetch-depth: 0
 
       - name: Initialize submodules
-        run: >-
-          git submodule update --init --recursive
-          dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2
-          dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
+        run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2
 
       - name: Set up uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -95,10 +92,7 @@ jobs:
           fetch-depth: 0
 
       - name: Initialize submodules
-        run: >-
-          git submodule update --init --recursive
-          dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2
-          dfttest2/${{ env.PACKAGE_NAME }}/vapoursynth
+        run: git submodule update --init --recursive dfttest2/${{ env.PACKAGE_NAME }}/vs-dfttest2
 
       - name: Set up uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
