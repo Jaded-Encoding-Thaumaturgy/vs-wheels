@@ -120,17 +120,28 @@ runs:
         path: onnxruntime
         submodules: recursive
 
-    - name: Patch ONNX Runtime MEA header bug
+    - name: Patch ONNX Runtime CUDA build issues
       if: steps.cache-onnx.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        $path = "onnxruntime/onnxruntime/contrib_ops/cuda/bert/cutlass_fmha/memory_efficient_attention.h"
-        if (Test-Path $path) {
-          $content = Get-Content -Raw $path
+        $meaPath = "onnxruntime/onnxruntime/contrib_ops/cuda/bert/cutlass_fmha/memory_efficient_attention.h"
+        if (Test-Path $meaPath) {
+          $content = Get-Content -Raw $meaPath
           if ($content -notmatch '#ifndef USE_MEMORY_EFFICIENT_ATTENTION') {
             $patch = "namespace onnxruntime { namespace contrib { namespace cuda {`n#ifndef USE_MEMORY_EFFICIENT_ATTENTION`nconstexpr float kCutlassSafeMaskFilterValue = -1.0e+30f;`n#endif`n}}}`n#if USE_MEMORY_EFFICIENT_ATTENTION"
             $content = $content.Replace('#if USE_MEMORY_EFFICIENT_ATTENTION', $patch)
-            Set-Content -Path $path -Value $content
+            Set-Content -Path $meaPath -Value $content
+          }
+        }
+
+        $filterPath = "onnxruntime/cmake/onnxruntime_cuda_source_filters.cmake"
+        if (Test-Path $filterPath) {
+          $content = Get-Content -Raw $filterPath
+          if ($content -notmatch 'NOT onnxruntime_USE_FLASH_ATTENTION') {
+            $target = "if(onnxruntime_QUICK_BUILD)"
+            $patch = "if(NOT onnxruntime_USE_FLASH_ATTENTION)`n    list(FILTER _list EXCLUDE REGEX `"/bert/flash_attention/.*\\.cu$`")`n  endif()`n`n  if(onnxruntime_QUICK_BUILD)"
+            $content = $content.Replace($target, $patch)
+            Set-Content -Path $filterPath -Value $content
           }
         }
 

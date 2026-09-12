@@ -1,5 +1,6 @@
 # CUDA-specific ONNX Runtime cache variables.
 
+# Disabled LLM/GenAI attention kernels (patched to exclude template compilation)
 set(onnxruntime_USE_FLASH_ATTENTION OFF CACHE BOOL "")
 set(onnxruntime_USE_LEAN_ATTENTION OFF CACHE BOOL "")
 set(onnxruntime_USE_MEMORY_EFFICIENT_ATTENTION OFF CACHE BOOL "")
