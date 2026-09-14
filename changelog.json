@@ -117,12 +117,24 @@
     "10": {
       "release_date": "2026-05-16",
       "notes": "Matches upstream release v10"
+    },
+    "11.0.0": {
+      "package": "vapoursynth-dfttest2_gcc",
+      "version": "11.0.0",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-dfttest2_cpu": {
     "10": {
       "release_date": "2026-05-16",
       "notes": "Matches upstream release v10"
+    },
+    "11.0.0": {
+      "package": "vapoursynth-dfttest2_cpu",
+      "version": "11.0.0",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-dfttest2_nvrtc": {
@@ -157,6 +169,14 @@
       "cuda_linux": "13.3",
       "release_date": "2026-07-01",
       "commit": "b60b0ea6fc1123fe4a9972ca5a2c9a421dc0ef22"
+    },
+    "11.0.0": {
+      "package": "vapoursynth-dfttest2_nvrtc",
+      "version": "11.0.0",
+      "cuda_windows": "13.4.1",
+      "cuda_linux": "13.4",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-dfttest2_cuda": {
@@ -197,6 +217,14 @@
       "cuda_windows": "13.3.0",
       "release_date": "2026-07-01",
       "commit": "b60b0ea6fc1123fe4a9972ca5a2c9a421dc0ef22"
+    },
+    "11.0.0": {
+      "package": "vapoursynth-dfttest2_cuda",
+      "version": "11.0.0",
+      "cuda_linux": "13.4",
+      "cuda_windows": "13.4.1",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-dfttest2_hip": {
@@ -241,6 +269,14 @@
       "hip_windows": "7.14.0",
       "release_date": "2026-07-25",
       "commit": "55c5e82801c6d326795ef6a16de878f89e5cb7e0"
+    },
+    "11.0.0": {
+      "package": "vapoursynth-dfttest2_hip",
+      "version": "11.0.0",
+      "hip_linux": "7.14.1",
+      "hip_windows": "7.14.1",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-dfttest2_hiprtc": {
@@ -285,6 +321,14 @@
       "hip_windows": "7.14.0",
       "release_date": "2026-07-25",
       "commit": "55c5e82801c6d326795ef6a16de878f89e5cb7e0"
+    },
+    "11.0.0": {
+      "package": "vapoursynth-dfttest2_hiprtc",
+      "version": "11.0.0",
+      "hip_linux": "7.14.1",
+      "hip_windows": "7.14.1",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-ffms2": {
@@ -334,6 +378,21 @@
       "vulkan_macos": "1.4.357.0",
       "release_date": "2026-08-14",
       "commit": "cfac6e1f4c9ce9c6851c32bbc7d2eec3b673b99a"
+    },
+    "17.0": {
+      "package": "vapoursynth-mlrt-ncnn",
+      "version": "17.0",
+      "onnx_windows": "v1.22.0",
+      "onnx_linux": "v1.22.0",
+      "onnx_macos": "v1.22.0",
+      "ncnn_windows": "20260526",
+      "ncnn_linux": "20260526",
+      "ncnn_macos": "20260526",
+      "vulkan_windows": "1.4.357.0",
+      "vulkan_linux": "1.4.357.1",
+      "vulkan_macos": "1.4.357.1",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-mlrt-migx": {
@@ -349,6 +408,13 @@
       "hip_linux": "7.14.0",
       "release_date": "2026-07-25",
       "commit": "68edb3ceac2d661a4829b1309d3d2dc9e8af407e"
+    },
+    "17.0": {
+      "package": "vapoursynth-mlrt-migx",
+      "version": "17.0",
+      "hip_linux": "7.14.1",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-mlrt-ort-cuda": {
@@ -429,6 +495,16 @@
       "openvino_macos_intel": "2026.3.1",
       "release_date": "2026-08-29",
       "commit": "54d8e254419d04f9be5217b5c06f5faf4a910686"
+    },
+    "17.0": {
+      "package": "vapoursynth-mlrt-ov",
+      "version": "17.0",
+      "openvino_windows": "2026.3.1",
+      "openvino_linux": "2026.3.1",
+      "openvino_macos_arm64": "2026.3.1",
+      "openvino_macos_intel": "2026.3.1",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-mlrt-trt": {
@@ -470,6 +546,16 @@
       "tensorrt_linux": "11.2.1.2-1.cuda13.3",
       "release_date": "2026-07-31",
       "commit": "53a4c695a5027b4b3081cf8036ec7d2be6e50be3"
+    },
+    "17.0": {
+      "package": "vapoursynth-mlrt-trt",
+      "version": "17.0",
+      "cuda_windows": "13.4.1",
+      "cuda_linux": "13.4",
+      "tensorrt_windows": "11.3.0.99",
+      "tensorrt_linux": "11.3.0.99-1.cuda13.4",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-mlrt-trt_rtx": {
@@ -501,6 +587,16 @@
       "tensorrt_rtx_linux": "1.6.1.120",
       "release_date": "2026-07-29",
       "commit": "7122137fdf86ab2853c1899700d403ffa58d1dad"
+    },
+    "17.0": {
+      "package": "vapoursynth-mlrt-trt_rtx",
+      "version": "17.0",
+      "cuda_windows": "13.4.1",
+      "cuda_linux": "13.4",
+      "tensorrt_rtx_windows": "1.6.1.120",
+      "tensorrt_rtx_linux": "1.6.1.120",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   },
   "vapoursynth-fmtc": {
@@ -558,6 +654,19 @@
       "cudnn_linux": "9.25.0.15",
       "release_date": "2026-08-14",
       "commit": "cfac6e1f4c9ce9c6851c32bbc7d2eec3b673b99a"
+    },
+    "17.0": {
+      "package": "vapoursynth-mlrt-ort",
+      "version": "17.0",
+      "onnxruntime_windows": "v1.30.0",
+      "onnxruntime_linux": "v1.30.0",
+      "onnxruntime_macos": "v1.30.0",
+      "cuda_windows": "13.4.1",
+      "cuda_linux": "13.4",
+      "cudnn_windows": "9.26.0.51",
+      "cudnn_linux": "9.26.0.51",
+      "release_date": "2026-09-14",
+      "commit": "69984e684e778b388f18078cca18410e90ec1603"
     }
   }
 }

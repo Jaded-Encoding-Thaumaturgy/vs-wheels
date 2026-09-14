@@ -99,6 +99,9 @@ Downgrade CUDA version for Linux because 13.x is segfaulting
 
 ## vapoursynth-dfttest2_cpu
 
+### Version 11.0.0 (2026-09-14)
+
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 10 (2026-05-16)
 
 Matches upstream release v10
@@ -106,6 +109,11 @@ Matches upstream release v10
 
 ## vapoursynth-dfttest2_cuda
 
+### Version 11.0.0 (2026-09-14)
+
+- **CUDA Linux**: 13.4
+- **CUDA Windows**: 13.4.1
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 10.6 (2026-07-01)
 
 - **CUDA Linux**: 13.3
@@ -134,6 +142,9 @@ The cuFFT dependency is now pulled from the NVIDIA PyPI package.
 
 ## vapoursynth-dfttest2_gcc
 
+### Version 11.0.0 (2026-09-14)
+
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 10 (2026-05-16)
 
 Matches upstream release v10
@@ -145,6 +156,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 11.0.0 (2026-09-14)
+
+- **HIP Linux**: 7.14.1
+- **HIP Windows**: 7.14.1
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 10.6 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -176,6 +192,11 @@ Matches upstream release v10
 
 - **HIP Windows**: 7.1.1
 - **HIP Linux**: 7.2.2
+### Version 11.0.0 (2026-09-14)
+
+- **HIP Linux**: 7.14.1
+- **HIP Windows**: 7.14.1
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 10.6 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -207,6 +228,11 @@ Matches upstream release v10
 
 - **CUDA Windows**: 13.2.1
 - **CUDA Linux**: 13.2
+### Version 11.0.0 (2026-09-14)
+
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 10.3 (2026-07-01)
 
 - **CUDA Windows**: 13.3.0
@@ -252,6 +278,10 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-migx
 
+### Version 17.0 (2026-09-14)
+
+- **HIP Linux**: 7.14.1
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 16.0 (2026-07-25)
 
 - **HIP Linux**: 7.14.0
@@ -262,6 +292,18 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ncnn
 
+### Version 17.0 (2026-09-14)
+
+- **ONNX Windows**: v1.22.0
+- **ONNX Linux**: v1.22.0
+- **ONNX macOS**: v1.22.0
+- **NCNN Windows**: 20260526
+- **NCNN Linux**: 20260526
+- **NCNN macOS**: 20260526
+- **Vulkan Windows**: 1.4.357.0
+- **Vulkan Linux**: 1.4.357.1
+- **Vulkan macOS**: 1.4.357.1
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 16.0 (2026-08-14)
 
 - **ONNX Windows**: v1.22.0
@@ -288,6 +330,16 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ort
 
+### Version 17.0 (2026-09-14)
+
+- **ONNX Runtime Windows**: v1.30.0
+- **ONNX Runtime Linux**: v1.30.0
+- **ONNX Runtime macOS**: v1.30.0
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **cuDNN Windows**: 9.26.0.51
+- **cuDNN Linux**: 9.26.0.51
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 16.2 (2026-08-14)
 
 - **ONNX Runtime Windows**: v1.29.0
@@ -352,6 +404,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-ov
 
+### Version 17.0 (2026-09-14)
+
+- **OpenVINO Windows**: 2026.3.1
+- **OpenVINO Linux**: 2026.3.1
+- **OpenVINO macOS Arm64**: 2026.3.1
+- **OpenVINO macOS Intel**: 2026.3.1
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 16.1 (2026-08-29)
 
 - **OpenVINO Windows**: 2026.3.1
@@ -375,6 +434,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-trt
 
+### Version 17.0 (2026-09-14)
+
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **TensorRT Windows**: 11.3.0.99
+- **TensorRT Linux**: 11.3.0.99-1.cuda13.4
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 16.1 (2026-07-31)
 
 - **CUDA Windows**: 13.3.1
@@ -406,6 +472,13 @@ The TensorRT dependency is now pulled from the NVIDIA PyPI package for both Linu
 
 ## vapoursynth-mlrt-trt_rtx
 
+### Version 17.0 (2026-09-14)
+
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **TensorRT RTX Windows**: 1.6.1.120
+- **TensorRT RTX Linux**: 1.6.1.120
+- **Commit**: [69984e6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/69984e684e778b388f18078cca18410e90ec1603)
 ### Version 16.0 (2026-07-29)
 
 - **CUDA Windows**: 13.4.0
