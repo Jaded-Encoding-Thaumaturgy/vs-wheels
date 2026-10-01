@@ -52,7 +52,7 @@ runs:
           "-S", "openvino",
           "-B", "build_openvino",
           "-G", "Ninja",
-          "-Wno-dev",
+          "-Wno-author",
           "-LA",
           "-C", "$env:GITHUB_WORKSPACE/.github/cmake-cache/openvino-base.cmake",
           "-C", "$env:GITHUB_WORKSPACE/.github/cmake-cache/openvino-windows.cmake",

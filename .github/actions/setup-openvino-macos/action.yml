@@ -64,7 +64,7 @@ runs:
           -S openvino
           -B build_openvino
           -G Ninja
-          -Wno-dev
+          -Wno-author
           -LA
           -C "$GITHUB_WORKSPACE/.github/cmake-cache/openvino-base.cmake"
           -C "$GITHUB_WORKSPACE/.github/cmake-cache/openvino-macos.cmake"

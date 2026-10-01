@@ -220,7 +220,7 @@ runs:
           "-S", "onnxruntime/cmake",
           "-B", "build_onnxruntime",
           "-G", "Ninja",
-          "-Wno-dev",
+          "-Wno-author",
           "-LA",
           "-C", "$env:GITHUB_WORKSPACE/.github/cmake-cache/onnxruntime-base.cmake"
           "-C", "$env:GITHUB_WORKSPACE/.github/cmake-cache/onnxruntime-windows.cmake"

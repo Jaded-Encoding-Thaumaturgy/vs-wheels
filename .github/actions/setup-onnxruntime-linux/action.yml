@@ -153,7 +153,7 @@ runs:
           -S onnxruntime/cmake
           -B build_onnxruntime
           -G Ninja
-          -Wno-dev
+          -Wno-author
           -LA
           -C "$GITHUB_WORKSPACE/.github/cmake-cache/onnxruntime-base.cmake"
           -C "$GITHUB_WORKSPACE/.github/cmake-cache/onnxruntime-linux.cmake"
