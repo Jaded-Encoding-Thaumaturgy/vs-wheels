@@ -106,7 +106,7 @@ jobs:
           - name: Linux x64
             os: ubuntu-22.04
           - name: Linux ARM64
-            os: ubuntu-22.04-arm
+            os: ubuntu-24.04-arm
           - name: Windows x64
             os: windows-2025-vs2026
           - name: macOS ARM64
