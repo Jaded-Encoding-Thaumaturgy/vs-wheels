@@ -67,6 +67,11 @@ target_compile_definitions(
 
 target_link_libraries(dfttest2_hiprtc PRIVATE hip::host hiprtc::hiprtc)
 
+if(NOT WIN32)
+  target_compile_options(dfttest2_hiprtc PRIVATE -fvisibility=hidden)
+  target_link_options(dfttest2_hiprtc PRIVATE -Wl,--exclude-libs,ALL)
+endif()
+
 add_custom_target(build_hiprtc ALL DEPENDS dfttest2_hiprtc)
 
 # === Packaging & Installation ===
