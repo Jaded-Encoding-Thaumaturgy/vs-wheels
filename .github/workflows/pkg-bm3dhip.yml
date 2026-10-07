@@ -123,7 +123,7 @@ jobs:
           mv repaired_wheels/*.whl dist/
 
       - name: Upload wheels
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: ${{ env.PACKAGE_NAME }}-wheels-${{ matrix.os }}-${{ matrix.arch }}
           path: dist/*.whl
@@ -152,7 +152,7 @@ jobs:
         env:
           SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_BM3DHIP: ${{ inputs.version }}
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: ${{ env.PACKAGE_NAME }}-sdist
           path: dist/*.tar.gz
@@ -172,7 +172,7 @@ jobs:
 
       - name: Upload metadata
         if: github.event_name == 'workflow_dispatch' && inputs.publish && inputs.repository == 'pypi'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: ${{ env.PACKAGE_NAME }}-metadata
           path: metadata.json
