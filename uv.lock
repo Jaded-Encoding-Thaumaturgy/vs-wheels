@@ -1092,13 +1092,13 @@ sdist = { url = "https://files.pythonhosted.org/packages/3e/a0/328dd4e184ec6e329
 
 [[package]]
 name = "tensorrt-rtx-cu13-libs"
-version = "1.6.1.120"
+version = "1.7.1.116"
 source = { registry = "https://pypi.org/simple" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/93/62f3538d30003f5d483684e8c31ec00fae69b71e53589e63a9b7b03dae2b/tensorrt_rtx_cu13_libs-1.6.1.120-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:cb972965c8bcd58e2cdb805eb872c69fb90abdf98356b71942d9a2f8a10220cf", size = 92382349, upload-time = "2026-07-28T16:52:27.222Z" },
-    { url = "https://files.pythonhosted.org/packages/d9/fe/09423232fdba51f9e3a535cb9a5f72485e29432d41109b2e7f9f314a86af/tensorrt_rtx_cu13_libs-1.6.1.120-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:edc0ba4607fd478c64874167c22f9ecc0fc85aed35226e0a67bc8a2cbb7a07e8", size = 88300576, upload-time = "2026-07-28T16:52:57.031Z" },
-    { url = "https://files.pythonhosted.org/packages/5e/f6/71f7e715d3b3d6afe58d02e1f733a2c1d9242117927fe2fe37f712b28092/tensorrt_rtx_cu13_libs-1.6.1.120-py3-none-win_amd64.whl", hash = "sha256:902c0459921bd0a26b579f5fa8e72f528f4949bd1ee824cfa95120627fad4d0b", size = 91446794, upload-time = "2026-07-28T16:53:18.98Z" },
-    { url = "https://files.pythonhosted.org/packages/d0/2c/ccf29dad46da20f34f73db409611f3456be1c0eb07144dce06618871610e/tensorrt_rtx_cu13_libs-1.6.1.120-py3-none-win_arm64.whl", hash = "sha256:b478ea95991280a3cb8f8e0f8e92e9d07c0525fa88c39e8c209d1a0b772a31d8", size = 83283756, upload-time = "2026-07-28T16:53:47.184Z" },
+    { url = "https://files.pythonhosted.org/packages/95/ba/cd44f655337d9ba9fe035c50b8baa70ce7a505db09cb7bde2a094370778e/tensorrt_rtx_cu13_libs-1.7.1.116-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:e3fd45fed001240d63304e77a2d4006319b839994237cb294b6e7ad72acaabcd", size = 95153708, upload-time = "2026-10-14T18:04:09.664Z" },
+    { url = "https://files.pythonhosted.org/packages/54/ec/9fcdef80283dd4cf09ed6f4b5992193486c0babc4507d1515958a0b07a45/tensorrt_rtx_cu13_libs-1.7.1.116-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:ec8b6cb95a8ea61e31d544dbc5039d35219b311999f92c518a3889aaae74359c", size = 90582711, upload-time = "2026-10-14T18:04:44.409Z" },
+    { url = "https://files.pythonhosted.org/packages/92/84/858ba13bccd67f2bed699e976536a041270f9a0a14a447d3cd45fc4efae3/tensorrt_rtx_cu13_libs-1.7.1.116-py3-none-win_amd64.whl", hash = "sha256:3f0bc38ffe0b755e9de672da7b9ed3c05ddfd2538160c36af2a1e0994508c940", size = 93129282, upload-time = "2026-10-14T18:05:31.417Z" },
+    { url = "https://files.pythonhosted.org/packages/48/85/c9d300dbb4d693bd89d3b9003abeb700bbca5362445c25bd626b47cfbcc5/tensorrt_rtx_cu13_libs-1.7.1.116-py3-none-win_arm64.whl", hash = "sha256:2776fc3e236ec0c0943cd95245fd26c3422123ea79a7355a4df7cde1467bd61e", size = 84998874, upload-time = "2026-10-14T18:06:22.232Z" },
 ]
 
 [[package]]
@@ -1400,7 +1400,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "tensorrt-rtx-cu13-libs", specifier = "==1.6.1.120" },
+    { name = "tensorrt-rtx-cu13-libs", specifier = "==1.7.1.116" },
     { name = "vapoursynth", specifier = ">=75" },
 ]
 

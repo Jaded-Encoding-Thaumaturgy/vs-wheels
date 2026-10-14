@@ -11,7 +11,7 @@ license-files = ["vs-mlrt/LICENSE"]
 requires-python = ">=3.12"
 authors = [{ name = "AmusementClub" }]
 maintainers = [{ name = "Vardë", email = "ichunjo.le.terrible@gmail.com" }]
-dependencies = ["vapoursynth>=75", "tensorrt-rtx-cu13-libs==1.6.1.120"]
+dependencies = ["vapoursynth>=75", "tensorrt-rtx-cu13-libs==1.7.1.116"]
 
 [project.urls]
 "Source Code" = "https://github.com/Ichunjo/vs-mlrt"
