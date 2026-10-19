@@ -292,6 +292,18 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ncnn
 
+### Version v17.1 (2026-10-19)
+
+- **ONNX Windows**: v1.23.2
+- **ONNX Linux**: v1.23.2
+- **ONNX macOS**: v1.23.2
+- **NCNN Windows**: 20260526
+- **NCNN Linux**: 20260526
+- **NCNN macOS**: 20260526
+- **Vulkan Windows**: 1.4.363.0
+- **Vulkan Linux**: 1.4.363.0
+- **Vulkan macOS**: 1.4.363.0
+- **Commit**: [bec6763](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/bec6763924abf559f14061b03ff384230424d8e2)
 ### Version 17.0 (2026-09-14)
 
 - **ONNX Windows**: v1.22.0
@@ -330,6 +342,16 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ort
 
+### Version v17.1.1 (2026-10-19)
+
+- **ONNX Runtime Windows**: v1.31.0
+- **ONNX Runtime Linux**: v1.31.0
+- **ONNX Runtime macOS**: v1.31.0
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **cuDNN Windows**: 9.27.0.42
+- **cuDNN Linux**: 9.27.0.42
+- **Commit**: [bec6763](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/bec6763924abf559f14061b03ff384230424d8e2)
 ### Version 17.0 (2026-09-14)
 
 - **ONNX Runtime Windows**: v1.30.0
@@ -404,6 +426,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-ov
 
+### Version v17.1 (2026-10-19)
+
+- **OpenVINO Windows**: 2026.4.1
+- **OpenVINO Linux**: 2026.4.1
+- **OpenVINO macOS Arm64**: 2026.4.1
+- **OpenVINO macOS Intel**: 2026.4.1
+- **Commit**: [bec6763](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/bec6763924abf559f14061b03ff384230424d8e2)
 ### Version 17.0 (2026-09-14)
 
 - **OpenVINO Windows**: 2026.3.1
@@ -434,6 +463,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-trt
 
+### Version v17.1 (2026-10-19)
+
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **TensorRT Windows**: 11.4.0.106
+- **TensorRT Linux**: 11.4.0.106-1.cuda13.4
+- **Commit**: [bec6763](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/bec6763924abf559f14061b03ff384230424d8e2)
 ### Version 17.0 (2026-09-14)
 
 - **CUDA Windows**: 13.4.1
@@ -472,6 +508,13 @@ The TensorRT dependency is now pulled from the NVIDIA PyPI package for both Linu
 
 ## vapoursynth-mlrt-trt_rtx
 
+### Version v17.1 (2026-10-19)
+
+- **CUDA Windows**: 13.4.1
+- **CUDA Linux**: 13.4
+- **TensorRT RTX Windows**: 1.7.1.116
+- **TensorRT RTX Linux**: 1.7.1.116
+- **Commit**: [bec6763](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/bec6763924abf559f14061b03ff384230424d8e2)
 ### Version 17.0 (2026-09-14)
 
 - **CUDA Windows**: 13.4.1
