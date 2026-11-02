@@ -116,6 +116,15 @@ jobs:
         if: runner.os == 'Windows'
         uses: ./.github/actions/setup-msvc
 
+      - name: Get Vulkan headers
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: KhronosGroup/Vulkan-Headers
+          ref: d20afc58d6a95f80be5f1639a4990790f15bbf6a # v1.4.329
+          path: vulkan-headers
+          sparse-checkout: include
+          persist-credentials: false
+
       - name: Install build tools (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -193,6 +202,7 @@ jobs:
         run: uv build --package vapoursynth-mlrt-${{ env.PACKAGE_NAME }}
         env:
           SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VAPOURSYNTH_MLRT_TRT: ${{ inputs.version }}
+          CMAKE_INCLUDE_PATH: ${{ github.workspace }}/vulkan-headers/include
 
       - name: Repair wheel (Linux)
         if: runner.os == 'Linux'
