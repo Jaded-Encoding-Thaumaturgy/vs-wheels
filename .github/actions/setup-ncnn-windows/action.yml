@@ -34,7 +34,7 @@ runs:
         key: ${{ steps.cache-key.outputs.key }}
 
     - name: Install Vulkan SDK
-      uses: jakoch/install-vulkan-sdk-action@6d320c543af48e7e45b02c8c9ab14d5ffad48eba # v1.8.0
+      uses: jakoch/install-vulkan-sdk-action@1ec9954bb37778d5bd3ea91198d729839515712c # v1.8.0
       with:
         vulkan_version: ${{ inputs.vulkan-version }}
 
