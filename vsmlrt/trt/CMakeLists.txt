@@ -62,11 +62,13 @@ find_path(
 if(VAPOURSYNTH_INCLUDE_DIR)
   message(STATUS "Found VapourSynth headers: ${VAPOURSYNTH_INCLUDE_DIR}")
 else()
-  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=75 is installed.")
+  message(FATAL_ERROR "VapourSynth headers not found. Ensure vapoursynth>=81 is installed.")
 endif()
 
 # === Dependencies ===
 find_package(CUDAToolkit REQUIRED)
+find_path(VULKAN_INCLUDE_DIR vulkan/vulkan_core.h HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
+include_directories("${VULKAN_INCLUDE_DIR}")
 
 # === Target Definition & Configuration ===
 add_library(vstrt SHARED vs-mlrt/vstrt/vs_tensorrt.cpp vs-mlrt/vstrt/win32.cpp)
