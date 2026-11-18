@@ -1407,7 +1407,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "tensorrt-cu13-libs", specifier = "==11.4.0.106" },
-    { name = "vapoursynth", specifier = ">=75" },
+    { name = "vapoursynth", specifier = ">=81" },
 ]
 
 [[package]]
@@ -1421,7 +1421,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "tensorrt-rtx-cu13-libs", specifier = "==1.7.1.116" },
-    { name = "vapoursynth", specifier = ">=75" },
+    { name = "vapoursynth", specifier = ">=81" },
 ]
 
 [[package]]
