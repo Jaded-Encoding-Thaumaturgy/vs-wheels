@@ -292,6 +292,18 @@ Matches upstream release R31.
 
 ## vapoursynth-mlrt-ncnn
 
+### Version v17.1.1 (2026-11-18)
+
+- **ONNX Windows**: v1.23.2
+- **ONNX Linux**: v1.23.2
+- **ONNX macOS**: v1.23.2
+- **NCNN Windows**: 20261020
+- **NCNN Linux**: 20261020
+- **NCNN macOS**: 20261020
+- **Vulkan Windows**: 1.4.363.1
+- **Vulkan Linux**: 1.4.363.1
+- **Vulkan macOS**: 1.4.363.1
+- **Commit**: [08a2af6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/08a2af64b8e3e6d49258108f37cc07c5b25295e7)
 ### Version v17.1 (2026-10-19)
 
 - **ONNX Windows**: v1.23.2
@@ -463,6 +475,13 @@ CUDA and cuDNN dependencies are now pulled from the NVIDIA PyPI packages.
 
 ## vapoursynth-mlrt-trt
 
+### Version v17.1.1 (2026-11-18)
+
+- **CUDA Windows**: 13.5.0
+- **CUDA Linux**: 13.5
+- **TensorRT Windows**: 11.5.0.63
+- **TensorRT Linux**: 11.5.0.63-1.cuda13.5
+- **Commit**: [08a2af6](https://github.com/Jaded-Encoding-Thaumaturgy/vs-wheels/commit/08a2af64b8e3e6d49258108f37cc07c5b25295e7)
 ### Version v17.1 (2026-10-19)
 
 - **CUDA Windows**: 13.4.1
