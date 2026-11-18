@@ -408,6 +408,21 @@
       "vulkan_macos": "1.4.363.0",
       "release_date": "2026-10-19",
       "commit": "bec6763924abf559f14061b03ff384230424d8e2"
+    },
+    "v17.1.1": {
+      "package": "vapoursynth-mlrt-ncnn",
+      "version": "v17.1.1",
+      "onnx_windows": "v1.23.2",
+      "onnx_linux": "v1.23.2",
+      "onnx_macos": "v1.23.2",
+      "ncnn_windows": "20261020",
+      "ncnn_linux": "20261020",
+      "ncnn_macos": "20261020",
+      "vulkan_windows": "1.4.363.1",
+      "vulkan_linux": "1.4.363.1",
+      "vulkan_macos": "1.4.363.1",
+      "release_date": "2026-11-18",
+      "commit": "08a2af64b8e3e6d49258108f37cc07c5b25295e7"
     }
   },
   "vapoursynth-mlrt-migx": {
@@ -591,6 +606,16 @@
       "tensorrt_linux": "11.4.0.106-1.cuda13.4",
       "release_date": "2026-10-19",
       "commit": "bec6763924abf559f14061b03ff384230424d8e2"
+    },
+    "v17.1.1": {
+      "package": "vapoursynth-mlrt-trt",
+      "version": "v17.1.1",
+      "cuda_windows": "13.5.0",
+      "cuda_linux": "13.5",
+      "tensorrt_windows": "11.5.0.63",
+      "tensorrt_linux": "11.5.0.63-1.cuda13.5",
+      "release_date": "2026-11-18",
+      "commit": "08a2af64b8e3e6d49258108f37cc07c5b25295e7"
     }
   },
   "vapoursynth-mlrt-trt_rtx": {
